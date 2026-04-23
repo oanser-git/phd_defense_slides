@@ -1,0 +1,20 @@
+% Temporary planning slide for Part I.
+
+\begin{frame}{Part 1 draft}
+	\small
+
+	\textbf{High-level plan}
+
+	\begin{enumerate}
+		\item Why ML-based NIDS still need explicit adaptation
+		\item State of the art: main adaptation families
+		\item Synthesis and gap analysis
+		\item Is configuration important? Evidence from our NOMS 2026 study
+		\item How configuration is handled today: offline hyperparameter optimization (HPO)
+		\item Why conventional HPO is not suited for fast re-adaptation
+		\item Research question (RQ1)
+		\item Contribution: meta-learning-based auto-configuration
+		\item Evaluation in supervised and anomaly-detection settings
+		\item Main takeaways of Part I
+	\end{enumerate}
+\end{frame}
