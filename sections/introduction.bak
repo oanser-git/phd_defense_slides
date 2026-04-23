@@ -1,0 +1,328 @@
+\section{Introduction}
+
+\newcommand{\sliderefs}[1]{\vspace{0.1em}{\fontsize{5.2}{6}\selectfont #1\par}}
+\newcommand{\figsource}[1]{{\fontsize{5.2}{6}\selectfont \emph{Source:} #1}}
+
+
+\begin{frame}{Why this topic matters}
+	\begin{columns}[T,onlytextwidth]
+		\column{0.56\textwidth}
+		\small
+		\begin{itemize}
+			\setlength\itemsep{0.55em}
+
+			\item Modern societies and public services increasingly rely on
+			      computer networks
+			      \\
+			      $\longrightarrow$ Higher exposure to cyber
+			      incidents and service interruptions.
+
+			\item ANSSI handled \alert{\textbf{4,386}} security events in 2024
+			      (\alert{\textbf{+15\%}} vs. 2023), including
+			      \alert{\textbf{1,361}} confirmed incidents,
+			      i.e., nearly \alert{\textbf{4}} per day.
+
+			\item \alert{\textbf{\$4.88M}} average global cost of a data breach in 2024.
+
+			\item \alert{\textbf{35\%}} of reported cyber incidents in the French health sector affected patient care.
+		\end{itemize}
+
+		\column{0.43\textwidth}
+		\centering
+
+		\includegraphics[width=0.92\linewidth]{figures/introduction/anssi_regions_scienceplots.pdf}
+
+		\par\vspace{0.1em}
+		\figsource{ANSSI, Panorama de la cybermenace 2024}
+
+		\vspace{0.8em}
+
+		\includegraphics[width=0.92\linewidth]{figures/introduction/cost_of_breach_scienceplots.pdf}
+
+		\par\vspace{0.1em}
+		\figsource{IBM Security, Cost of a Data Breach Report 2024}
+	\end{columns}
+
+	\sliderefs{Refs: ANSSI, Panorama de la cybermenace 2024; IBM Security, Cost of a Data Breach Report 2024; ANS, Observatoire des incidents cybersecurite sante 2023.}
+
+	% \vspace{0.6em}
+	% \centering
+	% {\color{red!70!black}\textbf{$\Rightarrow$ Cybersecurity is not only a technical issue, but also an operational and societal one.}}
+\end{frame}
+
+
+\begin{frame}{Where NIDS fits in cyber defense}
+	\begin{columns}[T,onlytextwidth]
+		\column{0.52\textwidth}
+		\small
+
+
+		\begin{itemize}
+			\setlength\itemsep{0.9em}
+
+			\item Continuous monitoring to manage cyber risk
+
+			\item SOCs and SIEM platforms centralize this monitoring
+
+			\item Network traffic gives direct visibility into system communications
+
+			\item NIDS turn traffic into alerts for investigation and response
+		\end{itemize}
+
+
+
+		\column{0.52\textwidth}
+		\centering
+
+		% Replace with exported custom figure
+		\includegraphics[width=0.8\linewidth]{figures/introduction/NIDS-transparent.pdf}
+
+	\end{columns}
+
+	\vspace{0.6em}
+	\centering
+	\textbf{$\Rightarrow$ NIDS is one analytical layer inside the broader
+		monitoring and response chain.}
+
+	\sliderefs{Refs: NIST SP 800-86 (2006); Scarfone \& Mell, Guide to Intrusion Detection and Prevention Systems (2007).}
+\end{frame}
+
+
+\begin{frame}{From signatures to ML-based NIDS}
+	\small
+	\begin{columns}[T,onlytextwidth]
+		\column{0.48\textwidth}
+		\begin{block}{Rule-based NIDS}
+			\begin{itemize}
+				\setlength\itemsep{0.6em}
+				\item Tools: \textbf{Snort}, \textbf{Suricata}, \textbf{Zeek}
+				\item Detect only known attack patterns or protocol violations, leaving unknown ones undetected.
+				\item Limited when payload content is encrypted
+			\end{itemize}
+		\end{block}
+
+		\column{0.48\textwidth}
+		\begin{block}{ML-based NIDS}
+			\begin{itemize}
+				\setlength\itemsep{0.6em}
+				\item Example: \textbf{Random Forest (RF) on flows}
+				\item Learn traffic patterns from historical data to generalize beyond exact rules.
+				\item Can still detect suspicious behavior in encrypted traffic
+			\end{itemize}
+		\end{block}
+	\end{columns}
+
+	\vspace{0.25em}
+	\begin{beamercolorbox}[wd=\linewidth,sep=0.9ex,rounded=true]{block body}
+		\centering
+		\textbf{Operational reality: mostly hybrid.} For example, a SOC may use \textbf{Suricata/Zeek} for known alerts and \textbf{ML on flows} to flag suspicious HTTPS command-and-control behavior.
+	\end{beamercolorbox}
+
+	\sliderefs{Refs: Snort [Roesch, 1999]; Zeek [Paxson, 1999]; Suricata (OISF); ML for NIDS [Sommer \& Paxson, 2010]; encrypted traffic [Anderson \& McGrew, 2016]; SANS Detection \& Response Survey (2024).}
+\end{frame}
+
+\begin{frame}{ML-based NIDS as a prediction task}
+	\small
+
+	\centering
+	\textbf{Network observation} $\longrightarrow$ \textbf{feature representation} $\longrightarrow$ \textbf{detection model} $\longrightarrow$ \textbf{prediction}
+
+	\vspace{1em}
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.48\textwidth}
+		\begin{block}{Input and output}
+			\small
+			\begin{itemize}
+				\setlength\itemsep{0.8em}
+				\item A network observation can be a packet, a flow, a sequence, or a graph
+				\item The model takes a numerical representation of this observation
+				\item The output is either a traffic label or an anomaly score
+			\end{itemize}
+		\end{block}
+
+		\column{0.48\textwidth}
+		\begin{block}{Two common learning settings}
+			\small
+			\begin{itemize}
+				\setlength\itemsep{0.8em}
+				\item \textbf{Classification}: trained with labelled benign and attack traffic
+				\item \textbf{Anomaly detection}: trained mainly on benign traffic
+				\item In anomaly detection, alerts are raised when the score exceeds a threshold
+			\end{itemize}
+		\end{block}
+	\end{columns}
+
+	\vspace{0.7em}
+	\centering
+	\textbf{$\Rightarrow$ This common ML setting leads to
+		the standard train $\rightarrow$ validate $\rightarrow$ test $\rightarrow$
+		deploy workflow.}
+
+	\sliderefs{Refs: Sommer \& Paxson (2010); Buczak \& Guven (2016).}
+\end{frame}
+
+\begin{frame}{ML-based NIDS Workflow: Train $\rightarrow$ Validate $\rightarrow$ Test $\rightarrow$ Deploy}
+	\small
+	\begin{columns}[T,onlytextwidth]
+
+		\column{0.55\linewidth}
+		\begin{itemize}
+			\setlength\itemsep{0.9em}
+
+			\item<1-> The model is trained on a labelled \textbf{training} set
+			      \(\mathcal{D}_{\text{train}}\).
+
+			\item<2-> A separate \textbf{validation} split
+			      \(\mathcal{D}_{\text{val}}\) is used to refine the model
+			      \textbf{configuration} (\textbf{hyperparameters}).
+
+			\item<3-> A final \textbf{test} set,
+			      \(\mathcal{D}_{\text{test}}\), measures performance on previously unseen data.
+
+			\item<4-> The selected model is then \textbf{deployed}
+			      to monitor live traffic.
+		\end{itemize}
+
+		\only<2>{%
+			\vspace{-5em}
+			\setbeamercolor{focusbox}{use={structure,normal text},
+				fg=structure.fg,
+				bg=structure.fg!12!normal text.bg}
+			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{focusbox}
+				\small
+				\textbf{Hyperparameters:} settings chosen before training that influence model behavior.\\
+				\textbf{Example}: In RF, too few trees can give unstable predictions,
+				while too many can increase computation and overfit the training data.
+			\end{beamercolorbox}
+		}
+
+		\column{0.42\linewidth}
+		\begin{figure}
+			\centering
+			\includegraphics<1>[width=1.05\linewidth]{figures/introduction/ML_NIDS_1-crop}
+			\includegraphics<2>[width=1.05\linewidth]{figures/introduction/ML_NIDS_2-crop}
+			\includegraphics<3>[width=1.05\linewidth]{figures/introduction/ML_NIDS_3-crop}
+			\includegraphics<4>[width=1.05\linewidth]{figures/introduction/ML_NIDS_4-crop}
+			\label{fig:ml_nids_workflow}
+		\end{figure}
+
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}{How ML has been used to improve NIDS}
+	\small
+
+	\begin{itemize}
+		\setlength\itemsep{0.75em}
+
+		\item<1-> \alt<2>{\textcolor{gray}{Better detection performance $\longrightarrow$ BotMiner, Kitsune}\\
+			      \textcolor{gray}{\footnotesize e.g., DDoS, botnet, web attacks}}
+		      {Better detection performance $\longrightarrow$ BotMiner, Kitsune\\
+			      \footnotesize e.g., DDoS, botnet, web attacks}
+
+		\item<1-> \alt<2>{\textcolor{gray}{Richer traffic representations $\longrightarrow$ Flow-MAE, NetVigil}\\
+			      \textcolor{gray}{\footnotesize e.g., packet, flow, sequence, graph}}
+		      {Richer traffic representations $\longrightarrow$ Flow-MAE, NetVigil\\
+			      \footnotesize e.g., packet, flow, sequence, graph}
+
+		\item<1-> \alt<2>{\textcolor{gray}{More practical deployment $\longrightarrow$ AOC-IDS, ENIDrift}\\
+			      \textcolor{gray}{\footnotesize e.g., lightweight, online, real-time detection}}
+		      {More practical deployment $\longrightarrow$ AOC-IDS, ENIDrift\\
+			      \footnotesize e.g., lightweight, online, real-time detection}
+
+		\item<1-> \alt<2>{\textcolor{gray}{Better use of limited labels $\longrightarrow$ Active-SVDD, INSOMNIA}\\
+			      \textcolor{gray}{\footnotesize e.g., active learning, semi-supervised learning, and pseudo-labeling}}
+		      {Better use of limited labels $\longrightarrow$ Active-SVDD, INSOMNIA\\
+			      \footnotesize e.g., active learning, semi-supervised learning, and pseudo-labeling}
+
+		\item<1-> \alt<2>{\alert{\textbf{Better robustness in practice $\longrightarrow$ CADE, OWAD}}\\
+			      \footnotesize e.g., adaptability to evolving traffic,
+			      resilience to adversarial attacks, and more challenging evaluation}
+		      {Better robustness in practice $\longrightarrow$ CADE, OWAD\\
+			      \footnotesize e.g., adaptability to evolving traffic,
+			      resilience to adversarial attacks, and more challenging evaluation}
+
+	\end{itemize}
+
+	\sliderefs{Refs: BotMiner [Gu et al., 2008]; Kitsune [Mirsky et al., 2018]; Flow-MAE [Hang et al., 2023]; NetVigil [Hsieh et al., 2024]; AOC-IDS [Zhao et al., 2024]; ENIDrift [Wang, 2022]; Active-SVDD [Gornitz et al., 2009]; INSOMNIA [Pierazzi et al., 2021]; CADE [Yang et al., 2021]; OWAD [Hu et al., 2023].}
+
+\end{frame}
+
+
+\begin{frame}{Focus of this thesis: robustness in ML-based NIDS}
+	\small
+
+	\vfill
+	\begin{block}{Robustness in this thesis}
+		\begin{itemize}
+			\setlength\itemsep{0.6em}
+			\item Good performance on one fixed benchmark split is not sufficient to claim robustness.
+			\item Before deployment, robustness depends on evaluation conditions that reveal detector weaknesses.
+			\item After deployment, robustness means remaining effective when traffic and attack patterns evolve.
+		\end{itemize}
+
+		\vspace{0.35em}
+		\centering
+		\textbf{$\Rightarrow$ ML-based NIDS robustness is studied both before deployment, through the evaluation process, and after deployment, through adaptability to evolving traffic.}
+	\end{block}
+	\vfill
+
+\end{frame}
+
+
+
+\begin{frame}{Roadmap of the presentation}
+	\small
+
+	\setbeamercolor{roadmap step}{fg=normal text.fg,bg=structure.fg!10}
+	\setbeamercolor{roadmap card}{fg=normal text.fg,bg=black!3}
+	\setbeamercolor{roadmap card title}{fg=white,bg=structure.fg}
+	\setbeamercolor{roadmap card title alt}{fg=white,bg=alerted text.fg}
+
+	\centering
+	{\normalsize\textbf{Each part follows the same logic}}\\[0.2em]
+	{\normalsize State of the art $\rightarrow$ Limitations $\rightarrow$ Proposed contribution}\\[0.6em]
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.49\linewidth}
+		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card}
+			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title alt}
+				\centering \textbf{Part I \quad Evaluation}
+			\end{beamercolorbox}
+			\begin{minipage}[t][4.2cm][t]{\linewidth}
+				\vspace*{0.05cm}
+				\raggedright
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{
+					{\fontsize{5.9}{6.6}\selectfont
+							\textbullet\ Anser et al., \emph{``TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation,''}\\
+							ESORICS 2025 (\textit{main track}).}
+				}
+			\end{minipage}
+		\end{beamercolorbox}
+
+		\column{0.49\linewidth}
+		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card}
+			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title}
+				\centering \textbf{Part II \quad Adaptation}
+			\end{beamercolorbox}
+			\begin{minipage}[t][4.2cm][t]{\linewidth}
+				\vspace*{0.05cm}
+				\raggedright
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{
+				{\fontsize{5.7}{6.35}\selectfont
+						\textbullet\ Anser et al., \emph{``Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning,''}\\
+						NOMS 2023 (\textit{AnNet workshop}).}\\[0.12em]
+				{\fontsize{5.7}{6.35}\selectfont
+				\textbullet\ Anser et al., \emph{``Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets,''}\\
+				LCN 2024 (\textit{short paper}).}\\[0.12em]
+				{\fontsize{5.7}{6.35}\selectfont
+				\textbullet\ Anser et al., \emph{``An Empirical Study on Configuration Robustness of Unsupervised IDS,''}\\
+				NOMS 2026 (\textit{main track, to appear}).}
+				}
+			\end{minipage}
+		\end{beamercolorbox}
+	\end{columns}
+
+\end{frame}
