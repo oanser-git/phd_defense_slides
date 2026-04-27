@@ -1,0 +1,179 @@
+%\begin{frame}
+%{Diversity, Proximity, Scarcity (All in [0, 1]; higher =
+%  more challenging \(\mathcal{D}_\text{test}\))}
+%
+%  \scriptsize   % adjust size to taste
+%
+%  \begin{columns}[T,onlytextwidth]
+%
+%
+%    % -------- Proximity ----------------------------------------
+%    \column{0.32\linewidth} \uncover<1->{% \centering
+%      \centering
+%      \includegraphics[width=0.7\linewidth]{tata/figures/proximity-crop}
+%
+%      \begin{itemize}
+%        \item Quantifies \(\mathcal{Z}_\text{test}\) closeness to $N(z)$; nearer
+%        $\Rightarrow$ closer to a different label decision boundary $\Rightarrow$ harder
+%        cases.
+%        \item \(P\) = \textbf{max} one-sided \(\text{KS}\) (over clusters): compares
+%        \(\mathcal{Z}_{\text{test}}\) vs.\ \(\mathcal{Z}_{\text{train}}\) distances to
+%        \(N(z)\); higher \(P\) $\Rightarrow$ \(\mathcal{D}_\text{test}\) sit nearer
+%        different-label decision boundaries.
+%
+%      \end{itemize}
+%    }
+%
+%    % -------- Diversity ----------------------------------------
+%    \column{0.32\linewidth}
+%    \uncover<2->{%
+%      \centering
+%      \includegraphics[width=0.7\linewidth]{tata/figures/diversity-crop}
+%
+%      \vspace{0.3em}
+%
+%      \begin{itemize}
+%
+%        \item Assesses the variety of \(\mathcal{Z}_\text{test}\) within assigned
+%        clusters; higher diversity $\Rightarrow$ minimal redundancy $\Rightarrow$
+%        broader coverage of the latent space.
+%
+%        \item $D$ = \textbf{Average} of normalized \textbf{Vendi Scores} (over clusters)
+%        ; a higher $D$ $\Rightarrow$ a more comprehensive and varied
+%        \(\mathcal{D}_\text{test}\).
+%
+%      \end{itemize}
+%    }
+%
+%    % -------- Scarcity -----------------------------------------
+%    \column{0.32\linewidth}
+%    \centering
+%    \uncover<3->{%
+%    % two side-by-side images
+%      \begin{minipage}{0.48\linewidth}
+%        \centering
+%        \includegraphics[width=\linewidth]{tata/figures/bad_scarcity-crop}
+%        \\[0.1em]
+%        \scriptsize Bad scarcity
+%      \end{minipage}\hfill
+%      \begin{minipage}{0.48\linewidth}
+%        \centering
+%        \includegraphics[width=\linewidth]{tata/figures/optimal_scarcity-crop}
+%        \\[0.1em]
+%        \scriptsize Optimal scarcity
+%      \end{minipage}
+%
+%      \vspace{0.4em}
+%
+%      \begin{itemize}
+%
+%        \item Evaluates how uniformly \(\mathcal{Z}_\text{test}\) are distributed
+%        among all potential negative clusters (i.e., decision boundaries); a uniform
+%        spread $\Rightarrow$ all boundaries are exercised $\Rightarrow$ a more robust
+%        test set.
+%
+%        \item $S$ = \textbf{Average} of the \textbf{(1 - Gini coefficient)} (over
+%        clusters); a higher $S$ $\Rightarrow$ \(\mathcal{D}_\text{test}\) challenges all
+%        decision boundaries more evenly.
+%
+%      \end{itemize}
+%    }
+%
+%  \end{columns}
+%
+%\end{frame}
+
+\begin{frame}
+  \frametitle{Proximity $P \in [0,1]$, \quad higher =
+    nearer to different-label boundaries}
+
+  \begin{columns}[T, onlytextwidth]
+    \column{0.55\linewidth}
+
+
+    \begin{itemize}
+      \item Quantifies \(\mathcal{Z}_\text{test}\) closeness to $N(z)$; high proximity
+      $\Rightarrow$ closer to a different label decision boundary $\Rightarrow$ harder
+      cases.
+      \item[]
+      \item \(P\) = \textbf{max} one-sided Kolmogorov--Smirnov statistic (over clusters):
+      compares
+      \(\mathcal{Z}_{\text{test}}\) vs.\ \(\mathcal{Z}_{\text{train}}\) distances to
+      \(N(z)\)
+      \item[]
+%      \item Higher \(P\) $\Rightarrow$ \(\mathcal{D}_\text{test}\) sit nearer
+%      different-label decision boundaries.
+    \end{itemize}
+
+    \column{0.4\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{sections/TATA/methodology/figures/proximity-crop}
+
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Diversity $D \in [0,1]$, \quad higher = broader, less redundant coverage}
+
+  \begin{columns}[T, onlytextwidth]
+
+    \column{0.55\linewidth}
+
+    \begin{itemize}
+
+      \item Assesses the variety of \(\mathcal{Z}_\text{test}\); higher diversity
+      $\Rightarrow$ minimal redundancy $\Rightarrow$
+      broader coverage of the latent space.
+      \item[]
+      \item $D$ = \textbf{Average} of normalized \textbf{Vendi Scores} (over clusters)
+      \item[]
+%      \item Higher $D$ $\Rightarrow$ a more comprehensive and varied
+%      \(\mathcal{D}_\text{test}\).
+
+    \end{itemize}
+
+    \column{0.4\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{sections/TATA/methodology/figures/diversity-crop}
+
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Scarcity $S \in [0,1]$ \quad higher = boundaries challenged more evenly}
+
+  \begin{columns}[T, onlytextwidth]
+    % -------- Text on the left -----------------------------------
+    \column{0.55\linewidth}
+    \begin{itemize}
+
+      \item Evaluates how uniformly \(\mathcal{Z}_\text{test}\) are distributed
+      among all potential negative clusters (i.e., decision boundaries).
+      \item[]
+      \item High scarcity $\Rightarrow$ a uniform
+      spread $\Rightarrow$ all boundaries are exercised $\Rightarrow$ a more robust
+      test set.
+      \item[]
+      \item $S$ = \textbf{Average} of the \textbf{(1 - Gini coefficient)} (over
+      clusters)
+%      ; a higher $S$ $\Rightarrow$ \(\mathcal{D}_\text{test}\) challenges all
+%      decision boundaries more evenly.
+
+    \end{itemize}
+
+    % -------- Figures on the right -------------------------------
+    \column{0.4\linewidth}
+    \centering
+
+    \includegraphics[width=0.55\linewidth]{sections/TATA/methodology/figures/bad_scarcity-crop}
+    \\
+    \scriptsize Bad scarcity
+
+    \vspace{1em} % A larger vertical space between the two images
+
+    \includegraphics[width=0.55\linewidth]{sections/TATA/methodology/figures/optimal_scarcity-crop}
+    \\
+    \scriptsize Optimal scarcity
+
+  \end{columns}
+\end{frame}

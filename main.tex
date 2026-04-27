@@ -2,13 +2,39 @@
 
 \usetheme[progressbar=frametitle,numbering=fraction]{metropolis}
 \usecolortheme{spruce}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage{graphicx}
+\usepackage[normalem]{ulem}
 \usepackage{booktabs}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{fontawesome5}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+\newcommand{\iconNN}{%
+  \tikz[baseline=-0.5ex,scale=0.18,line width=0.7pt]{
+    \foreach \y in {1.5,0,-1.5}
+      \draw[fill=black] (-2,\y) circle (6pt);
+    \foreach \y in {0.75,-0.75}
+      \draw[fill=black] (0,\y) circle (6pt);
+    \draw[fill=black] (2,0) circle (6pt);
+    \foreach \yin in {1.5,0,-1.5}
+      \foreach \yhid in {0.75,-0.75} {
+        \draw (-2,\yin)--(0,\yhid);
+      }
+    \foreach \yhid in {0.75,-0.75}
+      \draw (0,\yhid)--(2,0);
+  }}
+
+\definecolor{defbg}{RGB}{230,243,255}
+\definecolor{takebg}{RGB}{255,235,235}
+\setbeamercolor{defbox}{bg=defbg,fg=black}
+\setbeamercolor{takebox}{bg=takebg,fg=black}
 
 \title{Toward Adaptive and Robust Machine Learning based Network Intrusion Detection Systems}
 % \subtitle{Optional Subtitle}
@@ -25,7 +51,9 @@
 % \end{frame}
 
 \input{sections/introduction}
-\input{sections/part_1/draft}
+% \input{sections/draft}
+\input{sections/TATA/slides}
+\input{sections/auto-configuration/slides}
 
 \begin{frame}[standout]
 	Questions?

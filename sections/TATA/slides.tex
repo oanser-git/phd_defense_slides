@@ -1,0 +1,516 @@
+\section{Part I: TATA}
+
+\begin{frame}{Introduction}
+	\centering
+	\includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{figures/TATA/ML_NIDS_last.pdf}
+
+	\textbf{$\Rightarrow$ This part focuses on \(\mathcal{D}_{\text{test}}\) and its relation to \(\mathcal{D}_{\text{train}}\).}\\[0.6em]
+
+\end{frame}
+
+% ------------------------------------------------------------
+% Slide 2 – Benchmark splits & their limits
+% ------------------------------------------------------------
+\begin{frame}{Benchmark NIDS datasets}
+
+	\small
+	\begin{columns}[T,onlytextwidth]
+		\column{0.55\linewidth}
+		\begin{itemize}
+			\item A single source dataset partitioned into \(\mathcal{D}_{\text{train}}\)
+			      and \(\mathcal{D}_{\text{test}}\).
+			\item Reported evaluation accuracies >\ \textbf{90\%} in published works on
+			      public benchmarks (IDS2017, UNSW-NB15…) \(\rightarrow\) solved problem or
+			      benchmark-induced illusions?
+			\item A near-complete overlap of DoS-Hulk flows in IDS2017's
+			      \(\mathcal{D}_{\text{train}}\) and \(\mathcal{D}_{\text{test}}\)\footnotemark.
+
+		\end{itemize}
+
+		\vspace{2em}
+
+		\setbeamercolor{focusbox}{use={structure, normal text},
+			fg=structure.fg,
+			bg=structure.fg!12!normal text.bg}
+		\begin{beamercolorbox}[wd=\linewidth, sep=1ex, rounded=true]{focusbox}
+			\small Overlap between \(\mathcal{D}_{\text{test}}\) and
+			\(\mathcal{D}_{\text{train}}\) does not prevent overfitting
+			\(\rightarrow\) it can hide it.
+		\end{beamercolorbox}
+
+		\column{0.4\linewidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=\linewidth]
+			{figures/TATA/bad_smells}
+			\label{fig:bad_smells}
+		\end{figure}
+	\end{columns}
+
+	\vspace{1em}
+	\footnotetext{\tiny Flood et al., Bad Design Smells in Benchmark NIDS
+		Datasets, IEEE EuroS\&P 2024.}
+
+\end{frame}
+
+
+% ---------- add in the preamble -----------------
+% custom colours for the two RQs
+\definecolor{rqblue}{RGB}{  0, 86,123}
+\definecolor{rqgreen}{RGB}{  0,123, 86}
+
+% use them for beamer blocks
+\setbeamercolor{block title}{fg=white,bg=rqblue}
+\setbeamercolor{block title alerted}{fg=white,bg=rqgreen}
+
+
+% ------------ RQ slide -------------
+\begin{frame}{Research Questions}
+	\vspace{0.5em}
+
+	\begin{block}<2->{\Large RQ1 — Test-set Assessment}
+
+		\large How can we create a numerical score or a set of metrics to objectively
+		measure the difficulty of a \(\mathcal{D}_\text{test}\) for a NIDS?
+
+	\end{block}
+
+
+	\vspace{3em}
+
+	\begin{block}<1->{\Large RQ2 — Targeted Augmentation}
+
+		\large Given a \textbf{too-easy} initial $\mathcal{D}_\text{test}$, can we apply
+		systematic augmentation to generate new, \textbf{realistic}, and
+		\textbf{challenging} traffic that is specifically designed to expose the hidden
+		weaknesses of the NIDS?
+
+	\end{block}
+
+
+\end{frame}
+
+\newcommand{\limMA}{\begingroup\large\faUnlock\endgroup}
+%\newcommand{\limNN}{\begingroup\large\faMicrochip\endgroup}
+\newcommand{\limTA}{\begingroup\large\faRuler\endgroup}
+\newcommand{\limRT}{\begingroup\large\faRedo\endgroup}
+\newcommand{\limSY}{\begingroup\large\faFlask\endgroup}
+\newcommand{\limPR}{\begingroup\large\faBullseye\endgroup}
+\newcommand{\limMU}{\begingroup\large\faHandPointer\endgroup}
+\newcommand{\limMC}{\begingroup\large\faTools\endgroup}
+\newcommand{\gOne}[1]{\colorbox{blue!15}{#1}}
+\newcommand{\gTwo}[1]{\colorbox{green!20}{#1}}
+\newcommand{\gThree}[1]{\colorbox{orange!50}{#1}}
+% usage: \lateGOne{\limMA}
+\newcommand{\lateGOne}[1]{\alt<12->{\gOne{#1}}{#1}}
+\newcommand{\lateGTwo}[1]{\alt<12->{\gTwo{#1}}{#1}}
+\newcommand{\lateGThree}[1]{\alt<12->{\gThree{#1}}{#1}}
+\newcommand{\showat}[2]{\alt<#1->{#2}{\phantom{#2}}}
+\newcommand{\finalonly}[1]{\alt<4->{#1}{\phantom{#1}}}
+\newcommand{\ncovlim}{%
+	\parbox[t]{\linewidth}{%
+		Model access (\lateGOne{\limMA}) + NN-only (\lateGOne{\iconNN}) + \\
+		Ignores train--test alignment (\lateGTwo{\limTA})}}
+
+\newcommand{\ncovlimbf}{%
+	\parbox[t]{\linewidth}{%
+		\textbf
+		{Model access (\lateGOne{\limMA}) + NN-only (\lateGOne{\iconNN}) + \\
+			Ignores train--test alignment (\lateGTwo{\limTA})}}}
+\newcommand{\ncovlimfinal}{%
+	\parbox[t]{\linewidth}{%
+		Model access (\gOne{\limMA}) + NN-only (\gOne{\iconNN}) + \\
+		Ignores train--test alignment (\gTwo{\limTA})}}
+%% ------------------------------------------------------------
+%\begin{frame}[c]{Related Work}
+%    \centering
+%
+%    % helper icons
+%    \newcommand{\cmark}{\textcolor{green!60!black}{\faCheck}}
+%    \newcommand{\xmark}{\textcolor{red}{\faTimes}}
+%
+%    % table style
+%    \scriptsize
+%    \setlength{\tabcolsep}{10pt}
+%    \renewcommand{\arraystretch}{2}
+%
+%    % ----------------------------------------------------------------
+%    \begin{tabularx}{\linewidth}
+%    {@{}>{\raggedright\arraybackslash}p{3.8cm} c c X@{}}
+%        \toprule
+%        \textbf{Method category} & \textbf{RQ1} & \textbf{RQ2} &
+%        \textbf{Key limitations} \\
+%        \midrule
+%
+%
+%        % ---------------------------------------------
+%        \only<1>{\phantom{Neuron coverage}}%
+%        \only<2->{Neuron coverage} &
+%
+%        \only<1>{\phantom{\cmark}}%
+%        \only<2->{\cmark} &
+%
+%        \only<1>{\phantom{\xmark}}%
+%        \only<2->{\xmark} &
+%
+%        \only<1>{\phantom{\ncovlim}}%   % reserves height on overlay 1
+%        \only<2>{\ncovlim}%              % normal on overlay 2
+%        \only<3>{\ncovlimbf}%            % bold on overlay 3
+%        \only<4->{\ncovlim}%             % normal again from overlay 4
+%        \\[0.3em]
+%
+%
+%        % Row 2 — Surprise coverage ------------------------------------
+%        \only<1-3>{\phantom{Surprise coverage}}%
+%        \only<4->{Surprise coverage} &
+%        \only<1-3>{\phantom{\cmark}}%
+%        \only<4->{\cmark} &
+%        \only<1-3>{\phantom{\xmark}}%
+%        \only<4->{\xmark} &
+%        \only<1-3>{
+%            \phantom
+%            {\limMA \; + \; \iconNN \; + \; Proximity-only
+%            focus (\lateGTwo{\limPR})}}%
+%        \only<4>
+%        {\limMA \; + \; \iconNN \; + \; Proximity-only
+%        focus (\lateGTwo{\limPR})}
+%        \only<5>{
+%            \textbf
+%            {\limMA \; + \; \iconNN \; + \; Proximity-only
+%            focus (\lateGTwo{\limPR})}}
+%        \only<6->
+%        {\limMA \; + \; \iconNN \; + \; Proximity-only
+%        focus (\lateGTwo{\limPR})}%
+%        \\[0.3em]
+%
+%        % Row 3 — Mutation testing -------------------------------------
+%        \only<1-5>{\phantom{Mutation testing}}%
+%        \only<6->{Mutation testing} &
+%        \only<1-5>{\phantom{\cmark}}%
+%        \only<6->{\cmark} &
+%        \only<1-5>{\phantom{\xmark}}%
+%        \only<6->{\xmark} &
+%        \only<1-5>
+%        {
+%            \phantom
+%            {\limMA \; + \; \limTA \; + \; Model-change
+%            sensitive (\lateGOne{\limMC})}}%
+%        \only<6>
+%        {\limMA \; + \; \limTA \; + \; Model-change
+%        sensitive (\lateGOne{\limMC})}%
+%        \only<7>{\textbf
+%        {\limMA \; + \; \limTA \; + \; Model-change
+%        sensitive (\lateGOne{\limMC})}}%
+%        \only<8->
+%        {\limMA \; + \; \limTA \; + \; Model-change
+%        sensitive (\lateGOne{\limMC})}%
+%        \\[0.3em]
+%
+%        % Row 4 — DeepMETIS --------------------------------------------
+%        \only<1-7>{\phantom{Mutation testing (DeepMetis)}}%
+%        \only<8->{Mutation testing (Deepmetis)} &
+%        \only<1-7>{\phantom{\cmark}}%
+%        \only<8->{\cmark} &
+%        \only<1-7>{\phantom{\cmark}}%
+%        \only<8->{\cmark} &
+%        \only<1-7>{
+%            \phantom
+%            {Retrain per dataset (\lateGThree{\limRT}) \;+\;Synthetic
+%            data (\lateGThree{\limSY})}}%
+%        \only<8>
+%        {Retrain per dataset (\lateGThree{\limRT}) \;+\;Synthetic
+%        data (\lateGThree{\limSY})}%
+%        \only<9>{
+%            \textbf
+%            {Retrain per dataset (\lateGThree{\limRT}) \;+\;Synthetic
+%            data (\lateGThree{\limSY})}}%
+%        \only<10->
+%        {Retrain per dataset (\lateGThree{\limRT}) \;+\;Synthetic
+%        data (\lateGThree{\limSY})}%
+%        \\[0.3em]
+%
+%        % Row 5 — Flood 2024 -------------------------------------------
+%        \only<1-9>{\phantom{Manual}}%
+%        \only<10->{Manual (\cite{flood2014baddesign})} &
+%        \only<1-9>{\phantom{\xmark}}%
+%        \only<10->{\xmark} &
+%        \only<1-9>{\phantom{\cmark}}%
+%        \only<10->{\cmark} &
+%        \only<1-9>{
+%            \phantom{Unguided augmentation (\lateGThree{\limMU})}}%
+%        \only<10>
+%        {Unguided augmentation (\lateGThree{\limMU})}%
+%        \only<11>{
+%            \textbf{Unguided augmentation (\lateGThree{\limMU})}}%
+%        \only<12->
+%        {Unguided augmentation (\lateGThree{\limMU})}%
+%        \\
+%
+%        \bottomrule
+%    \end{tabularx}
+%
+%    % =========== Definition / Take-away card ========================
+%    \vspace{1em}
+%
+%    % ---- normal definition card (overlays 1–11) --------------------
+%    \only<1-11>{%
+%        \begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1ex]
+%        {defbox}
+%            \scriptsize
+%            \only<2-3>{\textbf{Neuron coverage: }
+%            Fraction of neurons whose activation exceeds a preset threshold at least once
+%            across the test set; higher $\rightarrow$ explore more of the model’s
+%internal
+%            logic.}
+%            \only<4-5>
+%            {\textbf{Surprise coverage: } Measures how broadly the test set differs from
+%            what the model saw in training; higher $\rightarrow$ the set includes both
+%            familiar and highly surprising inputs.}
+%            \only<6-7>
+%            {
+%            \textbf{Mutation testing: } Mutates the model or its training setup (e.g.,
+%            weights, architecture, or hyperparameters), then checks if the test set can
+%            distinguish the mutant from the original model.}
+%            \only<8-9>
+%            {
+%            \textbf{DeepMetis:} Combines mutation testing with synthetic data
+%generation to
+%            create new test data points that expose the mutated models’ weaknesses.}
+%            \only<10-11>
+%            {\textbf{Flood et al. 2024~\cite{flood2014baddesign}:} Manual generation
+%of DoS-Hulk attacks with 60
+%            randomised web-page-size (1–10 MB) ✚ bandwidth (1–50 Mbps) combinations, then
+%            injected into IDS2017 to augment the test set}
+%        \end{beamercolorbox}}
+%
+%    % ---- take-away card (overlay 12+) --------------------------------
+%    \only<12->{%
+%        \begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0
+%        .8ex]
+%        {takebox}
+%            \gOne{\textbf{G1}}\;Model-related gaps\quad
+%            \gTwo{\textbf{G2}}\;Shortcomings in assessing \(\mathcal{D}_{\text{test}}
+%            $\rightarrow$ RQ1\quad
+%            \gThree{\textbf{G3}}\;Weaknesses in \(\mathcal{D}_{\text{test}}\)'s
+%            augmentation workflows $\rightarrow$ RQ2\\[0.4em]
+%        \end{beamercolorbox}}
+%\end{frame}
+
+
+\begin{frame}[c]{Related Work}
+	\centering
+	\newcommand{\cmark}{\textcolor{green!60!black}{\faCheck}}
+	\newcommand{\xmark}{\textcolor{red}{\faTimes}}
+
+	\scriptsize
+	\setlength{\tabcolsep}{10pt}
+	\renewcommand{\arraystretch}{2}
+
+	% -------- Progressive table (t0..t2) --------
+	\only<1-3>{%
+		\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.9cm} c c p{7.6cm}@{}}
+			\toprule
+			\textbf{Method category}                      & \textbf{RQ1} & \textbf{RQ2} & \textbf{Key limitations}
+			\\
+			\midrule
+			% t0
+			\showat{1}{Neuron coverage}                   &
+			\finalonly{\cmark}                            &
+			\finalonly{\xmark}                            &
+			\finalonly{\ncovlim}                                                                                   \\[0.3em]
+
+			% t1
+			\showat{2}{Surprise coverage}                 &
+			\finalonly{\cmark}                            &
+			\finalonly{\xmark}                            &
+			\finalonly{\limMA \; + \; \iconNN \; + \; Proximity-only focus (\lateGTwo{\limPR})}
+			\\[0.3em]
+
+			% t2 (two rows)
+			\multirow{2}{=}{\showat{3}{Mutation testing}} &
+			\multirow{2}{*}{\finalonly{\cmark}}
+			                                              &
+			\multirow{2}{*}{\finalonly{\cmark}}
+			                                              &
+			\finalonly{\limMA \; + \; \limTA \; + \; Model-change sensitive (\lateGOne{\limMC})}
+			\\
+			                                              &              &              & \finalonly
+			{Retrain per dataset (\lateGThree{\limRT}) \;+\; Synthetic data (\lateGThree{\limSY}
+			)}                                                                                                     \\[0.3em]
+
+			% Manual row: reserved, shown only on final
+			\showat{4}{Manual (Flood et al.)}             &
+			\finalonly{\xmark}                            &
+			\finalonly{\cmark}
+			                                              &
+			\finalonly{Unguided augmentation (\lateGThree{\limMU})}
+			\\
+			\bottomrule
+		\end{tabular}
+	}
+
+	% -------- Final table (t3) — full, exactly like before --------
+	\only<4->{%
+		\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.9cm} c c p{7.6cm}@{}}
+			\toprule
+			\textbf{Method category}          & \textbf{RQ1}                            & \textbf{RQ2} &
+			\textbf{Key limitations}
+			\\
+			\midrule
+			Neuron coverage                   & \cmark                                  & \xmark       & \ncovlimfinal
+			\\[0.3em]
+			Surprise coverage                 & \cmark                                  & \xmark       & \limMA \; + \;
+			\iconNN \; + \; Proximity-only focus (\gTwo{\limPR})                                                                                     \\[0.3em]
+			\multirow{2}{=}{Mutation testing} & \multirow{2}{*}{\cmark}                 &
+			\multirow{2}{*}{\cmark}
+			                                  &
+			\limMA \; + \; \limTA \; + \; Model-change sensitive (\gOne{\limMC})
+			\\
+			                                  &                                         &              & Retrain per dataset (\gThree{\limRT}) \;+\;
+			Synthetic data (\gThree{\limSY})                                                                                                         \\[0.3em]
+			Manual (Flood et al., 2024)       & \xmark                                  & \cmark
+			                                  & Unguided augmentation (\gThree{\limMU})
+			\\
+			\bottomrule
+		\end{tabular}
+
+		\vspace{0.8em}
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex]{takebox}
+			\gOne{\textbf{G1}}\;Model-related gaps\quad
+			\gTwo{\textbf{G2}}\;Shortcomings in assessing \(\mathcal{D}_{\text{test}}\)
+			$\rightarrow$ RQ1\quad
+			\gThree{\textbf{G3}}\;Weaknesses in \(\mathcal{D}_{\text{test}}\)
+			augmentation workflows $\rightarrow$ RQ2
+		\end{beamercolorbox}
+	}
+
+	% -------- Explainers (two lines; fixed height) --------
+	\only<1>{\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1ex]{defbox}
+			\scriptsize
+			\textbf{Neuron coverage:}
+			Fraction of neurons whose activation exceeds a preset threshold at least once
+			across the test set; higher $\rightarrow$
+			explore more of the model’s internal
+			logic.
+		\end{beamercolorbox}}
+
+	\only<2>{\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1ex]{defbox}
+			\scriptsize
+			\textbf{Surprise coverage:}
+			Measures how broadly the test set differs from
+			what the model saw in training; higher $\rightarrow$ the test set includes
+			highly surprising inputs.
+		\end{beamercolorbox}}
+
+	\only<3>{\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1ex]{defbox}
+			\scriptsize
+			\textbf{Mutation testing:}
+			Mutates the model and/or its training setup (e.g., weights, architecture, or
+			hyperparameters), then checks if the test set can distinguish the mutant from
+			the original model.
+		\end{beamercolorbox}}
+
+\end{frame}
+
+%\begin{frame}{TATA — Three Connected Phases}
+
+\begin{frame}
+	{TATA (\textbf{T}est-set \textbf{A}ssessment \& \textbf{T}argeted \textbf{A}ugmentation)}
+
+	%    \small
+
+	% ---- Goal sentence ------------------------------------------------
+	\textbf{Goal:} Close the gaps identified in related work and answer the
+	research questions.
+
+
+
+	\begin{enumerate}
+		\item \textbf{Preliminary Phase} \hfill \gOne{\textbf{G1}}: \limMA\;
+		      +\;\iconNN\;+\;\limMC\\
+
+		      Approximate \(\mathcal{D_{\text{train}}}\)'s decision boundary while being model
+		      agnostic
+
+		\item[]
+		\item
+		      \textbf{Phase 1 – Assesses \(\mathcal{D}_{\text{test}}\)'s quality (\textbf{RQ1})}
+		      \hfill
+		      \gTwo{\textbf{G2}}: \limTA\;+\;\limPR\\
+
+		      \textbf{Define} three metrics (\textbf{Proximity}, \textbf{Diversity}, and
+		      \textbf{Scarcity}) to assess the \textbf{alignment} of
+		      \(\mathcal{D}_\text{test}\) with respect to \(\mathcal{D}_{\text{train}}\)'s
+		      distribution.
+
+		\item[]
+		\item \textbf{Phase 2 – \(\mathcal{D}_{\text{test}}\) Augmentation (\textbf{RQ2})}
+		      \hfill
+		      \gThree{\textbf{G3}}: \limRT\;+\;\limSY\;+\;\limMU\\
+		      Reinforcement learning
+		      (RL) guides a testbed to generate \textbf{realistic traffic}
+		      that fills uncovered metric gaps, producing \textbf{a more challenging}
+		      \( \mathcal{D}_{\text{test}} \).
+	\end{enumerate}
+
+\end{frame}
+
+\input{sections/TATA/methodology/slides}
+
+% ------------------------------------------------------------
+% Experimental Setup
+% ------------------------------------------------------------
+\begin{frame}{Experimental Setup}
+
+	\scriptsize
+
+	\textbf{Datasets (60 / 20 / 20 split)}
+
+	\begin{itemize}
+		\item [] \textit{(Using the revised and corrected versions)}
+		\item \textbf{CIC-IDS 2017}: 0.93 M benign / 0.25 M attack flows
+		\item \textbf{CSE-CIC-IDS 2018}: 59.8 M benign / 4.1 M attack flows
+	\end{itemize}
+
+	\textbf{NIDS Models}
+	\begin{itemize}
+		\item RF, SVM, 3-layer DNN (128-128-128 ReLU + Softmax)
+	\end{itemize}
+
+	%  \textbf{Latent-Space Encoder}
+	%  \begin{itemize}
+	%    \item 64 → 32 → 16 units, 3-D latent
+	%  \end{itemize}
+
+	\textbf{Agent Training}
+	\begin{itemize}
+		\item Augmentation targets Benign SSH flows only
+		\item []
+		\item Action space (client-side via \texttt{tc}):
+		      \textbf{Loss} $\in [5,10]\%$ \ \textbar\
+		      \textbf{Jitter} $\in [4,10]\,\mathrm{ms}$ \ \textbar\
+		      \textbf{Delay} $\in [10,40]\,\mathrm{ms}$ \ \textbar\
+		      \textbf{Duplication} $\in [0.1,5]\%$ \ \textbar\
+		      \textbf{Corruption} $\in [0.1,10]\%$ \ \textbar\
+		      \textbf{Reordering} $\in [0.1,50]\%$ \ \textbar\
+		      \textbf{Correlation} $\in [50,100]\%$.
+		      %    \item []
+		      %    \item Offline RL dataset: \(\sim\)
+		      %    500k transitions from IDS2018,
+		      %    generated by uniformly sampling the action space while a scripted SSH
+		      %    workload runs.
+
+	\end{itemize}
+
+\end{frame}
+
+
+\input{sections/TATA/results/slides}
+
+\begin{frame}{Part I conclusion}
+	\begin{itemize}
+		\item \phantom{Placeholder}
+		\item \phantom{Placeholder}
+		\item \phantom{Placeholder}
+	\end{itemize}
+\end{frame}
