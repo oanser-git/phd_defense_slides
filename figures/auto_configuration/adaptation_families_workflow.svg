@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="930" viewBox="40 45 1410 860">
+  <defs>
+    <style>
+      .title { font: 700 35px 'DejaVu Sans', Arial, sans-serif; fill: #12343d; }
+      .label { font: 700 23px 'DejaVu Sans', Arial, sans-serif; fill: #173844; }
+      .body { font: 600 25px 'DejaVu Sans', Arial, sans-serif; fill: #24343b; }
+      .small { font: 400 18px 'DejaVu Sans', Arial, sans-serif; fill: #4d616b; }
+      .tiny { font: 400 19px 'DejaVu Sans', Arial, sans-serif; fill: #5b6b73; }
+      .note { font: 700 18px 'DejaVu Sans', Arial, sans-serif; fill: #4d616b; }
+      .adtitle { font: 700 22px 'DejaVu Sans', Arial, sans-serif; fill: #6B7280; }
+      .node { fill: #f7fafc; stroke: #78909c; stroke-width: 2.4; }
+      .arrow { stroke: #4d616b; stroke-width: 3.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .arrowThin { stroke: #6b7c85; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .dashed { stroke-dasharray: 8 7; }
+      .family { font: 700 21px 'DejaVu Sans', Arial, sans-serif; fill: white; }
+      .legendfamily { font: 700 18px 'DejaVu Sans', Arial, sans-serif; fill: white; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#4d616b"/>
+    </marker>
+  </defs>
+
+  <!-- AD-specific region for threshold calibration -->
+  <rect x="985" y="40" rx="24" ry="24" width="280" height="352" fill="#eef0f3" fill-opacity="0.38" stroke="#6B7280" stroke-width="2.2"/>
+  <text x="1125" y="64" text-anchor="middle" class="adtitle">Anomaly Detection NIDS</text>
+
+  <!-- Workflow nodes -->
+  <rect x="80" y="260" rx="24" ry="24" width="220" height="106" class="node"/>
+  <text x="190" y="315" text-anchor="middle" class="label">Incoming traffic</text>
+  <text x="190" y="349" text-anchor="middle" class="small">new network context</text>
+
+  <rect x="430" y="220" rx="26" ry="26" width="430" height="180" class="node"/>
+  <text x="645" y="280" text-anchor="middle" class="title">
+    <tspan x="645" dy="0">Deployed</tspan>
+    <tspan x="645" dy="38">ML-based NIDS</tspan>
+  </text>
+  <text x="645" y="350" text-anchor="middle" class="small">feature representation + model weights</text>
+
+  <rect x="985" y="260" rx="22" ry="22" width="170" height="106" class="node"/>
+  <text x="1070" y="315" text-anchor="middle" class="label" font-weight="700">Threshold</text>
+  <text x="1070" y="349" text-anchor="middle" class="small">decision cutoff</text>
+
+  <rect x="1265" y="260" rx="22" ry="22" width="170" height="106" class="node"/>
+  <text x="1350" y="315" text-anchor="middle" class="label">Alerts</text>
+  <text x="1350" y="349" text-anchor="middle" class="small">operator view</text>
+
+  <path d="M300 313 H430" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M860 313 H985" class="arrow" marker-end="url(#arrowhead)"/>
+  <path d="M1155 313 H1265" class="arrow" marker-end="url(#arrowhead)"/>
+
+  <!-- Drift detection -->
+  <rect x="55" y="55" rx="18" ry="18" width="275" height="112" fill="#e6f0ff" stroke="#3B82F6" stroke-width="2.4"/>
+  <text x="192" y="103" text-anchor="middle" class="label">Drift / shift monitor</text>
+  <text x="192" y="138" text-anchor="middle" class="small">traffic or output change</text>
+  <path d="M192 167 V260" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <path d="M330 167 C418 172 500 192 565 220" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <circle cx="340" cy="83" r="18" fill="#3B82F6"/>
+  <text x="340" y="90" text-anchor="middle" class="family">D</text>
+
+  <!-- Transfer / domain adaptation -->
+  <rect x="365" y="55" rx="18" ry="18" width="275" height="112" fill="#f0e9ff" stroke="#7C3AED" stroke-width="2.4"/>
+  <text x="502" y="94" text-anchor="middle" class="label">
+    <tspan x="502" dy="0">Source domain /</tspan>
+    <tspan x="502" dy="24">prior model</tspan>
+  </text>
+  <text x="502" y="143" text-anchor="middle" class="small">knowledge reuse across contexts</text>
+  <path d="M502 167 C528 186 560 203 610 220" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <circle cx="650" cy="83" r="18" fill="#7C3AED"/>
+  <text x="650" y="90" text-anchor="middle" class="family">T</text>
+
+  <!-- Meta-learning -->
+  <rect x="675" y="55" rx="18" ry="18" width="275" height="112" fill="#fde7ff" stroke="#C026D3" stroke-width="2.4"/>
+  <text x="812" y="94" text-anchor="middle" class="label">
+    <tspan x="812" dy="0">Prior tasks /</tspan>
+    <tspan x="812" dy="24">meta-learner</tspan>
+  </text>
+  <text x="812" y="143" text-anchor="middle" class="small">learn how to adapt quickly</text>
+  <path d="M812 167 C790 186 760 202 720 220" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <circle cx="960" cy="83" r="18" fill="#C026D3"/>
+  <text x="960" y="90" text-anchor="middle" class="family">M</text>
+
+  <!-- Threshold calibration -->
+  <rect x="985" y="82" rx="18" ry="18" width="275" height="112" fill="#eef0f3" stroke="#6B7280" stroke-width="2.4"/>
+  <text x="1122" y="127" text-anchor="middle" class="label">Threshold calibration</text>
+  <text x="1122" y="160" text-anchor="middle" class="small">adjust alert cutoff after training</text>
+  <path d="M1122 194 V260" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <circle cx="1265" cy="110" r="18" fill="#6B7280"/>
+  <text x="1265" y="117" text-anchor="middle" class="family">C</text>
+
+  <!-- Online / continual learning -->
+  <rect x="430" y="490" rx="18" ry="18" width="430" height="112" fill="#e5f7f5" stroke="#0F766E" stroke-width="2.4"/>
+  <text x="645" y="536" text-anchor="middle" class="label">Online / continual update</text>
+  <text x="645" y="566" text-anchor="middle" class="small">incremental model updates</text>
+  <text x="645" y="589" text-anchor="middle" class="small">from new traffic</text>
+  <path d="M645 490 V400" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <path d="M190 366 C210 448 310 510 430 548" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <circle cx="872" cy="512" r="18" fill="#0F766E"/>
+  <text x="872" y="519" text-anchor="middle" class="family">O</text>
+
+  <!-- Active / semi-supervised -->
+  <rect x="945" y="490" rx="18" ry="18" width="430" height="112" fill="#fff1df" stroke="#D97706" stroke-width="2.4"/>
+  <text x="1160" y="536" text-anchor="middle" class="label">Few labels / pseudo-labels</text>
+  <text x="1160" y="566" text-anchor="middle" class="small">analyst queries + semi-supervision</text>
+  <path d="M1350 366 C1350 440 1280 478 1200 490" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <path d="M945 548 C900 540 825 490 810 400" class="arrowThin dashed" marker-end="url(#arrowhead)"/>
+  <circle cx="1394" cy="512" r="18" fill="#D97706"/>
+  <text x="1394" y="519" text-anchor="middle" class="family">A</text>
+
+  <!-- Legend items only -->
+  <circle cx="95" cy="700" r="15" fill="#3B82F6"/>
+  <text x="95" y="707" text-anchor="middle" class="legendfamily">D</text>
+  <text x="122" y="708" class="body" fill="#3B82F6">Drift detection</text>
+  <text x="120" y="736" class="tiny" fill="#3B82F6">monitor change in traffic or outputs</text>
+  <text x="120" y="760" class="tiny" fill="#3B82F6">CADE, OWAD, TRANSCEND</text>
+
+  <circle cx="580" cy="700" r="15" fill="#0F766E"/>
+  <text x="580" y="707" text-anchor="middle" class="legendfamily">O</text>
+  <text x="607" y="708" class="body" fill="#0F766E">Online / continual learning</text>
+  <text x="605" y="736" class="tiny" fill="#0F766E">update model weights over time</text>
+  <text x="605" y="760" class="tiny" fill="#0F766E">AOC-IDS, ENIDrift, ReCDA</text>
+
+  <circle cx="1065" cy="700" r="15" fill="#D97706"/>
+  <text x="1065" y="707" text-anchor="middle" class="legendfamily">A</text>
+  <text x="1092" y="708" class="body" fill="#D97706">Active / semi-supervised</text>
+  <text x="1090" y="736" class="tiny" fill="#D97706">use few labels or pseudo-labels</text>
+  <text x="1090" y="760" class="tiny" fill="#D97706">Active-SVDD, HITL-IDS, METALS</text>
+
+  <circle cx="95" cy="810" r="15" fill="#7C3AED"/>
+  <text x="95" y="817" text-anchor="middle" class="legendfamily">T</text>
+  <text x="122" y="818" class="body" fill="#7C3AED">Transfer / domain adaptation</text>
+  <text x="120" y="846" class="tiny" fill="#7C3AED">reuse knowledge from another context</text>
+  <text x="120" y="870" class="tiny" fill="#7C3AED">ADA, NAEF, DI-NIDS</text>
+
+  <circle cx="580" cy="810" r="15" fill="#C026D3"/>
+  <text x="580" y="817" text-anchor="middle" class="legendfamily">M</text>
+  <text x="607" y="818" class="body" fill="#C026D3">Meta-learning</text>
+  <text x="605" y="846" class="tiny" fill="#C026D3">learn how to adapt quickly from prior tasks</text>
+  <text x="605" y="870" class="tiny" fill="#C026D3">FC-Net, PTN-IDS, RETSINA</text>
+
+  <circle cx="1065" cy="810" r="15" fill="#6B7280"/>
+  <text x="1065" y="817" text-anchor="middle" class="legendfamily">C</text>
+  <text x="1092" y="818" class="body" fill="#6B7280">Threshold calibration</text>
+  <text x="1090" y="846" class="tiny" fill="#6B7280">adjust alert cutoff after training</text>
+  <text x="1090" y="870" class="tiny" fill="#6B7280">Bridges, Hundman, MAGPIE</text>
+</svg>

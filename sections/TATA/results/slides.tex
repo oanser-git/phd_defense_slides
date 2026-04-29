@@ -18,36 +18,36 @@
 
 
 %================= PROXIMITY (in practice) =================
-\begin{frame}{Proximity in Practice (IDS2017 only)}
-	\small
-	\begin{columns}[T,onlytextwidth]
-		% Left: text
-		\column{0.58\linewidth}
-		\begin{itemize}
-			\item Build 100 cumulative sub-tests by sorting \(z\) by distance to \(N(z)\).
-			\item[]
-			\item Beyond a proximity threshold, macro-F1 decreases as points close to decision
-			      boundaries accumulate --- \textbf{strong negative correlation}.
-			\item[]
-			\item Trends align across RF/DNN/SVM \(\Rightarrow\) proximity is
-			      \textbf{model-agnostic}.
-			      %      \item Build 100 cumulative sub-tests by sorting \(z\) by distance to
-			      %      \(N(z)\); higher proximity = closer to boundary.
-			      %      \item Macro-F1 stays \(\approx 1.0\) up to proximity
-			      %      \(\approx 0.11\text{--}0.14\), then declines to \(\approx 0.92\)
-			      %      ; strong negative correlation.
-			      %      \item Higher proximity \(\Rightarrow\)
-			      %      lower macro-F1; trends align across RF/DNN/SVM.
-		\end{itemize}
-		% Right: figure
-		\column{0.40\linewidth}
-		\centering
-		\begin{figure}
-			\includegraphics[width=0.95\linewidth]{sections/TATA/results/figures/proximity_in_practice-transparent.png}
-			\caption{\scriptsize Macro-F1 vs. proximity across cumulative sub-tests (IDS2017).}
-		\end{figure}
-	\end{columns}
-\end{frame}
+% \begin{frame}{Proximity in Practice (IDS2017 only)}
+% 	\small
+% 	\begin{columns}[T,onlytextwidth]
+% 		% Left: text
+% 		\column{0.58\linewidth}
+% 		\begin{itemize}
+% 			\item Build 100 cumulative sub-tests by sorting \(z\) by distance to \(N(z)\).
+% 			\item[]
+% 			\item Beyond a proximity threshold, macro-F1 decreases as points close to decision
+% 			      boundaries accumulate --- \textbf{strong negative correlation}.
+% 			\item[]
+% 			\item Trends align across RF/DNN/SVM \(\Rightarrow\) proximity is
+% 			      \textbf{model-agnostic}.
+% 			      %      \item Build 100 cumulative sub-tests by sorting \(z\) by distance to
+% 			      %      \(N(z)\); higher proximity = closer to boundary.
+% 			      %      \item Macro-F1 stays \(\approx 1.0\) up to proximity
+% 			      %      \(\approx 0.11\text{--}0.14\), then declines to \(\approx 0.92\)
+% 			      %      ; strong negative correlation.
+% 			      %      \item Higher proximity \(\Rightarrow\)
+% 			      %      lower macro-F1; trends align across RF/DNN/SVM.
+% 		\end{itemize}
+% 		% Right: figure
+% 		\column{0.40\linewidth}
+% 		\centering
+% 		\begin{figure}
+% 			\includegraphics[width=0.95\linewidth]{sections/TATA/results/figures/proximity_in_practice-transparent.png}
+% 			\caption{\scriptsize Macro-F1 vs. proximity across cumulative sub-tests (IDS2017).}
+% 		\end{figure}
+% 	\end{columns}
+% \end{frame}
 
 
 %%================= DIVERSITY (in practice) =================
@@ -378,31 +378,31 @@
 %
 %\end{frame}
 
-\begin{frame}{Datasets Analysis}
-
-	\small
-	\begin{columns}[T,onlytextwidth]
-		\column{0.55\linewidth}
-		\begin{itemize}
-			\item Apply \(D,P,S\)
-			      across many NIDS datasets (2009–2020), sorted by release year; averages
-			      over ten 60/20 splits.
-			\item []
-			\item No increasing pattern; values mostly \(\le 0.5\)
-			      with occasional peaks (e.g., early IDS2017/2018); low within-dataset variation.
-			\item []
-			\item \(\Rightarrow\)
-			      Despite richer, newer testbeds, NIDS test-set difficulty hasn’t
-			      substantially increased. (CV refs like MNIST/CIFAR-10 score higher on
-			      \(D,P,S\).)
-		\end{itemize}
-		\column{0.42\linewidth}
-		\begin{figure}
-			\centering
-			\includegraphics[width=\linewidth]{sections/TATA/results/figures/datasets_analysis-crop-transparent.png}
-			\caption{\scriptsize Test-set assessment of NIDS datasets.}
-			\label{fig:datasets_analysis}
-		\end{figure}
-	\end{columns}
-
-\end{frame}
+% \begin{frame}{Datasets Analysis}
+%
+% 	\small
+% 	\begin{columns}[T,onlytextwidth]
+% 		\column{0.55\linewidth}
+% 		\begin{itemize}
+% 			\item Apply \(D,P,S\)
+% 			      across many NIDS datasets (2009–2020), sorted by release year; averages
+% 			      over ten 60/20 splits.
+% 			\item []
+% 			\item No increasing pattern; values mostly \(\le 0.5\)
+% 			      with occasional peaks (e.g., early IDS2017/2018); low within-dataset variation.
+% 			\item []
+% 			\item \(\Rightarrow\)
+% 			      Despite richer, newer testbeds, NIDS test-set difficulty hasn’t
+% 			      substantially increased. (CV refs like MNIST/CIFAR-10 score higher on
+% 			      \(D,P,S\).)
+% 		\end{itemize}
+% 		\column{0.42\linewidth}
+% 		\begin{figure}
+% 			\centering
+% 			\includegraphics[width=\linewidth]{sections/TATA/results/figures/datasets_analysis-crop-transparent.png}
+% 			\caption{\scriptsize Test-set assessment of NIDS datasets.}
+% 			\label{fig:datasets_analysis}
+% 		\end{figure}
+% 	\end{columns}
+%
+% \end{frame}

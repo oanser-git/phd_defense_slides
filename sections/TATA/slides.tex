@@ -1,10 +1,30 @@
 \section{Part I: TATA}
 
 \begin{frame}{Introduction}
-	\centering
-	\includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{figures/TATA/ML_NIDS_last.pdf}
+	\small
+	\begin{columns}[T,onlytextwidth]
+		\column{0.42\linewidth}
+		\begin{itemize}
+			\item A robust evaluation should expose challenging cases, including
+			      corner cases.
+			\item Pre-deployment evaluation mainly relies on the test set
+			      \(\mathcal{D}_{\text{test}}\).
+			\item The key question is whether \(\mathcal{D}_{\text{test}}\)
+			      really stresses the ML-based NIDS.
+			\item The detector is constructed from
+			      \(\mathcal{D}_{\text{train}}\) \( \rightarrow \)
+			      \(\mathcal{D}_{\text{test}}\) must be assessed relative to
+			      \(\mathcal{D}_{\text{train}}\).
+		\end{itemize}
 
-	\textbf{$\Rightarrow$ This part focuses on \(\mathcal{D}_{\text{test}}\) and its relation to \(\mathcal{D}_{\text{train}}\).}\\[0.6em]
+		\column{0.56\linewidth}
+		\centering
+		\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{figures/TATA/ML_NIDS_last.pdf}
+	\end{columns}
+
+	\vspace{0.2em}
+	\centering
+	\textbf{$\Rightarrow$ This part focuses on \(\mathcal{D}_{\text{test}}\) and its relation to \(\mathcal{D}_{\text{train}}\).}
 
 \end{frame}
 
@@ -508,9 +528,12 @@
 \input{sections/TATA/results/slides}
 
 \begin{frame}{Part I conclusion}
+	\small
 	\begin{itemize}
-		\item \phantom{Placeholder}
-		\item \phantom{Placeholder}
-		\item \phantom{Placeholder}
+		\setlength\itemsep{0.65em}
+		\item TATA provides a pre-deployment framework to assess whether a \(\mathcal{D}_{\text{test}}\) really challenges a NIDS.
+		\item Targeted augmentation with a configurable live testbed exposes hidden weaknesses while preserving realistic traffic generation.
+		\item Across \textbf{12 public NIDS datasets} released between \textbf{2009 and 2020}, the metrics remain mostly below \textbf{0.5}, suggesting only limited test-set difficulty.
+		\item A more reliable pre-deployment evaluation is necessary, but not sufficient; robust ML-based NIDS also require post-deployment adaptation.
 	\end{itemize}
 \end{frame}

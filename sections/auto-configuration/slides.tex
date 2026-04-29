@@ -4,35 +4,30 @@
 	\small
 
 	\begin{columns}[T,onlytextwidth]
-		\column{0.40\linewidth}
+		\column{0.42\linewidth}
 		\begin{itemize}
 			\item ML-based NIDS are trained on historical traffic and deployed as static detectors.
-			\item This assumes training and deployment traffic remain statistically close.
-			\item In practice, benign traffic evolves, and attackers adapt.
+			\item This assumes training and deployment traffic remain
+			statistically close.
+			\item Benign traffic evolves, attackers adapt \(\rightarrow\) the
+			      network context changes.
 		\end{itemize}
 
-		\column{0.58\linewidth}
+		\column{0.54\linewidth}
 		\centering
-
-		\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{figures/auto_configuration/kdd_distribution_shift.pdf}
-
-		\par\vspace{0.05em}
-		{\fontsize{5.2}{6}\selectfont \textcolor{blue}{\textbf{Blue:}} Shifted benign traffic \quad \textcolor{orange}{\textbf{Orange:}} Shifted malicious traffic\par}
-
-		\par\vspace{0.1em}
-		\figsource{Anderson \& McGrew, KDD 2017, Table 2}
-
-		\vspace{0.3em}
-
-		\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{figures/auto_configuration/qiao_concept_drift.pdf}
+		\includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{figures/auto_configuration/qiao_concept_drift.pdf}
 
 		\par\vspace{0.1em}
 		\figsource{Qiao et al., IEEE TII 2022, Table V/VI and Section IV-C}
 	\end{columns}
 
-	\vspace{0.15em}
-	\centering
-	\resizebox{\linewidth}{!}{\textbf{$\Rightarrow$ Detection performance can degrade after deployment $\Rightarrow$ explicit adaptation mechanisms are needed}}
+	\vspace{0.6em}
+	\begin{beamercolorbox}[wd=\linewidth,sep=0.9ex,rounded=true,center]{block body}
+		\small
+		\textbf{$\Rightarrow$ Detection performance can degrade $\Rightarrow$ explicit adaptation mechanisms are needed}\\[0.35em]
+		\textbf{Adaptation} = post-deployment update of some part of the detection pipeline to maintain performance under network context change.\\[-0.02em]
+		{\footnotesize e.g., the input data, the model, the hyperparameter configuration, or the threshold}
+	\end{beamercolorbox}
 \end{frame}
 
 \definecolor{famdrift}{HTML}{3B82F6}
@@ -52,79 +47,111 @@
 	\uncover<#1->{#7} \\
 	\addlinespace[0.12em]}
 
+% \begin{frame}{State of the art: main adaptation families}
+% 	\fontsize{6.15}{6.85}\selectfont
+% 	\renewcommand{\arraystretch}{1.04}
+% 	\setlength{\tabcolsep}{4pt}
+%
+% 	\begin{tabular}{
+% 		>{\raggedright\arraybackslash}p{2.0cm}
+% 		>{\raggedright\arraybackslash}p{2.25cm}
+% 		>{\raggedright\arraybackslash}p{2.75cm}
+% 		>{\raggedright\arraybackslash}p{3.2cm}
+% 		>{\raggedright\arraybackslash}p{1.55cm}}
+% 		\toprule
+% 		\textbf{Family} & \textbf{Representative methods} & \textbf{Operational need} & \textbf{Adaptation mechanism} & \textbf{Label budget} \\
+% 		\midrule
+% 		\adaptfamilyrow{2}{famdrift}{Drift detection}{CADE, OWAD, TRANSCEND}{Early warning of drift}{Shift monitoring in data or outputs}{None}
+% 		\adaptfamilyrow{3}{famonline}{Online / continual learning}{AOC-IDS, ENIDrift, ReCDA}{Long-term tracking of evolving traffic}{Incremental weight updates from traffic streams}{Zero to low}
+% 		\adaptfamilyrow{4}{famactive}{Active / semi-supervised}{Active-SVDD, HITL-IDS, METALS}{Adaptation under scarce labels}{Label queries and pseudo-label exploitation}{Minimal}
+% 		\adaptfamilyrow{5}{famtransfer}{Transfer / domain adaptation}{ADA, NAEF, DI-NIDS}{Deployment to a new network context}{Knowledge transfer across domains}{Zero to few}
+% 		\adaptfamilyrow{6}{fammeta}{Meta-learning}{FC-Net, PTN-IDS, RETSINA}{Fast adaptation with limited data}{Learned initialization or metric}{Few to zero}
+% 		\adaptfamilyrow{7}{famthresh}{Threshold / score calibration}{Bridges, Hundman, MAGPIE}{Alert control without retraining}{Threshold or score adjustment}{None to very low}
+% 		\bottomrule
+% 	\end{tabular}
+%
+% 	\vspace{0.18em}
+% 	\only<8>{%
+% 		\begin{beamercolorbox}[wd=\linewidth,sep=0.45ex,rounded=true]{block body}
+% 			\scriptsize
+% 			\begin{columns}[T,onlytextwidth]
+% 				\column{0.29\linewidth}
+% 				\familymarker{famdrift}\ \textbf{Change monitoring only}\\[-0.02em]
+% 				{\tiny No direct detector adaptation.}
+%
+% 				\column{0.39\linewidth}
+% 				\familymarker{famonline}\hspace{0.08em}\familymarker{famactive}\hspace{0.08em}\familymarker{famtransfer}\hspace{0.08em}\familymarker{fammeta}\ \textbf{Model-targeted adaptation}\\[-0.02em]
+% 				{\tiny Weights, transferred repr., learned init.}
+%
+% 				\column{0.30\linewidth}
+% 				\familymarker{famthresh}\ \textbf{Threshold / HP adaptation}\\[-0.02em]
+% 				{\tiny Post-training HP only; not model adaptation.}
+% 			\end{columns}
+% 		\end{beamercolorbox}}
+%
+% 	\only<9>{%
+% 		\centering
+% 		\small\textbf{$\Rightarrow$ Existing methods mainly adapt the model or its outputs, while train-time hyperparameters remain largely fixed.}}
+% \end{frame}
+
 \begin{frame}{State of the art: main adaptation families}
-	\fontsize{6.15}{6.85}\selectfont
-	\renewcommand{\arraystretch}{1.04}
-	\setlength{\tabcolsep}{4pt}
-
-	\begin{tabular}{
-		>{\raggedright\arraybackslash}p{2.0cm}
-		>{\raggedright\arraybackslash}p{2.25cm}
-		>{\raggedright\arraybackslash}p{2.75cm}
-		>{\raggedright\arraybackslash}p{3.2cm}
-		>{\raggedright\arraybackslash}p{1.55cm}}
-		\toprule
-		\textbf{Family} & \textbf{Representative methods} & \textbf{Operational need} & \textbf{Adaptation mechanism} & \textbf{Label budget} \\
-		\midrule
-		\adaptfamilyrow{2}{famdrift}{Drift detection}{CADE, OWAD, TRANSCEND}{Early warning of drift}{Shift monitoring in data or outputs}{None}
-		\adaptfamilyrow{3}{famonline}{Online / continual learning}{AOC-IDS, ENIDrift, ReCDA}{Long-term tracking of evolving traffic}{Incremental weight updates from traffic streams}{Zero to low}
-		\adaptfamilyrow{4}{famactive}{Active / semi-supervised}{Active-SVDD, HITL-IDS, METALS}{Adaptation under scarce labels}{Label queries and pseudo-label exploitation}{Minimal}
-		\adaptfamilyrow{5}{famtransfer}{Transfer / domain adaptation}{ADA, NAEF, DI-NIDS}{Deployment to a new network context}{Knowledge transfer across domains}{Zero to few}
-		\adaptfamilyrow{6}{fammeta}{Meta-learning}{FC-Net, PTN-IDS, RETSINA}{Fast adaptation with limited data}{Learned initialization or metric}{Few to zero}
-		\adaptfamilyrow{7}{famthresh}{Threshold / score calibration}{Bridges, Hundman, MAGPIE}{Alert control without retraining}{Threshold or score adjustment}{None to very low}
-		\bottomrule
-	\end{tabular}
-
-	\vspace{0.18em}
-	\only<8>{%
-		\begin{beamercolorbox}[wd=\linewidth,sep=0.45ex,rounded=true]{block body}
-			\scriptsize
-			\begin{columns}[T,onlytextwidth]
-				\column{0.29\linewidth}
-				\familymarker{famdrift}\ \textbf{Change monitoring only}\\[-0.02em]
-				{\tiny No direct detector adaptation.}
-
-				\column{0.39\linewidth}
-				\familymarker{famonline}\hspace{0.08em}\familymarker{famactive}\hspace{0.08em}\familymarker{famtransfer}\hspace{0.08em}\familymarker{fammeta}\ \textbf{Model-targeted adaptation}\\[-0.02em]
-				{\tiny Weights, transferred repr., learned init.}
-
-				\column{0.30\linewidth}
-				\familymarker{famthresh}\ \textbf{Threshold / HP adaptation}\\[-0.02em]
-				{\tiny Post-training HP only; not model adaptation.}
-			\end{columns}
-		\end{beamercolorbox}}
-
-	\only<9>{%
-		\centering
-		\small\textbf{$\Rightarrow$ Existing methods mainly adapt the model or its outputs, while train-time hyperparameters remain largely fixed.}}
+	\centering
+	\includegraphics[width=\linewidth,height=0.89\textheight,keepaspectratio]{figures/auto_configuration/adaptation_families_workflow.pdf}
 \end{frame}
+
+% \begin{frame}{Is hyperparameter configuration important?}
+% 	\small
+%
+% 	\begin{columns}[T,onlytextwidth]
+% 		\column{0.38\linewidth}
+% 		\begin{itemize}
+% 			\footnotesize
+% 			\setlength\itemsep{0.35em}
+% 			\item Bilot et al. re-evaluate eight state-of-the-art PIDSs in a unified framework.
+% 			\item Tuned and untuned variants are compared under the same task.
+% 			\item Large performance gaps reveal strong hyperparameter sensitivity.
+% 			\item Tuning therefore affects both detection performance and the fairness of empirical comparisons.
+% 		\end{itemize}
+%
+% 		\column{0.60\linewidth}
+% 		\centering
+% 		\includegraphics[width=\linewidth]{figures/auto_configuration/bilot_hpo_importance.pdf}
+%
+% 		\par\vspace{0.1em}
+% 		\figsource{Bilot et al., USENIX Security 2025, Figure 5}
+% 	\end{columns}
+%
+% 	\vspace{0.2em}
+% 	\centering
+% 	\footnotesize\textbf{$\Rightarrow$ A deeper analysis of hyperparameter impact is provided in our paper}\\[-0.05em]
+% 	\footnotesize\textbf{\emph{An Empirical Study on Configuration Robustness of Unsupervised IDS}, accepted to the IEEE/IFIP NOMS 2026 main track.}
+% \end{frame}
 
 \begin{frame}{Is hyperparameter configuration important?}
 	\small
 
 	\begin{columns}[T,onlytextwidth]
-		\column{0.38\linewidth}
+		\column{0.42\linewidth}
 		\begin{itemize}
 			\footnotesize
-			\setlength\itemsep{0.35em}
-			\item Bilot et al. re-evaluate eight state-of-the-art PIDSs in a unified framework.
-			\item Tuned and untuned variants are compared under the same task.
-			\item Large performance gaps reveal strong hyperparameter sensitivity.
-			\item Tuning therefore affects both detection performance and the fairness of empirical comparisons.
+			\setlength\itemsep{0.45em}
+			\item We test whether a configuration optimized for one day can be reused on another day.
+			\item Each boxplot summarizes the \textbf{performance decrease} when transferring the optimal configuration from other days.
+			\item Some days show a limited median loss, but others reach about \textbf{20--40\%} degradation.
 		\end{itemize}
 
-		\column{0.60\linewidth}
+		\column{0.56\linewidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/auto_configuration/bilot_hpo_importance.pdf}
+		\includegraphics[width=\linewidth]{figures/auto_configuration/noms2026_daily_transfer_configs_plot_rgba.png}
 
 		\par\vspace{0.1em}
-		\figsource{Bilot et al., USENIX Security 2025, Figure 5}
+		\figsource{Anser et al., IEEE/IFIP NOMS 2026, Figure 5}
 	\end{columns}
 
-	\vspace{0.2em}
+	\vspace{0.15em}
 	\centering
-	\footnotesize\textbf{$\Rightarrow$ A deeper analysis of hyperparameter impact is provided in our paper}\\[-0.05em]
-	\footnotesize\textbf{\emph{An Empirical Study on Configuration Robustness of Unsupervised IDS}, accepted to the IEEE/IFIP NOMS 2026 main track.}
+	\footnotesize\textbf{$\Rightarrow$ Therefore, configuration transfer can help in some contexts, but it is not reliable as a general strategy.}
+
 \end{frame}
 
 \begin{frame}{How is configuration handled today?}
@@ -162,7 +189,7 @@
 	\small
 
 	\begin{block}{Research question}
-		How can we find a configuration of a ML-based NIDS in a timely manner while maintaining an acceptable level of detection performance, considering a heterogeneous network context?
+		How can we find a configuration of a ML-based NIDS in a timely manner while maintaining an acceptable level of detection performance?
 	\end{block}
 
 	\vspace{0.35em}
@@ -171,6 +198,8 @@
 			\item A NIDS configuration method has to be applied at each network context change.
 			\item A new network context is defined by a new attack in the network or by a topology change.
 		\end{itemize}
+		\vspace{0.15em}
+		{\scriptsize\emph{Source:} Anser et al., \emph{An Empirical Study on Configuration Robustness of Unsupervised IDS}, IEEE/IFIP NOMS 2026.}
 	\end{block}
 
 	\vspace{0.2em}
@@ -178,37 +207,343 @@
 	\small\textbf{$\Rightarrow$ Auto-configuration via meta-learning}
 \end{frame}
 
-\begin{frame}{Auto-configuration via Meta-learning}
+% \begin{frame}{Auto-configuration via Meta-learning}
+% 	\centering
+% 	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage1.pdf}
+% \end{frame}
+%
+% \begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+% 	\centering
+% 	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage4.pdf}
+% \end{frame}
+%
+% \begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+% 	\centering
+% 	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage5.pdf}
+% \end{frame}
+%
+% \begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+% 	\centering
+% 	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage6.pdf}
+% \end{frame}
+%
+% \begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+% 	\centering
+% 	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage7.pdf}
+% \end{frame}
+%
+% \begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+% 	\centering
+% 	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage8.pdf}
+% \end{frame}
+%
+% \begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+% 	\centering
+% 	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage9.pdf}
+% \end{frame}
+
+\input{sections/auto-configuration/method_sequence}
+
+\begin{frame}{Methodology applied in two settings}
+	\footnotesize
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.49\linewidth}
+		\begin{block}{Supervised setting}
+			% Previous version kept for reference.
+			% \begin{itemize}
+			% 	\scriptsize
+			% 	\item Binary Random Forest classifier on labeled benign and attack traffic.
+			% 	\item \emph{Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning}.\\
+			% 	      {\scriptsize Anser et al., NOMS 2023 (AnNet workshop).}
+			% 	\item Contexts: \textbf{17 daily datasets} from IDS2017 and IDS2018.
+			% 	\item Search space: \textbf{2 RF HPs} (`max\_features`, `min\_samples\_leaf`).
+			% 	\item BO baseline: \textbf{TPE}, with \textbf{300 iterations/day}, tuned on \textbf{MCC}.
+			% \end{itemize}
+			\begin{itemize}
+				\setlength\itemsep{0.15em}
+				\item Binary Random Forest on labeled benign/attack traffic.
+				\item Reference: Anser et al., \textbf{NOMS 2023} (AnNet workshop).
+				\item Contexts: \textbf{17 daily} IDS2017/IDS2018 datasets.
+				\item Search space: \textbf{2 RF HPs} (`max\_features`, `min\_samples\_leaf`).
+				\item BO baseline: \textbf{TPE}, \textbf{300 iterations/day}, optimized on \textbf{MCC}.
+			\end{itemize}
+		\end{block}
+
+		\column{0.49\linewidth}
+		\begin{block}{Unsupervised setting}
+			% Previous version kept for reference.
+			% \begin{itemize}
+			% 	\scriptsize
+			% 	\item Isolation Forest-based AD IDS trained on attack-free data.
+			% 	\item \emph{Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets}.\\
+			% 	      {\scriptsize Anser et al., LCN 2024 (short paper).}
+			% 	\item Contexts: \textbf{14 daily datasets} from IDS2017 and IDS2018.
+			% 	\item Search space: \textbf{7 iForest HPs + threshold}.
+			% 	\item BO baseline: daily optimum with attack labels offline; evaluation with \textbf{ROC-AUC}, \textbf{F1}, and \textbf{precision}.
+			% \end{itemize}
+			\begin{itemize}
+				\setlength\itemsep{0.15em}
+				\item Isolation Forest-based AD IDS trained on attack-free data.
+				\item Reference: Anser et al., \textbf{LCN 2024} (short paper).
+				\item Contexts: \textbf{14 daily} IDS2017/IDS2018 datasets.
+				\item Search space: \textbf{7 iForest HPs + threshold}.
+				\item BO baseline: offline daily optimum with labels; metrics: \textbf{ROC-AUC}, \textbf{F1}, \textbf{precision}.
+			\end{itemize}
+		\end{block}
+	\end{columns}
+
+	\vspace{0em}
 	\centering
-	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage1.pdf}
+	% Previous takeaway kept for reference.
+	% \scriptsize\textbf{$\Rightarrow$ Same meta-learning principle, but different detectors, search spaces, and configuration targets.}
+	% \scriptsize\textbf{$\Rightarrow$ Same meta-learning pipeline, but different detectors, search spaces, and targets.}
+	\footnotesize\textbf{$\Rightarrow$ Same meta-learning pipeline, but different detectors, search spaces, and targets.}
 \end{frame}
 
-\begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
-	\centering
-	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage4.pdf}
+\begin{frame}{Results: precision}
+	% Previous stacked layout kept for reference.
+	% \begin{columns}[T,onlytextwidth]
+	% 	\column{0.29\linewidth}
+	% 	\footnotesize
+	% 	\begin{itemize}
+	% 		\setlength\itemsep{0.25em}
+	% 		\item Supervised: precision is near-saturated on most days; MtL and HPO often overlap.
+	% 		\item Unsupervised: precision stays high overall, but variability is larger on days \textbf{2} and \textbf{5--8}.
+	% 		\item The gap comes from a few harder contexts where transfer is less reliable.
+	% 	\end{itemize}
+	% 	\column{0.68\linewidth}
+	% 	\centering
+	% 	\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{figures/auto_configuration/results_precision_supervised_cropped.png}
+	% 	\par\vspace{0.02em}
+	% 	{\scriptsize\textbf{Supervised setting}}
+	% 	\vspace{0.06em}
+	% 	\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{figures/auto_configuration/results_precision_unsupervised_cropped.png}
+	% 	\par\vspace{0.02em}
+	% 	{\scriptsize\textbf{Unsupervised setting}}
+	% \end{columns}
+	% \vspace{0.1em}
+	% \begin{center}
+	% 	\parbox{0.95\linewidth}{\centering\scriptsize\textbf{$\Rightarrow$ High precision in both settings; unsupervised AD exposes the harder transfer cases.}}
+	% \end{center}
+
+	% Previous active side-by-side version kept for reference.
+	% \footnotesize
+	% \begin{columns}[T,onlytextwidth]
+	% 	\column{0.49\linewidth}
+	% 	\centering
+	% 	\includegraphics[width=\linewidth]{figures/auto_configuration/results_precision_supervised_cropped.png}
+	% 	\par\vspace{0.04em}
+	% 	{\scriptsize\textbf{Supervised setting}}
+	% 	\column{0.49\linewidth}
+	% 	\centering
+	% 	\includegraphics[width=\linewidth]{figures/auto_configuration/results_precision_unsupervised_cropped.png}
+	% 	\par\vspace{0.04em}
+	% 	{\scriptsize\textbf{Unsupervised setting}}
+	% \end{columns}
+	% \vfill
+	% \begin{center}
+	% 	\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ High precision in both settings; unsupervised AD exposes the harder transfer cases.}}
+	% \end{center}
+
+	\footnotesize
+	\begin{columns}[T,onlytextwidth]
+		\column{0.39\linewidth}
+		\begin{itemize}
+			\setlength\itemsep{0.42em}
+			\item In the attack-free AD setting, precision stays high overall.
+			\item Variability is larger on days \textbf{2} and \textbf{5--8}.
+			\item The gap comes from a few harder contexts where transfer is less reliable.
+			\item In the supervised setting, precision is near-saturated and MtL often overlaps HPO.
+		\end{itemize}
+
+		\column{0.58\linewidth}
+		\centering
+		\includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/auto_configuration/results_precision_unsupervised_cropped.png}
+		\par\vspace{0.04em}
+		{\small\textbf{Unsupervised setting}}
+	\end{columns}
+
+	\vspace{0.08em}
+	\begin{center}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ High precision in both settings; unsupervised AD exposes the harder transfer cases.}}
+	\end{center}
 \end{frame}
 
-\begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
-	\centering
-	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage5.pdf}
+\begin{frame}{Results: gain}
+	% Previous stacked layout kept for reference.
+	% \begin{columns}[T,onlytextwidth]
+	% 	\column{0.29\linewidth}
+	% 	\footnotesize
+	% 	\begin{itemize}
+	% 		\setlength\itemsep{0.25em}
+	% 		\item Supervised: MtL improves over the default, with large gains on difficult days.
+	% 		\item Unsupervised: MtL can exceed BO when BO is limited to the same budget.
+	% 		\item Negative gains stay limited, so transfer rarely hurts much at equal cost.
+	% 	\end{itemize}
+	% 	\column{0.68\linewidth}
+	% 	\centering
+	% 	\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{figures/auto_configuration/results_gain_supervised_cropped.png}
+	% 	\par\vspace{0.02em}
+	% 	{\scriptsize\textbf{Supervised setting}}
+	% 	\vspace{0.06em}
+	% 	\includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{figures/auto_configuration/results_gain_unsupervised_cropped.png}
+	% 	\par\vspace{0.02em}
+	% 	{\scriptsize\textbf{Unsupervised setting}}
+	% \end{columns}
+	% \vspace{0.1em}
+	% \begin{center}
+	% 	\parbox{0.95\linewidth}{\centering\scriptsize\textbf{$\Rightarrow$ Transfer is cheaper than BO and can still win under the same budget.}}
+	% \end{center}
+
+	% Previous active side-by-side version kept for reference.
+	% \footnotesize
+	% \begin{columns}[T,onlytextwidth]
+	% 	\column{0.49\linewidth}
+	% 	\centering
+	% 	\includegraphics[width=\linewidth]{figures/auto_configuration/results_gain_supervised_cropped.png}
+	% 	\par\vspace{0.04em}
+	% 	{\scriptsize\textbf{Supervised setting}}
+	% 	\column{0.49\linewidth}
+	% 	\centering
+	% 	\includegraphics[width=\linewidth]{figures/auto_configuration/results_gain_unsupervised_cropped.png}
+	% 	\par\vspace{0.04em}
+	% 	{\scriptsize\textbf{Unsupervised setting}}
+	% \end{columns}
+	% \vfill
+	% \begin{center}
+	% 	\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ Transfer is cheaper than BO and can still win under the same budget.}}
+	% \end{center}
+
+	\footnotesize
+	\begin{columns}[T,onlytextwidth]
+		\column{0.39\linewidth}
+		\begin{itemize}
+			\setlength\itemsep{0.42em}
+			\item In the attack-free AD setting, MtL can exceed BO when BO is budget-matched.
+			\item Gains are strongest around the harder days, especially \textbf{5--8}.
+			\item Negative gains stay limited at equal cost.
+			\item In the supervised setting, MtL also improves over the default with large gains on difficult days.
+		\end{itemize}
+
+		\column{0.58\linewidth}
+		\centering
+		\includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/auto_configuration/results_gain_unsupervised_cropped.png}
+		\par\vspace{0.04em}
+		{\small\textbf{Unsupervised setting}}
+	\end{columns}
+
+	\vspace{0.08em}
+	\begin{center}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ Transfer is cheaper than BO and can still win under the same budget.}}
+	\end{center}
 \end{frame}
 
-\begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
-	\centering
-	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage6.pdf}
+% Previous split time slides kept for reference.
+% \begin{frame}{Results: configuration time}
+% 	% Previous one-slide time-comparison variants kept for reference.
+% 	% \footnotesize
+% 	% \begin{columns}[T,onlytextwidth]
+% 	% 	\column{0.49\linewidth}
+% 	% 	\centering
+% 	% 	\includegraphics[width=\linewidth]{figures/auto_configuration/results_time_supervised_focus.png}
+% 	% 	\par\vspace{0.02em}
+% 	% 	{\scriptsize\textbf{Supervised setting}}
+% 	% 	\column{0.49\linewidth}
+% 	% 	\centering
+% 	% 	\includegraphics[width=\linewidth]{figures/auto_configuration/results_time_unsupervised_focus.png}
+% 	% 	\par\vspace{0.02em}
+% 	% 	{\scriptsize\textbf{Unsupervised setting}}
+% 	% \end{columns}
+% 
+% 	\centering
+% 	\includegraphics[width=0.75\linewidth]{figures/auto_configuration/results_time_supervised_focus.png}
+% 	\par\vspace{0.04em}
+% 	{\small\textbf{Supervised setting}}\par
+% 
+% 	\vfill
+% 	\centering
+% 	\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ MtL runtime is quasi-constant.}}\par
+% \end{frame}
+% 
+% \begin{frame}[noframenumbering]{Results: configuration time}
+% 	\centering
+% 	\includegraphics[width=0.56\linewidth]{figures/auto_configuration/results_time_unsupervised_focus.png}
+% 	\par\vspace{0.04em}
+% 	{\small\textbf{Unsupervised setting}}\par
+% \end{frame}
+
+\begin{frame}{Results: configuration time}
+	\footnotesize
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.39\linewidth}
+		\begin{itemize}
+			\setlength\itemsep{0.42em}
+			\item In the attack-free AD setting, MtL returns a configuration in seconds to minutes.
+			\item BO can grow by orders of magnitude and exceed \textbf{100,000 s}.
+			\item Overall, MtL is about \textbf{160x faster}.
+			\item In the supervised setting, MtL remains quasi-constant and is about \textbf{9x faster} than HPO on average.
+		\end{itemize}
+
+		\column{0.58\linewidth}
+		\centering
+		\includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{figures/auto_configuration/results_time_unsupervised_cropped.png}
+		\par\vspace{0.04em}
+		{\small\textbf{Unsupervised setting}}
+	\end{columns}
+
+	\vspace{0.08em}
+	\begin{center}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ For online reconfiguration, the time advantage becomes decisive in the attack-free AD setting.}}
+	\end{center}
 \end{frame}
 
-\begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+\begin{frame}{Auto-configuration: conclusion}
+	\small
+
+	\begin{itemize}
+		\setlength\itemsep{0.55em}
+		\item Re-running HPO after each context change is too expensive for adaptive ML-based NIDS.
+		\item Meta-learning preserves strong detection performance while staying close to HPO in both settings.
+		\item The operational benefit is time: visible in supervised NIDS and decisive in attack-free AD.
+		\item For AD NIDS, auto-configuration must remain context-aware, since both model HPs and threshold must be adapted.
+	\end{itemize}
+
+	\vspace{0.15em}
 	\centering
-	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage7.pdf}
+	\footnotesize\textbf{$\Rightarrow$ Meta-learning makes NIDS reconfiguration fast enough for practice without sacrificing too much detection performance.}
 \end{frame}
 
-\begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+\begin{frame}{General conclusion}
+	\small
+
+	\begin{itemize}
+		\setlength\itemsep{0.6em}
+		\item Robust ML-based NIDS should not be judged only by their accuracy on a static benchmark.
+		\item This thesis addressed robustness along two complementary axes: \textbf{configuration robustness} and \textbf{evaluation robustness}.
+		\item Meta-learning enables fast, context-aware reconfiguration, including attack-free AD where both model HPs and threshold must be adapted.
+		\item TATA strengthens pre-deployment evaluation by assessing test-set difficulty and generating targeted, protocol-faithful traffic to expose hidden weaknesses.
+	\end{itemize}
+
+	\vspace{0.15em}
 	\centering
-	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage8.pdf}
+	\footnotesize\textbf{$\Rightarrow$ Robust ML-based NIDS require both adaptive configuration and stronger pre-deployment evaluation.}
 \end{frame}
 
-\begin{frame}[noframenumbering]{Auto-configuration via Meta-learning}
+\begin{frame}{Perspectives}
+	\small
+
+	\begin{itemize}
+		\setlength\itemsep{0.48em}
+		\item Move from one-shot benchmarking to \textbf{continuous, closed-loop evaluation and adaptation}.
+		\item Extend both frameworks beyond the current flow-based and single-protocol settings toward richer traffic granularities, applications, and larger testbeds.
+		\item Reuse TATA-generated hard cases not only for assessment, but also for \textbf{hardening and retraining} the detector.
+		\item Use \textbf{GenAI} for scenario-to-traffic generation and analyst assistance, while accounting for more adaptive attackers.
+		\item Explore \textbf{privacy-preserving and federated configuration learning} to mitigate cold-start deployment and share useful experience across organizations.
+	\end{itemize}
+
+	\vspace{0.15em}
 	\centering
-	\includegraphics[width=\linewidth]{figures/auto_configuration/method/secondPartPage9.pdf}
+	\footnotesize\textbf{$\Rightarrow$ The long-term goal is continuously evaluable, configurable, and trustworthy ML-based NIDS.}
 \end{frame}

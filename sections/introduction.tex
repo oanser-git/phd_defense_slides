@@ -2,6 +2,39 @@
 
 \newcommand{\sliderefs}[1]{\vspace{0.1em}{\fontsize{5.2}{6}\selectfont #1\par}}
 \newcommand{\figsource}[1]{{\fontsize{5.2}{6}\selectfont \emph{Source:} #1}}
+\newcommand{\aspectbadge}[2]{\tikz[baseline=(c.base)]\node[circle,fill=#1,text=white,font=\bfseries\scriptsize,inner sep=1.15pt] (c) {#2};}
+
+\newcommand{\workflowoverview}{%
+	\begin{tikzpicture}[baseline=(img.base)]
+		\node[anchor=south west,inner sep=0] (img) at (0,0) {\includegraphics[width=\linewidth]{figures/introduction/ML_NIDS_4-crop.pdf}};
+		\begin{scope}[x={(img.south east)},y={(img.north west)}]
+			\fill[orange!85!black,opacity=0.12] (0.76,0.50) ellipse (0.09 and 0.10);
+			\node[circle,fill=orange!85!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.84,0.57) {P};
+
+			\fill[violet!80!black,opacity=0.10] (0.11,0.87) ellipse (0.12 and 0.11);
+			\node[circle,fill=violet!80!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.24,0.82) {F};
+
+			\fill[green!60!black,opacity=0.12] (0.88,0.22) ellipse (0.10 and 0.11);
+			\node[circle,fill=green!60!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.95,0.26) {D};
+
+			\fill[blue!75!black,opacity=0.10] (0.45,0.70) ellipse (0.13 and 0.08);
+			\node[circle,fill=blue!75!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.58,0.80) {L};
+
+			\node[circle,fill=red!75!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] (rbadge) at (0.95,0.74) {R};
+			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.26,0.49);
+			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.37,0.49);
+			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.51,0.49);
+			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.68,0.72);
+			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.84,0.44);
+			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.88,0.30);
+			\fill[red!75!black,opacity=0.16] (0.26,0.49) circle (0.03);
+			\fill[red!75!black,opacity=0.16] (0.37,0.49) circle (0.03);
+			\fill[red!75!black,opacity=0.16] (0.51,0.49) circle (0.03);
+			\fill[red!75!black,opacity=0.16] (0.68,0.72) circle (0.03);
+			\fill[red!75!black,opacity=0.16] (0.84,0.44) circle (0.03);
+			\fill[red!75!black,opacity=0.16] (0.88,0.30) circle (0.03);
+		\end{scope}
+	\end{tikzpicture}}
 
 
 \begin{frame}{Why this topic matters}
@@ -148,7 +181,7 @@
 
 			\item<2-> A separate \textbf{validation} split
 			      \(\mathcal{D}_{\text{val}}\) is used to refine the model
-			      \textbf{configuration} (\textbf{hyperparameters}).
+			      \textbf{configuration} (\textbf{hyperparameters} and, in anomaly detection, the \textbf{threshold}).
 
 			\item<3-> A final \textbf{test} set,
 			      \(\mathcal{D}_{\text{test}}\), measures performance on previously unseen data.
@@ -158,15 +191,17 @@
 		\end{itemize}
 
 		\only<2>{%
-			\vspace{-5em}
+			\vspace{-7em}
 			\setbeamercolor{focusbox}{use={structure,normal text},
 				fg=structure.fg,
 				bg=structure.fg!12!normal text.bg}
 			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{focusbox}
 				\small
-				\textbf{Hyperparameters:} settings chosen before training that influence model behavior.\\
-				\textbf{Example}: In RF, too few trees can give unstable predictions,
-				while too many can increase computation and overfit the training data.
+				\textbf{Hyperparameters:} settings chosen before training that
+				influence model behavior.\\
+				\textbf{Example}: In RF, too few trees can give unstable
+				predictions, while too many can increase computation and overfit
+				the training data.
 			\end{beamercolorbox}
 		}
 
@@ -185,40 +220,28 @@
 
 
 \begin{frame}{How ML has been used to improve NIDS}
-	\small
+	\fontsize{8.3}{9.2}\selectfont
+	\begin{columns}[T,onlytextwidth]
+		\column{0.56\linewidth}
+		\begin{itemize}
+			\item[\aspectbadge{violet!80!black}{F}] Richer traffic representations $\longrightarrow$ Flow-MAE, NetVigil\\[0.2em]
+				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., packet, flow, sequence, graph}
+			\item[\aspectbadge{blue!75!black}{L}] Better use of limited labels $\longrightarrow$ Active-SVDD, INSOMNIA\\[0.2em]
+				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., active learning, semi-supervised learning, and pseudo-labeling}
+			\item[\aspectbadge{orange!85!black}{P}] Better detection performance $\longrightarrow$ BotMiner, Kitsune\\[0.2em]
+				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., DDoS, botnet, web attacks}
+			\item[\aspectbadge{green!60!black}{D}] More practical deployment $\longrightarrow$ AOC-IDS, ENIDrift\\[0.2em]
+				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., lightweight, online, real-time detection}
+			\item[\aspectbadge{red!75!black}{R}] Better robustness in practice $\longrightarrow$ CADE, OWAD\\[0.2em]
+				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., adaptability to evolving traffic, resilience to adversarial attacks, and more challenging evaluation}
+		\end{itemize}
 
-	\begin{itemize}
-		\setlength\itemsep{0.75em}
+		\column{0.42\linewidth}
+		\centering
+		\workflowoverview
+	\end{columns}
 
-		\item<1-> \alt<2>{\textcolor{gray}{Better detection performance $\longrightarrow$ BotMiner, Kitsune}\\
-			      \textcolor{gray}{\footnotesize e.g., DDoS, botnet, web attacks}}
-		      {Better detection performance $\longrightarrow$ BotMiner, Kitsune\\
-			      \footnotesize e.g., DDoS, botnet, web attacks}
-
-		\item<1-> \alt<2>{\textcolor{gray}{Richer traffic representations $\longrightarrow$ Flow-MAE, NetVigil}\\
-			      \textcolor{gray}{\footnotesize e.g., packet, flow, sequence, graph}}
-		      {Richer traffic representations $\longrightarrow$ Flow-MAE, NetVigil\\
-			      \footnotesize e.g., packet, flow, sequence, graph}
-
-		\item<1-> \alt<2>{\textcolor{gray}{More practical deployment $\longrightarrow$ AOC-IDS, ENIDrift}\\
-			      \textcolor{gray}{\footnotesize e.g., lightweight, online, real-time detection}}
-		      {More practical deployment $\longrightarrow$ AOC-IDS, ENIDrift\\
-			      \footnotesize e.g., lightweight, online, real-time detection}
-
-		\item<1-> \alt<2>{\textcolor{gray}{Better use of limited labels $\longrightarrow$ Active-SVDD, INSOMNIA}\\
-			      \textcolor{gray}{\footnotesize e.g., active learning, semi-supervised learning, and pseudo-labeling}}
-		      {Better use of limited labels $\longrightarrow$ Active-SVDD, INSOMNIA\\
-			      \footnotesize e.g., active learning, semi-supervised learning, and pseudo-labeling}
-
-		\item<1-> \alt<2>{\alert{\textbf{Better robustness in practice $\longrightarrow$ CADE, OWAD}}\\
-			      \footnotesize e.g., adaptability to evolving traffic,
-			      resilience to adversarial attacks, and more challenging evaluation}
-		      {Better robustness in practice $\longrightarrow$ CADE, OWAD\\
-			      \footnotesize e.g., adaptability to evolving traffic,
-			      resilience to adversarial attacks, and more challenging evaluation}
-
-	\end{itemize}
-
+	\vfill
 	\sliderefs{Refs: BotMiner [Gu et al., 2008]; Kitsune [Mirsky et al., 2018]; Flow-MAE [Hang et al., 2023]; NetVigil [Hsieh et al., 2024]; AOC-IDS [Zhao et al., 2024]; ENIDrift [Wang, 2022]; Active-SVDD [Gornitz et al., 2009]; INSOMNIA [Pierazzi et al., 2021]; CADE [Yang et al., 2021]; OWAD [Hu et al., 2023].}
 
 \end{frame}
@@ -255,8 +278,7 @@
 	\setbeamercolor{roadmap card title alt}{fg=white,bg=alerted text.fg}
 
 	\centering
-	{\normalsize\textbf{Each part follows the same logic}}\\[0.2em]
-	{\normalsize State of the art $\rightarrow$ Limitations $\rightarrow$ Proposed contribution}\\[0.6em]
+	\vspace*{0.2em}
 
 	\begin{columns}[T,onlytextwidth]
 		\column{0.49\linewidth}
@@ -268,9 +290,12 @@
 				\vspace*{0.05cm}
 				\raggedright
 				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{
-					{\fontsize{5.9}{6.6}\selectfont
-							\textbullet\ Anser et al., \emph{``TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation,''}\\
-							ESORICS 2025 (\textit{main track}).}
+				{\fontsize{6.7}{7.4}\selectfont
+						\textbullet\ Anser et al., \emph{``TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation,''}\\
+						ESORICS 2025 (\textit{main track}).}\\[0.18em]
+				{\fontsize{6.7}{7.4}\selectfont
+				\textbullet\ Anser et al., \emph{``An Empirical Study on Configuration Robustness of Unsupervised IDS,''}\\
+				NOMS 2026 (\textit{main track, to appear}).}
 				}
 			\end{minipage}
 		\end{beamercolorbox}
@@ -284,15 +309,12 @@
 				\vspace*{0.05cm}
 				\raggedright
 				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{
-				{\fontsize{5.7}{6.35}\selectfont
+				{\fontsize{6.7}{7.4}\selectfont
 						\textbullet\ Anser et al., \emph{``Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning,''}\\
 						NOMS 2023 (\textit{AnNet workshop}).}\\[0.12em]
-				{\fontsize{5.7}{6.35}\selectfont
+				{\fontsize{6.7}{7.4}\selectfont
 				\textbullet\ Anser et al., \emph{``Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets,''}\\
-				LCN 2024 (\textit{short paper}).}\\[0.12em]
-				{\fontsize{5.7}{6.35}\selectfont
-				\textbullet\ Anser et al., \emph{``An Empirical Study on Configuration Robustness of Unsupervised IDS,''}\\
-				NOMS 2026 (\textit{main track, to appear}).}
+				LCN 2024 (\textit{short paper}).}
 				}
 			\end{minipage}
 		\end{beamercolorbox}

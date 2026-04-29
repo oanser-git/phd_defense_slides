@@ -18,3 +18,11 @@ out/*
 *.synctex.gz
 *.toc
 *.vrb
+sections/introduction.bak
+discour.md
+omar_anser_pub.bib
+.gitignore
+main.bak
+sections/introduction.bak
+sections/TATA/slides.bak
+sections/draft.tex

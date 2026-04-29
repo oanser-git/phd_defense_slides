@@ -104,61 +104,54 @@
 \input{sections/TATA/methodology/metrics}
 
 
-% --- Preamble (if not already added) ---
-\newcommand{\strike}[1]{\textcolor{red!70!black}{\sout{#1}}}
+% --- Frame kept for possible later reuse ---
+% \newcommand{\strike}[1]{\textcolor{red!70!black}{\sout{#1}}}
+%
+% \begin{frame}{Which approaches can augment the test set?}
+% 	\small
+%
+% 	\begin{enumerate}
+% 		\item<1->
+% 		      \alt<2->{\strike{GANs / diffusion models.}}
+% 		      {GANs / diffusion models.}
+% 		      \begin{itemize}
+% 			      \item<2-> Synthetic generation may break protocol semantics $\Rightarrow$
+% 			            unrealistic flows.
+% 		      \end{itemize}
+%
+% 		      \vspace{0.6em}
+%
+% 		\item<3-> \alt<4->{\strike{Network simulators (e.g., NS-3, OMNeT++)}}
+% 		      {Network simulators (e.g., NS-3, OMNeT++)}
+% 		      \begin{itemize}
+% 			      \item<4-> Models protocol interactions, offering more realism.
+% 			      \item<4-> Remaining realism gap vs.\ real hardware and user behavior.
+% 		      \end{itemize}
+%
+% 		      \vspace{0.6em}
+%
+% 		\item<5-> Using a \textbf{configurable live testbed}.
+% 		      \begin{itemize}
+% 			      \item<6-> Best preserves realism of generated traffic.
+% 			      \item<6-> Emits legitimate traffic across multiple protocols (HTTP/HTTPS, SSH, SMTP, DNS,
+% 			            \dots) and can generate attack traffic under controlled conditions.
+% 		      \end{itemize}
+%
+% 		      \vspace{0.6em}
+%
+% 		      \uncover<7->{
+% 			      \setbeamercolor{focusbox}{use={structure, normal text},
+% 			      fg=structure.fg,
+% 			      bg=structure.fg!12!normal text.bg}
+% 		      \begin{beamercolorbox}[wd=\linewidth, sep=1ex, rounded=true]{focusbox}
+% 			      \small
+% 			      Generate targeted configs so the testbed produces realistic flows targeting
+% 			      under-covered \(\mathcal{Z}\) regions (low \(D,P,S\)).
+% 		      \end{beamercolorbox}
+% 		      }
+% 	\end{enumerate}
+% \end{frame}
 
-% --- Frame ---
-\begin{frame}{Which approaches can augment the test set?}
-	\small
-
-	\begin{enumerate}
-		% 1) Synthetic generation (as before; crossed on next click)
-		\item<1->
-		      \alt<2->{\strike{GANs / diffusion models.}}
-		      {GANs / diffusion models.}
-		      \begin{itemize}
-			      \item<2-> Synthetic generation may break protocol semantics $\Rightarrow$
-			            unrealistic flows.
-		      \end{itemize}
-
-		      \vspace{0.6em}
-
-		      % 2) Network simulators
-		\item<3-> \alt<4->{\strike{Network simulators (e.g., NS-3, OMNeT++)}}
-		      {Network simulators (e.g., NS-3, OMNeT++)}
-		      \begin{itemize}
-			      \item<4->
-			            Models protocol interactions, offering more realism.
-			      \item<4-> Remaining realism gap vs.\ real hardware and user behavior.
-		      \end{itemize}
-
-		      \vspace{0.6em}
-
-		      % 3) Live testbed
-		\item<5-> Using a \textbf{configurable live testbed}.
-		      \begin{itemize}
-			      \item<6-> Best preserves realism of generated traffic.
-			      \item<6->
-			            Emits legitimate traffic across multiple protocols (HTTP/HTTPS, SSH, SMTP, DNS,
-			            \dots) and can generate attack traffic under controlled conditions.
-		      \end{itemize}
-
-		      \vspace{0.6em}
-
-		      % This uncover block makes the colored box appear on the 9th click
-		      \uncover<7->{
-			      \setbeamercolor{focusbox}{use={structure, normal text},
-			      fg=structure.fg,
-			      bg=structure.fg!12!normal text.bg}
-		      \begin{beamercolorbox}[wd=\linewidth, sep=1ex, rounded=true]{focusbox}
-			      \small
-			      Generate targeted configs so the testbed produces realistic flows targeting
-			      under-covered \(\mathcal{Z}\) regions (low \(D,P,S\)).
-		      \end{beamercolorbox}
-		      }
-	\end{enumerate}
-
-\end{frame}
 
 %\begin{frame}{Phase 2: Targeted Augmentation}
 %  \scriptsize
@@ -223,6 +216,9 @@
 	% --- text below ---
 	\begin{itemize}
 		\item Start from Preliminary \& Phase 1 outputs
+		\item Configurable live testbed for realistic traffic generation.
+		\item Legitimate multi-protocol traffic (HTTP/HTTPS, SSH, SMTP, DNS, \dots)
+		      and controlled attack traffic.
 		\item []
 		\item \textbf{Training workflow}:
 		      \[
@@ -249,7 +245,8 @@
 		      %        \Rightarrow \stepbox{9}{\pi^\ast}
 		      %      \end{aligned}
 		      %    \]
-		\item Apply \(\pi^\ast\) to augment any \(\mathcal{D}_{\text{test}}\)
+		\item Apply \(\pi^\ast\) to augment any \(\mathcal{D}_{\text{test}}\) and target
+		      under-covered \(\mathcal{Z}\) regions (low \(D,P,S\)).
 	\end{itemize}
 \end{frame}
 
