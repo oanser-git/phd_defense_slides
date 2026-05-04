@@ -1,4 +1,4 @@
-\section{Part II: Auto-configuration}
+\section{Part I: Adaptation}
 
 \begin{frame}{Why ML-based NIDS still need explicit adaptation}
 	\small
@@ -6,9 +6,8 @@
 	\begin{columns}[T,onlytextwidth]
 		\column{0.42\linewidth}
 		\begin{itemize}
-			\item ML-based NIDS are trained on historical traffic and deployed as static detectors.
-			\item This assumes training and deployment traffic remain
-			statistically close.
+			\item Historical traffic for training; static detector at deployment.
+			\item Assumes training and deployment traffic are statistically identical.
 			\item Benign traffic evolves, attackers adapt \(\rightarrow\) the
 			      network context changes.
 		\end{itemize}
@@ -25,8 +24,7 @@
 	\begin{beamercolorbox}[wd=\linewidth,sep=0.9ex,rounded=true,center]{block body}
 		\small
 		\textbf{$\Rightarrow$ Detection performance can degrade $\Rightarrow$ explicit adaptation mechanisms are needed}\\[0.35em]
-		\textbf{Adaptation} = post-deployment update of some part of the detection pipeline to maintain performance under network context change.\\[-0.02em]
-		{\footnotesize e.g., the input data, the model, the hyperparameter configuration, or the threshold}
+		\textbf{Adaptation} = post-deployment update of (data $|$ model $|$ config $|$ threshold) to maintain performance as the network context changes.
 	\end{beamercolorbox}
 \end{frame}
 
@@ -36,7 +34,43 @@
 \definecolor{famtransfer}{HTML}{7C3AED}
 \definecolor{fammeta}{HTML}{C026D3}
 \definecolor{famthresh}{HTML}{6B7280}
+\definecolor{methodblue}{HTML}{2563EB}
+\definecolor{methodgreen}{HTML}{059669}
 
+\newcommand{\adaptationCostVisual}{%
+	\begin{tikzpicture}[baseline=(current bounding box.center)]
+		\node[draw=black!15,fill=black!3,rounded corners=6pt,inner sep=5pt,align=center] (repeat) at (0,0) {%
+			\begin{minipage}{3.8cm}
+				\centering
+				{\scriptsize \textbf{Context changes}}\\[0.2em]
+				{\scriptsize $C_1$ $\rightarrow$ search}\\[-0.05em]
+				{\scriptsize $C_2$ $\rightarrow$ search}\\[-0.05em]
+				{\scriptsize $C_3$ $\rightarrow$ search}
+			\end{minipage}};
+		\draw[red!75!black,line width=1.25pt] ([xshift=3pt,yshift=1pt]repeat.south west) -- ([xshift=-3pt,yshift=-1pt]repeat.north east);
+		\node[anchor=west,draw=structure.fg,fill=structure.fg!10,rounded corners=6pt,inner sep=5pt,align=center] (cost) at (2.6,0) {%
+			\begin{minipage}{2.55cm}
+				\centering
+				{\scriptsize \textbf{Too expensive}}\\[0.15em]
+				{\scriptsize repeated search}\\[-0.05em]
+				{\scriptsize for a (sub-)optimal config}
+			\end{minipage}};
+		\draw[->,line width=0.9pt,draw=structure.fg] (repeat.east) -- (cost.west);
+	\end{tikzpicture}}
+
+\newcommand{\methodologycard}[3]{%
+	\setbeamercolor{method card title}{fg=white,bg=#1}
+	\setbeamercolor{method card body}{fg=black,bg=#1!7}
+	\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{method card body}
+		\begin{beamercolorbox}[wd=\linewidth,sep=0.85ex,rounded=true]{method card title}
+			\centering\textbf{#2}
+		\end{beamercolorbox}
+		\vspace{0.25em}
+		\begin{minipage}{0.95\linewidth}
+			#3
+		\end{minipage}
+		\vspace{0.35em}
+	\end{beamercolorbox}}
 \newcommand{\familymarker}[1]{\tikz[baseline=-0.55ex]\fill[#1] (0,0) circle (0.9ex);}
 \newcommand{\familyname}[2]{\familymarker{#1}\hspace{0.35em}\textbf{#2}}
 \newcommand{\adaptfamilyrow}[7]{%
@@ -96,7 +130,19 @@
 
 \begin{frame}{State of the art: main adaptation families}
 	\centering
-	\includegraphics[width=\linewidth,height=0.89\textheight,keepaspectratio]{figures/auto_configuration/adaptation_families_workflow.pdf}
+	\vspace{-2em}
+	\makebox[\linewidth][c]{%
+		\only<1>{\includegraphics[width=\linewidth]{figures/auto_configuration/adaptation_families_workflow_stage1.pdf}}%
+		\only<2>{\includegraphics[width=\linewidth]{figures/auto_configuration/adaptation_families_workflow_stage2.pdf}}%
+		\only<3>{\includegraphics[width=\linewidth]{figures/auto_configuration/adaptation_families_workflow_stage3.pdf}}%
+		\only<4>{\includegraphics[width=\linewidth]{figures/auto_configuration/adaptation_families_workflow_stage4.pdf}}%
+		\only<5-6>{\includegraphics[width=\linewidth]{figures/auto_configuration/adaptation_families_workflow_stage5.pdf}}%
+	}
+
+	\vspace{-0.6em}
+	\only<6>{%
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ Most methods adapt model, or threshold; configuration remains untargeted.}}}
+
 \end{frame}
 
 % \begin{frame}{Is hyperparameter configuration important?}
@@ -135,9 +181,9 @@
 		\begin{itemize}
 			\footnotesize
 			\setlength\itemsep{0.45em}
-			\item We test whether a configuration optimized for one day can be reused on another day.
-			\item Each boxplot summarizes the \textbf{performance decrease} when transferring the optimal configuration from other days.
-			\item Some days show a limited median loss, but others reach about \textbf{20--40\%} degradation.
+			\item Can a day-$t$ optimal config be reused on day $t'$?
+			\item Each boxplot \(\rightarrow\) performance drop from transferring another day's best config.
+			\item Limited loss on some days; 20--40\% degradation on others.
 		\end{itemize}
 
 		\column{0.56\linewidth}
@@ -150,39 +196,96 @@
 
 	\vspace{0.15em}
 	\centering
-	\footnotesize\textbf{$\Rightarrow$ Therefore, configuration transfer can help in some contexts, but it is not reliable as a general strategy.}
+	\footnotesize\textbf{$\Longrightarrow$ Configuration transfer helps in some contexts, but is not reliable in general.}
 
 \end{frame}
+
+% \begin{frame}{How is configuration handled today?}
+% 	\small
+%
+% 	\begin{block}{Conventional offline HPO}
+% 		\begin{itemize}
+% 			\setlength\itemsep{0.45em}
+% 			\item Grid search, random search\sliderefmark{1}, Bayesian optimization\sliderefmark{2}, and evolutionary search.
+% 			\item Repeated train-and-validate evaluations over candidate configurations.
+% 		\end{itemize}
+% 	\end{block}
+%
+% 	\vspace{0.35em}
+% 	\begin{block}{Why not for ML-based NIDS adaptation?}
+% 		\footnotesize
+% 		These methods are static, offline, computationally expensive, and time-consuming procedures
+% 		that must be re-run from scratch when the network context changes.
+% 	\end{block}
+%
+% 	\vspace{0.25em}
+% 	\begin{block}{A NIDS-specific example}
+% 		\footnotesize
+% 		In Anser et al. (NOMS 2023)\sliderefmark{3}, Bayesian optimization of a binary Random Forest NIDS used
+% 		\textbf{300 iterations} for a single daily network context, which corresponds to about
+% 		\textbf{50 minutes} when one HPO iteration takes up to \textbf{10 seconds}.
+% 	\end{block}
+%
+% 	\vspace{0.18em}
+% 	\centering
+% 	{\fontsize{5.8}{6.5}\selectfont Refs: \sliderefentry{1}{Bergstra \& Bengio, JMLR 2012}; \sliderefentry{2}{Snoek et al., NeurIPS 2012}; \sliderefentry{3}{Anser et al., NOMS 2023}.}
+% \end{frame}
 
 \begin{frame}{How is configuration handled today?}
 	\small
 
-	\begin{block}{Conventional offline HPO}
-		\begin{itemize}
-			\setlength\itemsep{0.45em}
-			\item Grid search, random search, Bayesian optimization, and evolutionary search.
-			\item Repeated train-and-validate evaluations over candidate configurations.
-		\end{itemize}
-	\end{block}
-
-	\vspace{0.35em}
-	\begin{block}{Why not for ML-based NIDS adaptation?}
+	{\normalsize\textbf{Methods}}\\[-0.05em]
+	\begin{itemize}
 		\footnotesize
-		These methods are static, offline, computationally expensive, and time-consuming procedures
-		that must be re-run from scratch when the network context changes.
-	\end{block}
+		\setlength\itemsep{0.15em}
+		\item Grid search, random search\sliderefmark{1}, Bayesian optimization (BO)\sliderefmark{2}, evolutionary search.
+		\item Repeated train-and-validate over candidate configurations.
+	\end{itemize}
 
-	\vspace{0.25em}
-	\begin{block}{A NIDS-specific example}
+	\vspace{0.1em}
+	{\normalsize\textbf{Main drawback}}\\[-0.05em]
+	\begin{itemize}
 		\footnotesize
-		In Anser et al. (NOMS 2023), Bayesian optimization of a binary Random Forest NIDS used
-		\textbf{300 iterations} for a single daily network context, which corresponds to about
-		\textbf{50 minutes} when one HPO iteration takes up to \textbf{10 seconds}.
-	\end{block}
+		\setlength\itemsep{0.15em}
+		\item Offline and expensive.
+		\item Restarted from scratch after each context change.
+	\end{itemize}
+
+	\vspace{0.1em}
+	{\normalsize\textbf{Real NIDS example\sliderefmark{3}}}\\[0.15em]
+	\begin{itemize}
+		\footnotesize
+		\setlength\itemsep{0.1em}
+		\item Bayesian optimization + binary Random Forest NIDS.
+	\end{itemize}
 
 	\vspace{0.18em}
+	\begin{columns}[T,onlytextwidth]
+		\column{0.31\linewidth}
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex,center]{defbox}
+			\Large\textbf{300}\\[-0.15em]
+			\scriptsize iterations
+		\end{beamercolorbox}
+
+		\column{0.31\linewidth}
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex,center]{defbox}
+			\Large\textbf{10 s}\\[-0.15em]
+			\scriptsize per iteration
+		\end{beamercolorbox}
+
+		\column{0.34\linewidth}
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex,center]{defbox}
+			\Large\textbf{$\approx$ 50 min}\\[-0.15em]
+			\scriptsize per daily context
+		\end{beamercolorbox}
+	\end{columns}
+
+	\vspace{0.15em}
 	\centering
-	{\fontsize{5.8}{6.5}\selectfont Refs: Bergstra \& Bengio, JMLR 2012; Snoek et al., NeurIPS 2012; Anser et al., NOMS 2023.}
+	\footnotesize\textbf{$\Longrightarrow$ Too slow for repeated post-deployment reconfiguration.}
+
+	\vspace{0.14em}
+	{\fontsize{5.8}{6.5}\selectfont Refs: \sliderefentry{1}{Bergstra \& Bengio, JMLR 2012}; \sliderefentry{2}{Snoek et al., NeurIPS 2012}; \sliderefentry{3}{Anser et al., NOMS 2023}.}
 \end{frame}
 
 \begin{frame}{Research question (RQ1)}
@@ -249,48 +352,26 @@
 
 	\begin{columns}[T,onlytextwidth]
 		\column{0.49\linewidth}
-		\begin{block}{Supervised setting}
-			% Previous version kept for reference.
-			% \begin{itemize}
-			% 	\scriptsize
-			% 	\item Binary Random Forest classifier on labeled benign and attack traffic.
-			% 	\item \emph{Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning}.\\
-			% 	      {\scriptsize Anser et al., NOMS 2023 (AnNet workshop).}
-			% 	\item Contexts: \textbf{17 daily datasets} from IDS2017 and IDS2018.
-			% 	\item Search space: \textbf{2 RF HPs} (`max\_features`, `min\_samples\_leaf`).
-			% 	\item BO baseline: \textbf{TPE}, with \textbf{300 iterations/day}, tuned on \textbf{MCC}.
-			% \end{itemize}
+		\methodologycard{methodblue}{Supervised setting}{%
 			\begin{itemize}
 				\setlength\itemsep{0.15em}
 				\item Binary Random Forest on labeled benign/attack traffic.
 				\item Reference: Anser et al., \textbf{NOMS 2023} (AnNet workshop).
 				\item Contexts: \textbf{17 daily} IDS2017/IDS2018 datasets.
 				\item Search space: \textbf{2 RF HPs} (`max\_features`, `min\_samples\_leaf`).
-				\item BO baseline: \textbf{TPE}, \textbf{300 iterations/day}, optimized on \textbf{MCC}.
-			\end{itemize}
-		\end{block}
+				\item BO baseline: \textbf{300 iterations/day}, optimized on \textbf{MCC}.
+			\end{itemize}}
 
 		\column{0.49\linewidth}
-		\begin{block}{Unsupervised setting}
-			% Previous version kept for reference.
-			% \begin{itemize}
-			% 	\scriptsize
-			% 	\item Isolation Forest-based AD IDS trained on attack-free data.
-			% 	\item \emph{Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets}.\\
-			% 	      {\scriptsize Anser et al., LCN 2024 (short paper).}
-			% 	\item Contexts: \textbf{14 daily datasets} from IDS2017 and IDS2018.
-			% 	\item Search space: \textbf{7 iForest HPs + threshold}.
-			% 	\item BO baseline: daily optimum with attack labels offline; evaluation with \textbf{ROC-AUC}, \textbf{F1}, and \textbf{precision}.
-			% \end{itemize}
+		\methodologycard{methodgreen}{Unsupervised setting}{%
 			\begin{itemize}
 				\setlength\itemsep{0.15em}
 				\item Isolation Forest-based AD IDS trained on attack-free data.
 				\item Reference: Anser et al., \textbf{LCN 2024} (short paper).
 				\item Contexts: \textbf{14 daily} IDS2017/IDS2018 datasets.
 				\item Search space: \textbf{7 iForest HPs + threshold}.
-				\item BO baseline: offline daily optimum with labels; metrics: \textbf{ROC-AUC}, \textbf{F1}, \textbf{precision}.
-			\end{itemize}
-		\end{block}
+				\item BO baseline: offline daily optimum with labels; metric: \textbf{precision}.
+			\end{itemize}}
 	\end{columns}
 
 	\vspace{0em}
@@ -298,7 +379,7 @@
 	% Previous takeaway kept for reference.
 	% \scriptsize\textbf{$\Rightarrow$ Same meta-learning principle, but different detectors, search spaces, and configuration targets.}
 	% \scriptsize\textbf{$\Rightarrow$ Same meta-learning pipeline, but different detectors, search spaces, and targets.}
-	\footnotesize\textbf{$\Rightarrow$ Same meta-learning pipeline, but different detectors, search spaces, and targets.}
+	\small\textbf{$\Rightarrow$ Same meta-learning pipeline, but different detectors, search spaces, and targets.}
 \end{frame}
 
 \begin{frame}{Results: precision}
@@ -351,10 +432,10 @@
 		\column{0.39\linewidth}
 		\begin{itemize}
 			\setlength\itemsep{0.42em}
-			\item In the attack-free AD setting, precision stays high overall.
-			\item Variability is larger on days \textbf{2} and \textbf{5--8}.
-			\item The gap comes from a few harder contexts where transfer is less reliable.
-			\item In the supervised setting, precision is near-saturated and MtL often overlaps HPO.
+			\item High overall precision in attack-free AD.
+			\item Higher variability on days \textbf{2} and \textbf{5--8}.
+			\item Harder contexts $\rightarrow$ weaker transfer.
+			\item Supervised setting: meta-learning close to the (sub-)optimal configuration.
 		\end{itemize}
 
 		\column{0.58\linewidth}
@@ -366,7 +447,7 @@
 
 	\vspace{0.08em}
 	\begin{center}
-		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ High precision in both settings; unsupervised AD exposes the harder transfer cases.}}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ High precision overall; attack-free AD reveals the harder transfer days.}}
 	\end{center}
 \end{frame}
 
@@ -420,10 +501,10 @@
 		\column{0.39\linewidth}
 		\begin{itemize}
 			\setlength\itemsep{0.42em}
-			\item In the attack-free AD setting, MtL can exceed BO when BO is budget-matched.
-			\item Gains are strongest around the harder days, especially \textbf{5--8}.
-			\item Negative gains stay limited at equal cost.
-			\item In the supervised setting, MtL also improves over the default with large gains on difficult days.
+			\item Attack-free AD: meta-learning can beat budget-matched BO.
+			\item Strongest gains on harder days, especially \textbf{5--8}.
+			\item Limited negative gains at equal cost.
+			\item Supervised setting: large gains over the default.
 		\end{itemize}
 
 		\column{0.58\linewidth}
@@ -435,7 +516,7 @@
 
 	\vspace{0.08em}
 	\begin{center}
-		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ Transfer is cheaper than BO and can still win under the same budget.}}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ Cheaper than BO, yet competitive or better at equal budget.}}
 	\end{center}
 \end{frame}
 
@@ -480,10 +561,10 @@
 		\column{0.39\linewidth}
 		\begin{itemize}
 			\setlength\itemsep{0.42em}
-			\item In the attack-free AD setting, MtL returns a configuration in seconds to minutes.
-			\item BO can grow by orders of magnitude and exceed \textbf{100,000 s}.
-			\item Overall, MtL is about \textbf{160x faster}.
-			\item In the supervised setting, MtL remains quasi-constant and is about \textbf{9x faster} than HPO on average.
+			\item Attack-free AD: seconds-to-minutes reconfiguration.
+			\item BO runtime can exceed \textbf{100,000 s}.
+			\item About \textbf{160x} faster overall.
+			\item Supervised setting: about \textbf{9x} faster than finding a (sub-)optimal configuration.
 		\end{itemize}
 
 		\column{0.58\linewidth}
@@ -495,55 +576,26 @@
 
 	\vspace{0.08em}
 	\begin{center}
-		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ For online reconfiguration, the time advantage becomes decisive in the attack-free AD setting.}}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ Time advantage becomes decisive for online reconfiguration.}}
 	\end{center}
 \end{frame}
 
-\begin{frame}{Auto-configuration: conclusion}
+\begin{frame}{Part I conclusion}
 	\small
+	\centering
+	\adaptationCostVisual
+
+	\vspace{0.35em}
 
 	\begin{itemize}
 		\setlength\itemsep{0.55em}
-		\item Re-running HPO after each context change is too expensive for adaptive ML-based NIDS.
-		\item Meta-learning preserves strong detection performance while staying close to HPO in both settings.
+		\item Meta-learning preserves strong detection performance.
 		\item The operational benefit is time: visible in supervised NIDS and decisive in attack-free AD.
-		\item For AD NIDS, auto-configuration must remain context-aware, since both model HPs and threshold must be adapted.
 	\end{itemize}
 
-	\vspace{0.15em}
-	\centering
-	\footnotesize\textbf{$\Rightarrow$ Meta-learning makes NIDS reconfiguration fast enough for practice without sacrificing too much detection performance.}
-\end{frame}
+	\vspace{0.08em}
+	\begin{center}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ A comprehensive analysis of the impact of configuration not presented here is available in our NOMS 2026 paper.}}
+	\end{center}
 
-\begin{frame}{General conclusion}
-	\small
-
-	\begin{itemize}
-		\setlength\itemsep{0.6em}
-		\item Robust ML-based NIDS should not be judged only by their accuracy on a static benchmark.
-		\item This thesis addressed robustness along two complementary axes: \textbf{configuration robustness} and \textbf{evaluation robustness}.
-		\item Meta-learning enables fast, context-aware reconfiguration, including attack-free AD where both model HPs and threshold must be adapted.
-		\item TATA strengthens pre-deployment evaluation by assessing test-set difficulty and generating targeted, protocol-faithful traffic to expose hidden weaknesses.
-	\end{itemize}
-
-	\vspace{0.15em}
-	\centering
-	\footnotesize\textbf{$\Rightarrow$ Robust ML-based NIDS require both adaptive configuration and stronger pre-deployment evaluation.}
-\end{frame}
-
-\begin{frame}{Perspectives}
-	\small
-
-	\begin{itemize}
-		\setlength\itemsep{0.48em}
-		\item Move from one-shot benchmarking to \textbf{continuous, closed-loop evaluation and adaptation}.
-		\item Extend both frameworks beyond the current flow-based and single-protocol settings toward richer traffic granularities, applications, and larger testbeds.
-		\item Reuse TATA-generated hard cases not only for assessment, but also for \textbf{hardening and retraining} the detector.
-		\item Use \textbf{GenAI} for scenario-to-traffic generation and analyst assistance, while accounting for more adaptive attackers.
-		\item Explore \textbf{privacy-preserving and federated configuration learning} to mitigate cold-start deployment and share useful experience across organizations.
-	\end{itemize}
-
-	\vspace{0.15em}
-	\centering
-	\footnotesize\textbf{$\Rightarrow$ The long-term goal is continuously evaluable, configurable, and trustworthy ML-based NIDS.}
 \end{frame}

@@ -1,0 +1,56 @@
+\section{Conclusion and perspectives}
+\begin{frame}{Adaptation Part}
+	\small
+
+	{\normalsize\textbf{Conclusion}}\\[-0.05em]
+	\begin{itemize}
+		\setlength\itemsep{0.35em}
+		\item Re-running the search for a (sub-)optimal configuration after each context change is too expensive for adaptive ML-based NIDS.
+		\item Meta-learning keeps reconfiguration fast while staying close to the (sub-)optimal configuration, including attack-free AD.
+	\end{itemize}
+
+	\vspace{0.2em}
+	{\normalsize\textbf{Perspectives}}\\[-0.05em]
+	\begin{itemize}
+		\setlength\itemsep{0.35em}
+		\item Move toward continuous, closed-loop reconfiguration under network context change.
+		\item Explore privacy-preserving and federated configuration learning to mitigate cold-start deployment.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Evaluation Part}
+	\small
+
+	{\normalsize\textbf{Conclusion}}\\[-0.05em]
+	\begin{itemize}
+		\setlength\itemsep{0.35em}
+		\item Static benchmark accuracy is not enough for robust NIDS evaluation.
+		\item TATA assesses test-set difficulty and generates targeted, realistic raffic to expose hidden weaknesses.
+	\end{itemize}
+
+	\vspace{0.2em}
+	{\normalsize\textbf{Perspectives}}\\[-0.05em]
+	\begin{itemize}
+		\setlength\itemsep{0.35em}
+		\item Reuse TATA-generated hard cases for detector hardening and retraining.
+		\item Extend beyond the current flow-based, single-protocol setting toward richer traffic and larger testbeds.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Domain Perspectives}
+	\small
+
+	{\normalsize\textbf{General takeaway}}\\[-0.05em]
+	\begin{itemize}
+		\setlength\itemsep{0.35em}
+		\item Robust ML-based NIDS require both stronger pre-deployment evaluation and adaptive post-deployment configuration.
+	\end{itemize}
+
+	\vspace{0.2em}
+	{\normalsize\textbf{Perspectives}}\\[-0.05em]
+	\begin{itemize}
+		\setlength\itemsep{0.35em}
+		\item Move from one-shot benchmarking to continuous evaluation and adaptation loops.
+		\item Use GenAI for scenario-to-traffic generation and analyst assistance, while accounting for more adaptive attackers.
+	\end{itemize}
+\end{frame}

@@ -1,37 +1,6 @@
-\section{Part I: TATA}
+\section{Part II: Evaluation}
 
-\begin{frame}{Introduction}
-	\small
-	\begin{columns}[T,onlytextwidth]
-		\column{0.42\linewidth}
-		\begin{itemize}
-			\item A robust evaluation should expose challenging cases, including
-			      corner cases.
-			\item Pre-deployment evaluation mainly relies on the test set
-			      \(\mathcal{D}_{\text{test}}\).
-			\item The key question is whether \(\mathcal{D}_{\text{test}}\)
-			      really stresses the ML-based NIDS.
-			\item The detector is constructed from
-			      \(\mathcal{D}_{\text{train}}\) \( \rightarrow \)
-			      \(\mathcal{D}_{\text{test}}\) must be assessed relative to
-			      \(\mathcal{D}_{\text{train}}\).
-		\end{itemize}
-
-		\column{0.56\linewidth}
-		\centering
-		\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{figures/TATA/ML_NIDS_last.pdf}
-	\end{columns}
-
-	\vspace{0.2em}
-	\centering
-	\textbf{$\Rightarrow$ This part focuses on \(\mathcal{D}_{\text{test}}\) and its relation to \(\mathcal{D}_{\text{train}}\).}
-
-\end{frame}
-
-% ------------------------------------------------------------
-% Slide 2 – Benchmark splits & their limits
-% ------------------------------------------------------------
-\begin{frame}{Benchmark NIDS datasets}
+\begin{frame}{Benchmark NIDS datasets — A Closer Look}
 
 	\small
 	\begin{columns}[T,onlytextwidth]
@@ -72,6 +41,36 @@
 		Datasets, IEEE EuroS\&P 2024.}
 
 \end{frame}
+
+
+\begin{frame}{Focusing on \(\mathcal{D}_{\text{test}}\) and its relation to \(\mathcal{D}_{\text{train}}\)}
+	\small
+	\begin{columns}[T,onlytextwidth]
+		\column{0.42\linewidth}
+		\begin{itemize}
+			\item A robust evaluation should expose challenging cases, including
+			      corner cases.
+			\item Pre-deployment evaluation mainly relies on the test set
+			      \(\mathcal{D}_{\text{test}}\).
+			\item The key question is whether \(\mathcal{D}_{\text{test}}\)
+			      really stresses the ML-based NIDS.
+			\item The detector is constructed from
+			      \(\mathcal{D}_{\text{train}}\) \( \rightarrow \)
+			      \(\mathcal{D}_{\text{test}}\) must be assessed relative to
+			      \(\mathcal{D}_{\text{train}}\).
+		\end{itemize}
+
+		\column{0.56\linewidth}
+		\centering
+		\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{figures/TATA/ML_NIDS_last.pdf}
+	\end{columns}
+
+	\vspace{0.2em}
+	\centering
+	\textbf{$\Rightarrow$ This part focuses on \(\mathcal{D}_{\text{test}}\) and its relation to \(\mathcal{D}_{\text{train}}\).}
+
+\end{frame}
+
 
 
 % ---------- add in the preamble -----------------
@@ -141,6 +140,26 @@
 	\parbox[t]{\linewidth}{%
 		Model access (\gOne{\limMA}) + NN-only (\gOne{\iconNN}) + \\
 		Ignores train--test alignment (\gTwo{\limTA})}}
+
+\newcommand{\tataGapClosureVisual}{%
+	\begin{tikzpicture}[baseline=(current bounding box.center)]
+		\node[draw=black!15,fill=black!3,rounded corners=6pt,inner sep=5pt,align=center] (prior) at (0,0) {%
+			\begin{minipage}{3.35cm}
+				\centering
+				{\scriptsize \textbf{Prior gaps}}\\[0.2em]
+				{\scriptsize \gOne{\textbf{G1}}~\limMA~\iconNN~\limMC}\\[-0.05em]
+				{\scriptsize \gTwo{\textbf{G2}}~\limTA~\limPR}\\[-0.05em]
+				{\scriptsize \gThree{\textbf{G3}}~\limRT~\limSY~\limMU}
+			\end{minipage}};
+		\draw[red!75!black,line width=1.25pt] ([xshift=3pt,yshift=1pt]prior.south west) -- ([xshift=-3pt,yshift=-1pt]prior.north east);
+		\node[anchor=west,draw=structure.fg,fill=structure.fg!10,rounded corners=6pt,inner sep=5pt,align=center] (tata) at (2.35,0) {%
+			\begin{minipage}{2.35cm}
+				\centering
+				{\scriptsize \textbf{TATA closes}}\\[0.2em]
+				{\scriptsize \gOne{\textbf{G1}}\hspace{0.45em}\gTwo{\textbf{G2}}\hspace{0.45em}\gThree{\textbf{G3}}}
+			\end{minipage}};
+		\draw[->,line width=0.9pt,draw=structure.fg] (prior.east) -- (tata.west);
+	\end{tikzpicture}}
 %% ------------------------------------------------------------
 %\begin{frame}[c]{Related Work}
 %    \centering
@@ -527,13 +546,21 @@
 
 \input{sections/TATA/results/slides}
 
-\begin{frame}{Part I conclusion}
+\begin{frame}{Part II conclusion}
 	\small
-	\begin{itemize}
-		\setlength\itemsep{0.65em}
-		\item TATA provides a pre-deployment framework to assess whether a \(\mathcal{D}_{\text{test}}\) really challenges a NIDS.
-		\item Targeted augmentation with a configurable live testbed exposes hidden weaknesses while preserving realistic traffic generation.
-		\item Across \textbf{12 public NIDS datasets} released between \textbf{2009 and 2020}, the metrics remain mostly below \textbf{0.5}, suggesting only limited test-set difficulty.
-		\item A more reliable pre-deployment evaluation is necessary, but not sufficient; robust ML-based NIDS also require post-deployment adaptation.
-	\end{itemize}
+	\begin{columns}[T,onlytextwidth]
+		\column{0.57\linewidth}
+		\begin{itemize}
+			\setlength\itemsep{1em}
+			\item[]
+			      \tataGapClosureVisual
+			\item Across \textbf{12 public NIDS datasets}, metrics remain mostly below \textbf{0.5} \(\Rightarrow\) limited test-set difficulty.
+		\end{itemize}
+
+		\column{0.40\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{sections/TATA/results/figures/datasets_analysis-crop-transparent.pdf}
+		\par\vspace{0.25em}
+		{\scriptsize 12 public NIDS datasets ordered on the x-axis by release year (2009--2020)}
+	\end{columns}
 \end{frame}

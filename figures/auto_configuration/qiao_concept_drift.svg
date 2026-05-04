@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="454" viewBox="0 0 1020 454">
+  <defs>
+    <style>
+      .axis { stroke: #222; stroke-width: 2.2; fill: none; }
+      .grid { stroke: #d0d0d0; stroke-width: 1.1; stroke-dasharray: 6 4; }
+      .ylabel { font: 700 28px 'DejaVu Sans', Arial, sans-serif; fill: #111; }
+      .tick { font: 400 18px 'DejaVu Sans', Arial, sans-serif; fill: #222; }
+      .xlabel { font: 700 22px 'DejaVu Sans', Arial, sans-serif; fill: #111; }
+      .value { font: 700 20px 'DejaVu Sans', Arial, sans-serif; fill: #3a3a3a; }
+    </style>
+  </defs>
+
+  <line x1="96" y1="20" x2="96" y2="388" class="axis"/>
+  <line x1="96" y1="388" x2="1000" y2="388" class="axis"/>
+
+  <line x1="96" y1="317.6" x2="1000" y2="317.6" class="grid"/>
+  <line x1="96" y1="247.2" x2="1000" y2="247.2" class="grid"/>
+  <line x1="96" y1="176.8" x2="1000" y2="176.8" class="grid"/>
+  <line x1="96" y1="106.4" x2="1000" y2="106.4" class="grid"/>
+  <line x1="96" y1="36" x2="1000" y2="36" class="grid"/>
+
+  <text x="72" y="394" text-anchor="end" class="tick">0</text>
+  <text x="72" y="323" text-anchor="end" class="tick">20</text>
+  <text x="72" y="253" text-anchor="end" class="tick">40</text>
+  <text x="72" y="183" text-anchor="end" class="tick">60</text>
+  <text x="72" y="112" text-anchor="end" class="tick">80</text>
+  <text x="72" y="42" text-anchor="end" class="tick">100</text>
+
+  <text x="34" y="228" text-anchor="middle" transform="rotate(-90 34 228)" class="ylabel">Accuracy (%)</text>
+
+  <rect x="150" y="38.82" width="230" height="349.18" fill="#7f8c8d"/>
+  <rect x="430" y="265.96" width="230" height="122.04" fill="#d62728"/>
+  <rect x="710" y="44.23" width="230" height="343.77" fill="#2ca25f"/>
+
+  <text x="265" y="30" text-anchor="middle" class="value">99.20</text>
+  <text x="545" y="256" text-anchor="middle" class="value">34.67</text>
+  <text x="825" y="35" text-anchor="middle" class="value">98.23</text>
+
+  <text x="265" y="412" text-anchor="middle" class="xlabel">CNN</text>
+  <text x="265" y="438" text-anchor="middle" class="xlabel">C1 static</text>
+
+  <text x="545" y="412" text-anchor="middle" class="xlabel">CNN</text>
+  <text x="545" y="438" text-anchor="middle" class="xlabel">C3 static</text>
+
+  <text x="825" y="412" text-anchor="middle" class="xlabel">CNN</text>
+  <text x="825" y="438" text-anchor="middle" class="xlabel">adapted avg</text>
+</svg>

@@ -13,9 +13,8 @@
 
 			\item Modern societies and public services increasingly rely on
 			      computer networks
-			      \\
 			      $\longrightarrow$ Higher exposure to cyber
-			      incidents and service interruptions.
+			      incidents.
 
 			\item ANSSI handled \alert{\textbf{4,386}} security events in 2024
 			      (\alert{\textbf{+15\%}} vs. 2023), including
@@ -30,7 +29,7 @@
 		\column{0.43\textwidth}
 		\centering
 
-		\includegraphics[width=0.92\linewidth]{figures/introduction/anssi_regions_scienceplots.pdf}
+		\includegraphics[width=\linewidth]{figures/introduction/anssi_regions_scienceplots.pdf}
 
 		\par\vspace{0.1em}
 		\figsource{ANSSI, Panorama de la cybermenace 2024}
@@ -43,7 +42,7 @@
 		\figsource{IBM Security, Cost of a Data Breach Report 2024}
 	\end{columns}
 
-	\sliderefs{Refs: ANSSI, Panorama de la cybermenace 2024; IBM Security, Cost of a Data Breach Report 2024; ANS, Observatoire des incidents cybersecurite sante 2023.}
+	% \sliderefs{Refs: ANSSI, Panorama de la cybermenace 2024; IBM Security, Cost of a Data Breach Report 2024; ANS, Observatoire des incidents cybersecurite sante 2023.}
 
 	% \vspace{0.6em}
 	% \centering
@@ -124,36 +123,10 @@
 \begin{frame}{ML-based NIDS as a prediction task}
 	\small
 
-	\centering
-	\textbf{Network observation} $\longrightarrow$ \textbf{feature representation} $\longrightarrow$ \textbf{detection model} $\longrightarrow$ \textbf{prediction}
+	\vspace{0.2em}
+	\includegraphics[width=0.98\linewidth]{figures/introduction/ml_prediction_task_diagram.pdf}
 
-	\vspace{1em}
-
-	\begin{columns}[T,onlytextwidth]
-		\column{0.48\textwidth}
-		\begin{block}{Input and output}
-			\small
-			\begin{itemize}
-				\setlength\itemsep{0.8em}
-				\item A network observation can be a packet, a flow, a sequence, or a graph
-				\item The model takes a numerical representation of this observation
-				\item The output is either a traffic label or an anomaly score
-			\end{itemize}
-		\end{block}
-
-		\column{0.48\textwidth}
-		\begin{block}{Two common learning settings}
-			\small
-			\begin{itemize}
-				\setlength\itemsep{0.8em}
-				\item \textbf{Classification}: trained with labelled benign and attack traffic
-				\item \textbf{Anomaly detection}: trained mainly on benign traffic
-				\item In anomaly detection, alerts are raised when the score exceeds a threshold
-			\end{itemize}
-		\end{block}
-	\end{columns}
-
-	\vspace{0.7em}
+	\vspace{0.2em}
 	\centering
 	\textbf{$\Rightarrow$ This common ML setting leads to
 		the standard train $\rightarrow$ validate $\rightarrow$ test $\rightarrow$

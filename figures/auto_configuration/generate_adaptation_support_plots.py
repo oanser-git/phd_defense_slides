@@ -13,10 +13,9 @@ QIAO_LABELS = [
     "CNN\nC1 static",
     "CNN\nC3 static",
     "CNN\nadapted avg",
-    "LSTM\nadapted avg",
 ]
-QIAO_VALUES = [99.20, 34.67, 98.23, 97.06]
-QIAO_COLORS = ["#7f8c8d", "#d62728", "#2ca25f", "#1f77b4"]
+QIAO_VALUES = [99.20, 34.67, 98.23]
+QIAO_COLORS = ["#7f8c8d", "#d62728", "#2ca25f"]
 
 
 def configure_style() -> None:

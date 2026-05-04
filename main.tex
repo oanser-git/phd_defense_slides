@@ -16,6 +16,9 @@
 \usepackage{multirow}
 \usepackage{tabularx}
 
+\newcommand{\sliderefmark}[1]{\textsuperscript{\textbf{[#1]}}}
+\newcommand{\sliderefentry}[2]{\textcolor{structure.fg}{\textbf{[#1]}}~#2}
+
 \newcommand{\iconNN}{%
   \tikz[baseline=-0.5ex,scale=0.18,line width=0.7pt]{
     \foreach \y in {1.5,0,-1.5}
@@ -39,45 +42,74 @@
 \title{Toward Robust Machine Learning based Network Intrusion Detection Systems}
 % \subtitle{Optional Subtitle}
 \author{Omar Anser}
-\institute{SnT — University of Luxembourg, Luxembourg}
+\institute{LORIA, Inria Centre at Université de Lorraine, France\\Currently postdoctoral researcher at University of Luxembourg, SnT, Luxembourg}
 \date{\today}
+
+\newcommand{\jurycard}[3]{%
+  \begin{minipage}[t]{\linewidth}
+    \raggedright
+    {\setlength{\fboxsep}{3pt}\colorbox{structure.fg}{\textcolor{white}{\scriptsize\textbf{#1}}}}\\[0.35em]
+    {\footnotesize\textbf{#2}}\\[0.15em]
+    {\fontsize{7.1}{7.8}\selectfont #3}
+  \end{minipage}%
+}
+
+\newcommand{\jurygroupcard}[5]{%
+  \begin{minipage}[t]{\linewidth}
+    \raggedright
+    {\setlength{\fboxsep}{3pt}\colorbox{structure.fg}{\textcolor{white}{\scriptsize\textbf{#1}}}}\\[0.35em]
+    \begin{minipage}[t]{0.48\linewidth}
+      \raggedright
+      {\footnotesize\textbf{#2}}\\[0.15em]
+      {\fontsize{7.1}{7.8}\selectfont #3}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\linewidth}
+      \raggedright
+      {\footnotesize\textbf{#4}}\\[0.15em]
+      {\fontsize{7.1}{7.8}\selectfont #5}
+    \end{minipage}
+  \end{minipage}%
+}
 
 \begin{document}
 
 \begin{frame}[plain,noframenumbering]
-	\vspace{0.35em}
+	\begin{flushright}
+		\includegraphics[height=0.54cm]{figures/logo/Inr_logo_fr_rouge.png}\hspace{0.45em}%
+		\includegraphics[height=0.54cm]{figures/logo/Logo_loria_abrege_couleur.png}\hspace{0.45em}%
+		\includegraphics[height=0.54cm]{figures/logo/Logo-universite-de-lorraine.png}
+	\end{flushright}
+
+	\vspace{-0.45em}
 	\centering
+	{\usebeamerfont{title}\usebeamercolor[fg]{title}\Large\bfseries Toward Robust Machine Learning based Network Intrusion Detection Systems\par}
 
-	\includegraphics[height=0.88cm]{figures/logo/Inr_logo_fr_rouge.png}\hspace{1.3em}%
-	\includegraphics[height=0.88cm]{figures/logo/Logo_loria_abrege_couleur.png}\hspace{1.3em}%
-	\includegraphics[height=0.88cm]{figures/logo/Logo-universite-de-lorraine.png}
+	\vspace{0.35em}
+	{\large Omar Anser\par}
 
-	\vspace{0.55em}
+	\vspace{0.12em}
+	{\footnotesize Inria, Université de Lorraine, CNRS, LORIA, Nancy, France (currently post doc Univ. Luxembourg)\par}
 
-	{\usebeamerfont{title}\usebeamercolor[fg]{title}\LARGE\bfseries Toward Robust Machine Learning based Network Intrusion Detection Systems\par}
-
-  \vspace{0.9em}
-  {\large Omar Anser\par}
-
-  \vspace{0.35em}
-  {\normalsize SnT --- University of Luxembourg, Luxembourg\par}
-
-  \vspace{0.9em}
-	\begin{beamercolorbox}[wd=0.92\linewidth,sep=1ex,rounded=true]{block body}
-    \small
-    \textbf{Jury}\\[0.35em]
-    \begin{tabular}{@{}ll@{}}
-      President: & Bernardetta Addis \\
-      Rapporteurs: & Nadjib A\"it-Saadi, Francesco Bronzino \\
-      Examiner: & Gr\'egory Blanc \\
-      Supervisors: & Isabelle Chrisment, J\'er\^ome Fran\c{c}ois
-    \end{tabular}
+	\vspace{0.42em}
+	\begin{beamercolorbox}[wd=0.95\linewidth,sep=0.7ex,rounded=true]{block body}
+		\centering
+		\begin{minipage}{0.88\linewidth}
+			\begin{minipage}[t]{0.30\linewidth}
+				\jurycard{President}{Bernardetta Addis}{Professeure\\Université de Lorraine}
+			\end{minipage}\hfill
+			\begin{minipage}[t]{0.66\linewidth}
+				\jurygroupcard{Rapporteurs}{Nadjib A\"it-Saadi}{Professeur des universités\\UVSQ - Université Paris-Saclay}{Francesco Bronzino}{Maître de conférences HDR\\ENS de Lyon}
+			\end{minipage}\\[0.55em]
+			\begin{minipage}[t]{0.30\linewidth}
+				\jurycard{Examiner}{Gr\'egory Blanc}{Maître de conférences\\Télécom SudParis}
+			\end{minipage}\hfill
+			\begin{minipage}[t]{0.66\linewidth}
+				\jurygroupcard{Supervisors}{Isabelle Chrisment}{Professeure\\Université de Lorraine}{Jérôme François}{Research scientist\\University of Luxembourg, SnT}
+			\end{minipage}
+		\end{minipage}
 	\end{beamercolorbox}
 
 	\vfill
-
-	\vspace{0.6em}
-	{\small \today\par}
 \end{frame}
 
 % \begin{frame}{Outline}
@@ -86,8 +118,9 @@
 
 \input{sections/introduction}
 % \input{sections/draft}
-\input{sections/TATA/slides}
 \input{sections/auto-configuration/slides}
+\input{sections/TATA/slides}
+\input{sections/conclusion}
 
 \begin{frame}[standout]
 	Questions?

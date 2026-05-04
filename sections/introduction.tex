@@ -3,24 +3,57 @@
 \newcommand{\sliderefs}[1]{\vspace{0.1em}{\fontsize{5.2}{6}\selectfont #1\par}}
 \newcommand{\figsource}[1]{{\fontsize{5.2}{6}\selectfont \emph{Source:} #1}}
 \newcommand{\aspectbadge}[2]{\tikz[baseline=(c.base)]\node[circle,fill=#1,text=white,font=\bfseries\scriptsize,inner sep=1.15pt] (c) {#2};}
+\newcommand{\fadedaspectbadge}[2]{\tikz[baseline=(c.base)]\node[circle,fill=#1!35,text=white!70!black,font=\bfseries\scriptsize,inner sep=1.15pt] (c) {#2};}
 
-\newcommand{\workflowoverview}{%
+\newcommand{\aspectitem}[5]{%
+	\item[\alt<#1->{\aspectbadge{#2}{#3}}{\fadedaspectbadge{#2}{#3}}]%
+	\alt<#1->{#4}{\textcolor{black!35}{#4}}\\[0.2em]%
+	\hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont\alt<#1->{#5}{\textcolor{black!35}{#5}}}%
+}
+
+\newcommand{\workflowoverviewstep}[1]{%
 	\begin{tikzpicture}[baseline=(img.base)]
 		\node[anchor=south west,inner sep=0] (img) at (0,0) {\includegraphics[width=\linewidth]{figures/introduction/ML_NIDS_4-crop.pdf}};
 		\begin{scope}[x={(img.south east)},y={(img.north west)}]
-			\fill[orange!85!black,opacity=0.12] (0.76,0.50) ellipse (0.09 and 0.10);
-			\node[circle,fill=orange!85!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.84,0.57) {P};
+			\ifnum#1>0
+				\fill[violet!80!black,opacity=0.10] (0.11,0.87) ellipse (0.12 and 0.11);
+				\node[circle,fill=violet!80!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.24,0.82) {A};
+			\fi
+			\ifnum#1>1
+				\fill[blue!75!black,opacity=0.10] (0.45,0.70) ellipse (0.13 and 0.08);
+				\node[circle,fill=blue!75!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.58,0.80) {B};
+			\fi
+			\ifnum#1>2
+				\fill[orange!85!black,opacity=0.12] (0.76,0.50) ellipse (0.09 and 0.10);
+				\node[circle,fill=orange!85!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.84,0.57) {C};
+			\fi
+			\ifnum#1>3
+				\fill[green!60!black,opacity=0.12] (0.88,0.22) ellipse (0.10 and 0.11);
+				\node[circle,fill=green!60!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.95,0.26) {D};
+			\fi
+			\ifnum#1>4
+				\node[circle,fill=red!75!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] (rbadge) at (0.95,0.74) {E};
+				\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.26,0.49);
+				\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.37,0.49);
+				\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.51,0.49);
+				\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.68,0.72);
+				\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.84,0.44);
+				\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.88,0.30);
+				\fill[red!75!black,opacity=0.16] (0.26,0.49) circle (0.03);
+				\fill[red!75!black,opacity=0.16] (0.37,0.49) circle (0.03);
+				\fill[red!75!black,opacity=0.16] (0.51,0.49) circle (0.03);
+				\fill[red!75!black,opacity=0.16] (0.68,0.72) circle (0.03);
+				\fill[red!75!black,opacity=0.16] (0.84,0.44) circle (0.03);
+				\fill[red!75!black,opacity=0.16] (0.88,0.30) circle (0.03);
+			\fi
+		\end{scope}
+	\end{tikzpicture}}
 
-			\fill[violet!80!black,opacity=0.10] (0.11,0.87) ellipse (0.12 and 0.11);
-			\node[circle,fill=violet!80!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.24,0.82) {F};
-
-			\fill[green!60!black,opacity=0.12] (0.88,0.22) ellipse (0.10 and 0.11);
-			\node[circle,fill=green!60!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.95,0.26) {D};
-
-			\fill[blue!75!black,opacity=0.10] (0.45,0.70) ellipse (0.13 and 0.08);
-			\node[circle,fill=blue!75!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] at (0.58,0.80) {L};
-
-			\node[circle,fill=red!75!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] (rbadge) at (0.95,0.74) {R};
+\newcommand{\workflowoverviewrobustnessonly}{%
+	\begin{tikzpicture}[baseline=(img.base)]
+		\node[anchor=south west,inner sep=0] (img) at (0,0) {\includegraphics[width=\linewidth]{figures/introduction/ML_NIDS_4-crop.pdf}};
+		\begin{scope}[x={(img.south east)},y={(img.north west)}]
+			\node[circle,fill=red!75!black,text=white,font=\bfseries\tiny,inner sep=1.15pt] (rbadge) at (0.95,0.74) {E};
 			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.26,0.49);
 			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.37,0.49);
 			\draw[red!75!black,opacity=0.65,line width=0.65pt,dash pattern=on 1.4pt off 1.8pt] (rbadge) -- (0.51,0.49);
@@ -98,7 +131,7 @@
 
 			\item Network traffic gives direct visibility into system communications
 
-			\item NIDS turn traffic into alerts for investigation and response
+			\item NIDS turn traffic into alerts for investigation and response\sliderefmark{2}
 		\end{itemize}
 
 
@@ -114,9 +147,9 @@
 	\vspace{0.6em}
 	\centering
 	\textbf{$\Rightarrow$ NIDS is one analytical layer inside the broader
-		monitoring and response chain.}
+		monitoring and response chain\sliderefmark{1}.}
 
-	\sliderefs{Refs: NIST SP 800-86 (2006); Scarfone \& Mell, Guide to Intrusion Detection and Prevention Systems (2007).}
+	\sliderefs{Refs: \sliderefentry{1}{NIST SP 800-86 (2006)}; \sliderefentry{2}{Scarfone \& Mell, Guide to Intrusion Detection and Prevention Systems (2007)}.}
 \end{frame}
 
 
@@ -127,19 +160,19 @@
 		\begin{block}{Rule-based NIDS}
 			\begin{itemize}
 				\setlength\itemsep{0.6em}
-				\item Tools: \textbf{Snort}, \textbf{Suricata}, \textbf{Zeek}
+				\item Tools: \textbf{Snort}\sliderefmark{1}, \textbf{Suricata}\sliderefmark{2}, \textbf{Zeek}\sliderefmark{3}
 				\item Detect only known attack patterns or protocol violations, leaving unknown ones undetected.
-				\item Limited when payload content is encrypted
+				\item Encrypted traffic limits payload-based rules\sliderefmark{5}
 			\end{itemize}
 		\end{block}
 
 		\column{0.48\textwidth}
-		\begin{block}{ML-based NIDS}
+		\begin{block}{ML-based NIDS\sliderefmark{4}}
 			\begin{itemize}
 				\setlength\itemsep{0.6em}
 				\item Example: \textbf{Random Forest (RF) on flows}
 				\item Learn traffic patterns from historical data to generalize beyond exact rules.
-				\item Can still detect suspicious behavior in encrypted traffic
+				\item Can learn complex traffic patterns even under encryption\sliderefmark{5}
 			\end{itemize}
 		\end{block}
 	\end{columns}
@@ -147,25 +180,26 @@
 	\vspace{0.25em}
 	\begin{beamercolorbox}[wd=\linewidth,sep=0.9ex,rounded=true]{block body}
 		\centering
-		\textbf{Operational reality: mostly hybrid.} For example, a SOC may use \textbf{Suricata/Zeek} for known alerts and \textbf{ML on flows} to flag suspicious HTTPS command-and-control behavior.
+		\textbf{Operational reality: mostly hybrid\sliderefmark{6}.} E.g. SOCs use \textbf{Suricata/Zeek} for known alerts + \textbf{ML on flows} to flag suspicious HTTPS C\&C behavior.
 	\end{beamercolorbox}
 
-	\sliderefs{Refs: Snort [Roesch, 1999]; Zeek [Paxson, 1999]; Suricata (OISF); ML for NIDS [Sommer \& Paxson, 2010]; encrypted traffic [Anderson \& McGrew, 2016]; SANS Detection \& Response Survey (2024).}
+	\sliderefs{Refs: \sliderefentry{1}{Snort [Roesch, 1999]}; \sliderefentry{2}{Suricata (OISF)}; \sliderefentry{3}{Zeek [Paxson, 1999]}; \sliderefentry{4}{ML for NIDS [Sommer \& Paxson, 2010]}; \sliderefentry{5}{encrypted traffic [Anderson \& McGrew, 2016]}; \sliderefentry{6}{SANS Detection \& Response Survey (2024)}.}
 \end{frame}
 
 \begin{frame}{ML-based NIDS as a prediction task}
 	\small
 
 	\vspace{0.2em}
-	\includegraphics[width=0.98\linewidth]{figures/introduction/ml_prediction_task_diagram.pdf}
+	\centering
+	\includegraphics[width=0.96\linewidth]{figures/introduction/ml_prediction_task_diagram.pdf}
 
 	\vspace{0.2em}
 	\centering
 	\textbf{$\Rightarrow$ This common ML setting leads to
 		the standard train $\rightarrow$ validate $\rightarrow$ test $\rightarrow$
-		deploy workflow.}
+		deploy workflow\sliderefmark{1}\sliderefmark{2}.}
 
-	\sliderefs{Refs: Sommer \& Paxson (2010); Buczak \& Guven (2016).}
+	\sliderefs{Refs: \sliderefentry{1}{Sommer \& Paxson (2010)}; \sliderefentry{2}{Buczak \& Guven (2016)}.}
 \end{frame}
 
 \begin{frame}{ML-based NIDS Workflow: Train $\rightarrow$ Validate $\rightarrow$ Test $\rightarrow$ Deploy}
@@ -224,25 +258,55 @@
 	\begin{columns}[T,onlytextwidth]
 		\column{0.56\linewidth}
 		\begin{itemize}
-			\item[\aspectbadge{violet!80!black}{F}] Richer traffic representations $\longrightarrow$ Flow-MAE, NetVigil\\[0.2em]
-				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., packet, flow, sequence, graph}
-			\item[\aspectbadge{blue!75!black}{L}] Better use of limited labels $\longrightarrow$ Active-SVDD, INSOMNIA\\[0.2em]
-				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., active learning, semi-supervised learning, and pseudo-labeling}
-			\item[\aspectbadge{orange!85!black}{P}] Better detection performance $\longrightarrow$ BotMiner, Kitsune\\[0.2em]
-				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., DDoS, botnet, web attacks}
-			\item[\aspectbadge{green!60!black}{D}] More practical deployment $\longrightarrow$ AOC-IDS, ENIDrift\\[0.2em]
-				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., lightweight, online, real-time detection}
-			\item[\aspectbadge{red!75!black}{R}] Better robustness in practice $\longrightarrow$ CADE, OWAD\\[0.2em]
-				      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., adaptability to evolving traffic, resilience to adversarial attacks, and more challenging evaluation}
+			\aspectitem{1}{violet!80!black}{A}{Richer traffic representations $\longrightarrow$ Flow-MAE\sliderefmark{1}, NetVigil\sliderefmark{2}}{e.g., packet, flow, sequence, graph}
+			\aspectitem{2}{blue!75!black}{B}{Better use of limited labels $\longrightarrow$ Active-SVDD\sliderefmark{3}, INSOMNIA\sliderefmark{4}}{e.g., active learning, semi-supervised learning, and pseudo-labeling}
+			\aspectitem{3}{orange!85!black}{C}{Better detection performance $\longrightarrow$ BotMiner\sliderefmark{5}, Kitsune\sliderefmark{6}}{e.g., DDoS, botnet, web attacks}
+			\aspectitem{4}{green!60!black}{D}{More practical deployment $\longrightarrow$ AOC-IDS\sliderefmark{7}, ENIDrift\sliderefmark{8}}{e.g., lightweight, online, real-time detection}
+			\aspectitem{5}{red!75!black}{E}{Better robustness in practice $\longrightarrow$ CADE\sliderefmark{9}, OWAD\sliderefmark{10}}{e.g., adaptability to evolving traffic, resilience to adversarial attacks, and more challenging evaluation}
 		\end{itemize}
 
 		\column{0.42\linewidth}
 		\centering
-		\workflowoverview
+		\only<1>{\workflowoverviewstep{1}}
+		\only<2>{\workflowoverviewstep{2}}
+		\only<3>{\workflowoverviewstep{3}}
+		\only<4>{\workflowoverviewstep{4}}
+		\only<5>{\workflowoverviewstep{5}}
 	\end{columns}
 
 	\vfill
-	\sliderefs{Refs: BotMiner [Gu et al., 2008]; Kitsune [Mirsky et al., 2018]; Flow-MAE [Hang et al., 2023]; NetVigil [Hsieh et al., 2024]; AOC-IDS [Zhao et al., 2024]; ENIDrift [Wang, 2022]; Active-SVDD [Gornitz et al., 2009]; INSOMNIA [Pierazzi et al., 2021]; CADE [Yang et al., 2021]; OWAD [Hu et al., 2023].}
+	\sliderefs{Refs: \sliderefentry{1}{Flow-MAE [Hang et al., 2023]}; \sliderefentry{2}{NetVigil [Hsieh et al., 2024]}; \sliderefentry{3}{Active-SVDD [Gornitz et al., 2009]}; \sliderefentry{4}{INSOMNIA [Pierazzi et al., 2021]}; \sliderefentry{5}{BotMiner [Gu et al., 2008]}; \sliderefentry{6}{Kitsune [Mirsky et al., 2018]}; \sliderefentry{7}{AOC-IDS [Zhao et al., 2024]}; \sliderefentry{8}{ENIDrift [Wang, 2022]}; \sliderefentry{9}{CADE [Yang et al., 2021]}; \sliderefentry{10}{OWAD [Hu et al., 2023]}.}
+
+\end{frame}
+
+
+\begin{frame}{How ML has been used to improve NIDS}
+	\fontsize{8.3}{9.2}\selectfont
+	\begin{columns}[T,onlytextwidth]
+		\column{0.56\linewidth}
+		\begin{itemize}
+			\item[\fadedaspectbadge{violet!80!black}{A}] \textcolor{black!35}{Richer traffic representations $\longrightarrow$ Flow-MAE, NetVigil}\\[0.2em]
+			      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont\textcolor{black!35}{e.g., packet, flow, sequence, graph}}
+			\item[\fadedaspectbadge{blue!75!black}{B}] \textcolor{black!35}{Better use of limited labels $\longrightarrow$ Active-SVDD, INSOMNIA}\\[0.2em]
+			      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont\textcolor{black!35}{e.g., active learning, semi-supervised learning, and pseudo-labeling}}
+			\item[\fadedaspectbadge{orange!85!black}{C}] \textcolor{black!35}{Better detection performance $\longrightarrow$ BotMiner, Kitsune}\\[0.2em]
+			      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont\textcolor{black!35}{e.g., DDoS, botnet, web attacks}}
+			\item[\fadedaspectbadge{green!60!black}{D}] \textcolor{black!35}{More practical deployment $\longrightarrow$ AOC-IDS, ENIDrift}\\[0.2em]
+			      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont\textcolor{black!35}{e.g., lightweight, online, real-time detection}}
+			\item[\aspectbadge{red!75!black}{E}] Better robustness in practice $\longrightarrow$ CADE\sliderefmark{1}, OWAD\sliderefmark{2}\\[0.2em]
+			      \hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont e.g., adaptability to evolving traffic, resilience to adversarial attacks, and more challenging evaluation}
+		\end{itemize}
+
+		\column{0.42\linewidth}
+		\centering
+		\workflowoverviewrobustnessonly
+	\end{columns}
+
+	\vfill
+	\centering
+	\parbox{0.95\linewidth}{\centering\textbf{$\Rightarrow$ The other axes optimize the detector inside a given setup, robustness questions the validity of that setup itself.}}
+
+	\sliderefs{Refs: \sliderefentry{1}{CADE [Yang et al., 2021]}; \sliderefentry{2}{OWAD [Hu et al., 2023]}.}
 
 \end{frame}
 
@@ -254,14 +318,14 @@
 	\begin{block}{Robustness in this thesis}
 		\begin{itemize}
 			\setlength\itemsep{0.6em}
-			\item Good performance on one fixed benchmark split is not sufficient to claim robustness.
-			\item Before deployment, robustness depends on evaluation conditions that reveal detector weaknesses.
-			\item After deployment, robustness means remaining effective when traffic and attack patterns evolve.
+			\item One fixed benchmark split is not enough.
+			\item Robustness in operation: effectiveness under evolving traffic and attacks.
+			\item Robustness in assessment: evaluation that truly stresses the detector.
 		\end{itemize}
 
 		\vspace{0.35em}
 		\centering
-		\textbf{$\Rightarrow$ ML-based NIDS robustness is studied both before deployment, through the evaluation process, and after deployment, through adaptability to evolving traffic.}
+		\textbf{$\Rightarrow$ Robustness = adaptation + rigorous evaluation.}
 	\end{block}
 	\vfill
 
@@ -284,40 +348,48 @@
 		\column{0.49\linewidth}
 		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card}
 			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title alt}
-				\centering \textbf{Part I \quad Evaluation}
+				\centering \textbf{Part I \quad Adaptation}
 			\end{beamercolorbox}
 			\begin{minipage}[t][4.2cm][t]{\linewidth}
 				\vspace*{0.05cm}
 				\raggedright
-				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{
-				{\fontsize{6.7}{7.4}\selectfont
-						\textbullet\ Anser et al., \emph{``TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation,''}\\
-						ESORICS 2025 (\textit{main track}).}\\[0.18em]
-				{\fontsize{6.7}{7.4}\selectfont
-				\textbullet\ Anser et al., \emph{``An Empirical Study on Configuration Robustness of Unsupervised IDS,''}\\
-				NOMS 2026 (\textit{main track, to appear}).}
-				}
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{%
+					\footnotesize
+					\begin{itemize}
+						\setlength\itemsep{0.45em}
+						\item Post-deployment robustness
+						\item Fast NIDS reconfiguration
+						\item Meta-learning-based auto-configuration
+						\item Context change handling
+					\end{itemize}}
 			\end{minipage}
 		\end{beamercolorbox}
 
 		\column{0.49\linewidth}
 		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card}
 			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title}
-				\centering \textbf{Part II \quad Adaptation}
+				\centering \textbf{Part II \quad Evaluation}
 			\end{beamercolorbox}
 			\begin{minipage}[t][4.2cm][t]{\linewidth}
 				\vspace*{0.05cm}
 				\raggedright
-				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{
-				{\fontsize{6.7}{7.4}\selectfont
-						\textbullet\ Anser et al., \emph{``Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning,''}\\
-						NOMS 2023 (\textit{AnNet workshop}).}\\[0.12em]
-				{\fontsize{6.7}{7.4}\selectfont
-				\textbullet\ Anser et al., \emph{``Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets,''}\\
-				LCN 2024 (\textit{short paper}).}
-				}
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{%
+					\footnotesize
+					\begin{itemize}
+						\setlength\itemsep{0.45em}
+						\item Test-set difficulty assessment \(\rightarrow\) relvealing NIDS weaknesses
+						\item Targeted augmentation of the test set when difficulty is low
+					\end{itemize}}
 			\end{minipage}
 		\end{beamercolorbox}
 	\end{columns}
+
+	\vspace{0.18em}
+	{\fontsize{4.7}{5.2}\selectfont
+		\parbox{0.99\linewidth}{\centering
+			\textit{Publications:} Part I -- \emph{Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning} (NOMS 2023, AnNet);\\
+			\emph{Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets} (LCN 2024).\\
+			Part II -- \emph{TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation} (ESORICS 2025);\\
+			\emph{An Empirical Study on Configuration Robustness of Unsupervised IDS} (NOMS 2026).}}
 
 \end{frame}
