@@ -6,9 +6,9 @@
 \newcommand{\fadedaspectbadge}[2]{\tikz[baseline=(c.base)]\node[circle,fill=#1!35,text=white!70!black,font=\bfseries\scriptsize,inner sep=1.15pt] (c) {#2};}
 
 \newcommand{\aspectitem}[5]{%
-	\item[\alt<#1->{\aspectbadge{#2}{#3}}{\fadedaspectbadge{#2}{#3}}]%
-	\alt<#1->{#4}{\textcolor{black!35}{#4}}\\[0.2em]%
-	\hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont\alt<#1->{#5}{\textcolor{black!35}{#5}}}%
+	\item[\alt<#1>{\aspectbadge{#2}{#3}}{\fadedaspectbadge{#2}{#3}}]%
+	\alt<#1>{#4}{\textcolor{black!35}{#4}}\\[0.2em]%
+	\hspace*{1.8em}{\fontsize{7.2}{7.9}\selectfont\alt<#1>{#5}{\textcolor{black!35}{#5}}}%
 }
 
 \newcommand{\workflowoverviewstep}[1]{%
@@ -77,19 +77,18 @@
 		\begin{itemize}
 			\setlength\itemsep{0.55em}
 
-			\item Modern societies and public services increasingly rely on
-			      computer networks
-			      $\longrightarrow$ Higher exposure to cyber
-			      incidents.
+			\item Modern societies increasingly rely on computer networks
+			      $\longrightarrow$ Higher exposure to cyber incidents.
 
-			\item ANSSI handled \alert{\textbf{4,386}} security events in 2024
-			      (\alert{\textbf{+15\%}} vs. 2023), including
-			      \alert{\textbf{1,361}} confirmed incidents,
-			      i.e., nearly \alert{\textbf{4}} per day.
+			\item ANSSI 2024: \textbf{4,386} events handled (\textbf{+15\%} vs. 2023);
+			      \textbf{1,361} confirmed incidents
+			      (\textbf{\(\approx\) 4/day})
 
-			\item \alert{\textbf{\$4.88M}} average global cost of a data breach in 2024.
+			\item Average data breach cost in 2024: \textbf{\$4.88M}.
 
-			\item \alert{\textbf{35\%}} of reported cyber incidents in the French health sector affected patient care.
+			\item In the French health sector, \textbf{35\%} of reported
+			      incidents affected patient care.
+
 		\end{itemize}
 
 		\column{0.43\textwidth}
@@ -129,9 +128,9 @@
 
 			\item SOCs and SIEM platforms centralize this monitoring
 
-			\item Network traffic gives direct visibility into system communications
+			\item Network traffic gives visibility into system communications
 
-			\item NIDS turn traffic into alerts for investigation and response\sliderefmark{2}
+			\item NIDS turn traffic into alerts for investigation and response
 		\end{itemize}
 
 
@@ -147,9 +146,8 @@
 	\vspace{0.6em}
 	\centering
 	\textbf{$\Rightarrow$ NIDS is one analytical layer inside the broader
-		monitoring and response chain\sliderefmark{1}.}
+		monitoring and response chain.}
 
-	\sliderefs{Refs: \sliderefentry{1}{NIST SP 800-86 (2006)}; \sliderefentry{2}{Scarfone \& Mell, Guide to Intrusion Detection and Prevention Systems (2007)}.}
 \end{frame}
 
 
@@ -160,19 +158,19 @@
 		\begin{block}{Rule-based NIDS}
 			\begin{itemize}
 				\setlength\itemsep{0.6em}
-				\item Tools: \textbf{Snort}\sliderefmark{1}, \textbf{Suricata}\sliderefmark{2}, \textbf{Zeek}\sliderefmark{3}
+				\item Tools: Snort, Suricata, Zeek
 				\item Detect only known attack patterns or protocol violations, leaving unknown ones undetected.
-				\item Encrypted traffic limits payload-based rules\sliderefmark{5}
+				\item Encrypted traffic limits payload-based rules
 			\end{itemize}
 		\end{block}
 
 		\column{0.48\textwidth}
-		\begin{block}{ML-based NIDS\sliderefmark{4}}
+		\begin{block}{ML-based NIDS}
 			\begin{itemize}
 				\setlength\itemsep{0.6em}
-				\item Example: \textbf{Random Forest (RF) on flows}
+				\item Example: Random Forest (RF) on flows
 				\item Learn traffic patterns from historical data to generalize beyond exact rules.
-				\item Can learn complex traffic patterns even under encryption\sliderefmark{5}
+				\item Can learn complex traffic patterns even under encryption
 			\end{itemize}
 		\end{block}
 	\end{columns}
@@ -180,10 +178,10 @@
 	\vspace{0.25em}
 	\begin{beamercolorbox}[wd=\linewidth,sep=0.9ex,rounded=true]{block body}
 		\centering
-		\textbf{Operational reality: mostly hybrid\sliderefmark{6}.} E.g. SOCs use \textbf{Suricata/Zeek} for known alerts + \textbf{ML on flows} to flag suspicious HTTPS C\&C behavior.
+		\textbf{Operational reality: mostly hybrid\sliderefmark{1}.} E.g. SOCs use \textbf{Suricata/Zeek} for known alerts + \textbf{ML on flows} to flag suspicious HTTPS C\&C behavior.
 	\end{beamercolorbox}
 
-	\sliderefs{Refs: \sliderefentry{1}{Snort [Roesch, 1999]}; \sliderefentry{2}{Suricata (OISF)}; \sliderefentry{3}{Zeek [Paxson, 1999]}; \sliderefentry{4}{ML for NIDS [Sommer \& Paxson, 2010]}; \sliderefentry{5}{encrypted traffic [Anderson \& McGrew, 2016]}; \sliderefentry{6}{SANS Detection \& Response Survey (2024)}.}
+	\sliderefs{Ref: \sliderefentry{1}{SANS Detection \& Response Survey (2024)}.}
 \end{frame}
 
 \begin{frame}{ML-based NIDS as a prediction task}
@@ -191,15 +189,19 @@
 
 	\vspace{0.2em}
 	\centering
-	\includegraphics[width=0.96\linewidth]{figures/introduction/ml_prediction_task_diagram.pdf}
+	\includegraphics<1>[width=0.96\linewidth]{figures/introduction/ml_prediction_task_diagram_stage1.pdf}
+	\includegraphics<2>[width=0.96\linewidth]{figures/introduction/ml_prediction_task_diagram_stage2.pdf}
+	\includegraphics<3>[width=0.96\linewidth]{figures/introduction/ml_prediction_task_diagram_stage3.pdf}
+	\includegraphics<4>[width=0.96\linewidth]{figures/introduction/ml_prediction_task_diagram_stage4.pdf}
+	\includegraphics<5>[width=0.96\linewidth]{figures/introduction/ml_prediction_task_diagram_stage5.pdf}
 
 	\vspace{0.2em}
 	\centering
 	\textbf{$\Rightarrow$ This common ML setting leads to
 		the standard train $\rightarrow$ validate $\rightarrow$ test $\rightarrow$
-		deploy workflow\sliderefmark{1}\sliderefmark{2}.}
+		deploy workflow\sliderefmark{1}.}
 
-	\sliderefs{Refs: \sliderefentry{1}{Sommer \& Paxson (2010)}; \sliderefentry{2}{Buczak \& Guven (2016)}.}
+	\sliderefs{Ref: \sliderefentry{1}{Sommer \& Paxson, ``Outside the Closed World: On Using Machine Learning for Network Intrusion Detection,'' IEEE Symposium on Security and Privacy (2010)}.}
 \end{frame}
 
 \begin{frame}{ML-based NIDS Workflow: Train $\rightarrow$ Validate $\rightarrow$ Test $\rightarrow$ Deploy}
@@ -210,34 +212,35 @@
 		\begin{itemize}
 			\setlength\itemsep{0.9em}
 
-			\item<1-> The model is trained on a labelled \textbf{training} set
-			      \(\mathcal{D}_{\text{train}}\).
+			\item<1-> The model is trained on a training set
+			      \textbf{\(\mathcal{D}_{\text{train}}\)}.
 
-			\item<2-> A separate \textbf{validation} split
-			      \(\mathcal{D}_{\text{val}}\) is used to refine the model
-			      \textbf{configuration} (\textbf{hyperparameters} and, in anomaly detection, the \textbf{threshold}).
+			\item<2-> A separate validation split
+			      \textbf{\(\mathcal{D}_{\text{val}}\)} to refine the model
+			      \textbf{configuration} (\textbf{hyperparameters} and, in
+			      anomaly detection, the \textbf{threshold}).
 
-			\item<3-> A final \textbf{test} set,
-			      \(\mathcal{D}_{\text{test}}\), measures performance on previously unseen data.
+			\item<3-> A final test set,
+			      \textbf{\(\mathcal{D}_{\text{test}}\)}, measures performance on unseen data.
 
-			\item<4-> The selected model is then \textbf{deployed}
+			\item<4-> The selected model is deployed
 			      to monitor live traffic.
 		\end{itemize}
 
-		\only<2>{%
-			\vspace{-7em}
-			\setbeamercolor{focusbox}{use={structure,normal text},
-				fg=structure.fg,
-				bg=structure.fg!12!normal text.bg}
-			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{focusbox}
-				\small
-				\textbf{Hyperparameters:} settings chosen before training that
-				influence model behavior.\\
-				\textbf{Example}: In RF, too few trees can give unstable
-				predictions, while too many can increase computation and overfit
-				the training data.
-			\end{beamercolorbox}
-		}
+		% \only<2>{%
+		% 	\vspace{-7em}
+		% 	\setbeamercolor{focusbox}{use={structure,normal text},
+		% 		fg=structure.fg,
+		% 		bg=structure.fg!12!normal text.bg}
+		% 	\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{focusbox}
+		% 		\small
+		% 		\textbf{Hyperparameters:} settings chosen before training that
+		% 		influence model behavior.\\
+		% 		\textbf{Example}: In RF, too few trees can give unstable
+		% 		predictions, while too many can increase computation and overfit
+		% 		the training data.
+		% 	\end{beamercolorbox}
+		% }
 
 		\column{0.42\linewidth}
 		\begin{figure}
@@ -275,7 +278,13 @@
 	\end{columns}
 
 	\vfill
-	\sliderefs{Refs: \sliderefentry{1}{Flow-MAE [Hang et al., 2023]}; \sliderefentry{2}{NetVigil [Hsieh et al., 2024]}; \sliderefentry{3}{Active-SVDD [Gornitz et al., 2009]}; \sliderefentry{4}{INSOMNIA [Pierazzi et al., 2021]}; \sliderefentry{5}{BotMiner [Gu et al., 2008]}; \sliderefentry{6}{Kitsune [Mirsky et al., 2018]}; \sliderefentry{7}{AOC-IDS [Zhao et al., 2024]}; \sliderefentry{8}{ENIDrift [Wang, 2022]}; \sliderefentry{9}{CADE [Yang et al., 2021]}; \sliderefentry{10}{OWAD [Hu et al., 2023]}.}
+	\sliderefs{%
+		\only<1>{Refs: \sliderefentry{1}{Flow-MAE [Hang et al., 2023, RAID]}; \sliderefentry{2}{NetVigil [Hsieh et al., 2024, NSDI]}.}%
+		\only<2>{Refs: \sliderefentry{3}{Active-SVDD [G\"ornitz et al., 2009, ECML PKDD]}; \sliderefentry{4}{INSOMNIA [Pierazzi et al., 2021, AISec]}.}%
+		\only<3>{Refs: \sliderefentry{5}{BotMiner [Gu et al., 2008, USENIX Security]}; \sliderefentry{6}{Kitsune [Mirsky et al., 2018, NDSS]}.}%
+		\only<4>{Refs: \sliderefentry{7}{AOC-IDS [Zhang et al., 2024, IEEE INFOCOM]}; \sliderefentry{8}{ENIDrift [Wang, 2022, ACSAC]}.}%
+		\only<5>{Refs: \sliderefentry{9}{CADE [Yang et al., 2021, USENIX Security]}; \sliderefentry{10}{OWAD [Han et al., 2023, NDSS]}.}%
+	}
 
 \end{frame}
 
@@ -306,7 +315,7 @@
 	\centering
 	\parbox{0.95\linewidth}{\centering\textbf{$\Rightarrow$ The other axes optimize the detector inside a given setup, robustness questions the validity of that setup itself.}}
 
-	\sliderefs{Refs: \sliderefentry{1}{CADE [Yang et al., 2021]}; \sliderefentry{2}{OWAD [Hu et al., 2023]}.}
+	\sliderefs{Refs: \sliderefentry{1}{CADE [Yang et al., 2021, USENIX Security]}; \sliderefentry{2}{OWAD [Han et al., 2023, NDSS]}.}
 
 \end{frame}
 
@@ -319,7 +328,7 @@
 		\begin{itemize}
 			\setlength\itemsep{0.6em}
 			\item One fixed benchmark split is not enough.
-			\item Robustness in operation: effectiveness under evolving traffic and attacks.
+			\item Robustness in operation: effectiveness under netwrok condition changes.
 			\item Robustness in assessment: evaluation that truly stresses the detector.
 		\end{itemize}
 
@@ -357,10 +366,9 @@
 					\footnotesize
 					\begin{itemize}
 						\setlength\itemsep{0.45em}
-						\item Post-deployment robustness
+						\item Context change handling
 						\item Fast NIDS reconfiguration
 						\item Meta-learning-based auto-configuration
-						\item Context change handling
 					\end{itemize}}
 			\end{minipage}
 		\end{beamercolorbox}
@@ -384,8 +392,8 @@
 		\end{beamercolorbox}
 	\end{columns}
 
-	\vspace{0.18em}
-	{\fontsize{4.7}{5.2}\selectfont
+	\vspace{-0.30em}
+	{\fontsize{8}{5.2}\selectfont
 		\parbox{0.99\linewidth}{\centering
 			\textit{Publications:} Part I -- \emph{Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning} (NOMS 2023, AnNet);\\
 			\emph{Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets} (LCN 2024).\\

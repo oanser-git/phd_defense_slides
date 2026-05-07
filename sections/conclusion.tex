@@ -1,40 +1,139 @@
 \section{Conclusion and perspectives}
-\begin{frame}{Adaptation Part}
+
+\definecolor{evalblue}{HTML}{2563EB}
+\definecolor{adaptorange}{HTML}{D97706}
+
+% Previous two-slide conclusion variants kept for reference.
+% \begin{frame}{Adaptation Part}
+% 	\small
+% 	{\normalsize\textbf{Conclusion}}\\[-0.05em]
+% 	\begin{itemize}
+% 		\setlength\itemsep{0.35em}
+% 		\item Re-running the search for a (sub-)optimal configuration after each context change is too expensive for adaptive ML-based NIDS.
+% 		\item Meta-learning keeps reconfiguration fast while staying close to the (sub-)optimal configuration, including attack-free AD.
+% 	\end{itemize}
+% 	\vspace{0.2em}
+% 	{\normalsize\textbf{Perspectives}}\\[-0.05em]
+% 	\begin{itemize}
+% 		\setlength\itemsep{0.35em}
+% 		\item Move toward continuous, closed-loop reconfiguration under network context change.
+% 		\item Explore privacy-preserving and federated configuration learning to mitigate cold-start deployment.
+% 	\end{itemize}
+% \end{frame}
+%
+% \begin{frame}{Evaluation Part}
+% 	\small
+% 	{\normalsize\textbf{Conclusion}}\\[-0.05em]
+% 	\begin{itemize}
+% 		\setlength\itemsep{0.35em}
+% 		\item Static benchmark accuracy is not enough for robust NIDS evaluation.
+% 		\item TATA assesses test-set difficulty and generates targeted, realistic traffic to expose hidden weaknesses.
+% 	\end{itemize}
+% 	\vspace{0.2em}
+% 	{\normalsize\textbf{Perspectives}}\\[-0.05em]
+% 	\begin{itemize}
+% 		\setlength\itemsep{0.35em}
+% 		\item Reuse TATA-generated hard cases for detector hardening and retraining.
+% 		\item Extend beyond the current flow-based, single-protocol setting toward richer traffic and larger testbeds.
+% 	\end{itemize}
+% \end{frame}
+
+\newcommand{\robustnessContributionsVisual}{%
+	\begin{tikzpicture}[baseline=(img.base)]
+		\node[anchor=south west,inner sep=0] (img) at (0,0.26) {\includegraphics[width=0.58\linewidth]{figures/introduction/ML_NIDS_4-crop.pdf}};
+
+		\node[draw=evalblue!35,fill=evalblue!7,rounded corners=7pt,inner sep=4pt,align=center,anchor=west] (tata) at ([xshift=0.25cm,yshift=1.60cm]img.east) {%
+			\begin{minipage}{2.25cm}
+				\centering
+				{\scriptsize \textbf{Evaluation robustness}}\\[0.18em]
+				{\scriptsize \textbf{TATA}}
+			\end{minipage}};
+
+		\node[draw=adaptorange!45,fill=adaptorange!8,rounded corners=7pt,inner sep=4pt,align=center,anchor=west] (autocfg) at ([xshift=0.25cm,yshift=-1.10cm]img.east) {%
+			\begin{minipage}{2.25cm}
+				\centering
+				{\scriptsize \textbf{Deployment robustness}}\\[0.18em]
+				{\scriptsize \textbf{Auto-configuration}}
+			\end{minipage}};
+
+		\begin{scope}[x={(img.south east)},y={(img.north west)}]
+			\coordinate (evaltarget) at (0.79,0.58);
+			\coordinate (deploytarget) at (0.80,0.20);
+			\fill[evalblue,opacity=0.12] (0.79,0.58) ellipse (0.12 and 0.16);
+			\draw[evalblue!85!black,line width=0.9pt,dashed] (0.79,0.58) ellipse (0.12 and 0.16);
+			\fill[adaptorange,opacity=0.12] (0.80,0.20) ellipse (0.15 and 0.16);
+			\draw[adaptorange!85!black,line width=0.9pt,dashed] (0.80,0.20) ellipse (0.15 and 0.16);
+		\end{scope}
+
+		\draw[->,line width=0.95pt,draw=evalblue!85!black] (tata.west) .. controls +(-1.05,-0.35) and +(1.0,0.22) .. (evaltarget);
+		\draw[->,line width=0.95pt,draw=adaptorange!85!black] (autocfg.west) .. controls +(-0.9,0.0) and +(0.9,0.1) .. (deploytarget);
+	\end{tikzpicture}}
+
+\newcommand{\robustnessContributionsVisualAutoOnly}{%
+	\begin{tikzpicture}[baseline=(img.base)]
+		\node[anchor=south west,inner sep=0] (img) at (0,0.26) {\includegraphics[width=0.58\linewidth]{figures/introduction/ML_NIDS_4-crop.pdf}};
+		\node[draw=adaptorange!45,fill=adaptorange!8,rounded corners=7pt,inner sep=4pt,align=center,anchor=west] (autocfg) at ([xshift=0.25cm,yshift=-0.10cm]img.east) {%
+			\begin{minipage}{2.25cm}
+				\centering
+				{\scriptsize \textbf{Deployment}}\\[0.18em]
+				{\scriptsize \textbf{robustness}}\\[0.18em]
+				{\scriptsize \textbf{Auto-configuration}}
+			\end{minipage}};
+		\begin{scope}[x={(img.south east)},y={(img.north west)}]
+			\coordinate (deploytarget) at (0.80,0.20);
+			\fill[adaptorange,opacity=0.12] (0.80,0.20) ellipse (0.15 and 0.16);
+			\draw[adaptorange!85!black,line width=0.9pt,dashed] (0.80,0.20) ellipse (0.15 and 0.16);
+		\end{scope}
+		\draw[->,line width=0.95pt,draw=adaptorange!85!black] (autocfg.west) .. controls +(-0.9,0.0) and +(0.9,0.1) .. (deploytarget);
+	\end{tikzpicture}}
+
+% \begin{frame}{General conclusion}
+% 	\centering
+% 	\robustnessContributionsVisual
+% 
+% 	\vspace{0.55em}
+% 	\begin{beamercolorbox}[rounded=true,shadow=true,wd=0.95\linewidth,sep=0.9ex]{block body}
+% 		\centering
+% 		\small\textbf{$\Rightarrow$ Robustness in this thesis = rigorous evaluation + adaptive configuration.}
+% 	\end{beamercolorbox}
+% \end{frame}
+
+\begin{frame}{General conclusion}
 	\small
+	\begin{columns}[T,onlytextwidth]
+		\column{0.33\linewidth}
+		\begin{minipage}[t][0.49\textheight][t]{\linewidth}
+			\only<1>{%
+			{\normalsize\textbf{Auto-configuration}}\\[-0.05em]
+			{\normalsize\textbf{perspectives}}\\[0.08em]
+			\begin{itemize}
+				\setlength\itemsep{0.35em}
+				\item Closed-loop reconfiguration under context change.
+				\item Cold-start mitigation across organizations. \(\rightarrow\) privacy-preserving and federated configuration learning.
+			\end{itemize}}
+			\only<2>{%
+				{\normalsize\textbf{TATA perspectives}}\\[0.08em]
+				\begin{itemize}
+					\setlength\itemsep{0.35em}
+					\item Reuse hard cases for detector hardening.
+					\item Beyond single-protocol, flow-based settings.
+					\item Larger and richer stress-test testbeds.
+				\end{itemize}}
+		\end{minipage}
 
-	{\normalsize\textbf{Conclusion}}\\[-0.05em]
-	\begin{itemize}
-		\setlength\itemsep{0.35em}
-		\item Re-running the search for a (sub-)optimal configuration after each context change is too expensive for adaptive ML-based NIDS.
-		\item Meta-learning keeps reconfiguration fast while staying close to the (sub-)optimal configuration, including attack-free AD.
-	\end{itemize}
+		\column{0.63\linewidth}
+		\centering
+		\only<1>{\robustnessContributionsVisualAutoOnly}
+		\only<2>{\robustnessContributionsVisual}
+	\end{columns}
 
-	\vspace{0.2em}
-	{\normalsize\textbf{Perspectives}}\\[-0.05em]
-	\begin{itemize}
-		\setlength\itemsep{0.35em}
-		\item Move toward continuous, closed-loop reconfiguration under network context change.
-		\item Explore privacy-preserving and federated configuration learning to mitigate cold-start deployment.
-	\end{itemize}
-\end{frame}
+	\vspace{0.35em}
 
-\begin{frame}{Evaluation Part}
-	\small
-
-	{\normalsize\textbf{Conclusion}}\\[-0.05em]
-	\begin{itemize}
-		\setlength\itemsep{0.35em}
-		\item Static benchmark accuracy is not enough for robust NIDS evaluation.
-		\item TATA assesses test-set difficulty and generates targeted, realistic raffic to expose hidden weaknesses.
-	\end{itemize}
-
-	\vspace{0.2em}
-	{\normalsize\textbf{Perspectives}}\\[-0.05em]
-	\begin{itemize}
-		\setlength\itemsep{0.35em}
-		\item Reuse TATA-generated hard cases for detector hardening and retraining.
-		\item Extend beyond the current flow-based, single-protocol setting toward richer traffic and larger testbeds.
-	\end{itemize}
+	\only<2>{%
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=0.95\linewidth,sep=0.9ex]{block body}
+			\centering
+			\small\textbf{$\Rightarrow$ Robustness in this thesis = rigorous evaluation + adaptive configuration.}
+		\end{beamercolorbox}}
 \end{frame}
 
 \begin{frame}{Domain Perspectives}

@@ -1,4 +1,65 @@
+\metroset{sectionpage=none}
 \section{Part I: Adaptation}
+\metroset{sectionpage=progressbar}
+
+\begin{frame}{Roadmap of the presentation}
+	\small
+
+	\setbeamercolor{roadmap step}{fg=normal text.fg,bg=structure.fg!10}
+	\setbeamercolor{roadmap card}{fg=normal text.fg,bg=black!3}
+	\setbeamercolor{roadmap card title}{fg=white,bg=structure.fg}
+	\setbeamercolor{roadmap card title alt}{fg=white,bg=alerted text.fg}
+	\setbeamercolor{roadmap card dim}{fg=black!35,bg=black!2}
+	\setbeamercolor{roadmap card title dim}{fg=white!85,bg=black!20}
+
+	\centering
+	\vspace*{0.2em}
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.49\linewidth}
+		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card}
+			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title alt}
+				\centering \textbf{Part I \quad Adaptation}
+			\end{beamercolorbox}
+			\begin{minipage}[t][4.2cm][t]{\linewidth}
+				\vspace*{0.05cm}
+				\raggedright
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{%
+					\footnotesize
+					\begin{itemize}
+						\setlength\itemsep{0.45em}
+						\item Context change handling
+						\item Fast NIDS reconfiguration
+						\item Meta-learning-based auto-configuration
+					\end{itemize}}
+			\end{minipage}
+		\end{beamercolorbox}
+
+		\column{0.49\linewidth}
+		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card dim}
+			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title dim}
+				\centering \textbf{Part II \quad Evaluation}
+			\end{beamercolorbox}
+			\begin{minipage}[t][4.2cm][t]{\linewidth}
+				\vspace*{0.05cm}
+				\raggedright
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{%
+					\footnotesize\color{black!35}
+					\textbullet\ Test-set difficulty assessment \(\rightarrow\) relvealing NIDS weaknesses\\[0.45em]
+					\textbullet\ Targeted augmentation of the test set when difficulty is low}
+			\end{minipage}
+		\end{beamercolorbox}
+	\end{columns}
+
+	\vspace{-0.30em}
+	{\fontsize{8}{5.2}\selectfont
+		\parbox{0.99\linewidth}{\centering
+			\textit{Publications:} Part I -- \emph{Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning} (NOMS 2023, AnNet);\\
+			\emph{Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets} (LCN 2024).\\
+			\textcolor{black!35}{Part II -- \emph{TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation} (ESORICS 2025);\\
+				\emph{An Empirical Study on Configuration Robustness of Unsupervised IDS} (NOMS 2026).}}}
+
+\end{frame}
 
 \begin{frame}{Why ML-based NIDS still need explicit adaptation}
 	\small
@@ -20,7 +81,7 @@
 		\figsource{Qiao et al., IEEE TII 2022, Table V/VI and Section IV-C}
 	\end{columns}
 
-	\vspace{0.6em}
+	\vspace{3em}
 	\begin{beamercolorbox}[wd=\linewidth,sep=0.9ex,rounded=true,center]{block body}
 		\small
 		\textbf{$\Rightarrow$ Detection performance can degrade $\Rightarrow$ explicit adaptation mechanisms are needed}\\[0.35em]
@@ -65,8 +126,8 @@
 		\begin{beamercolorbox}[wd=\linewidth,sep=0.85ex,rounded=true]{method card title}
 			\centering\textbf{#2}
 		\end{beamercolorbox}
-		\vspace{0.25em}
-		\begin{minipage}{0.95\linewidth}
+		\begin{minipage}[t]{0.95\linewidth}
+			\vspace*{0.2em}
 			#3
 		\end{minipage}
 		\vspace{0.35em}
@@ -181,6 +242,7 @@
 		\begin{itemize}
 			\footnotesize
 			\setlength\itemsep{0.45em}
+			\item 14 daily IDS2017/IDS2018 datasets; each day is a separate context.
 			\item Can a day-$t$ optimal config be reused on day $t'$?
 			\item Each boxplot \(\rightarrow\) performance drop from transferring another day's best config.
 			\item Limited loss on some days; 20--40\% degradation on others.
@@ -238,7 +300,7 @@
 	\begin{itemize}
 		\footnotesize
 		\setlength\itemsep{0.15em}
-		\item Grid search, random search\sliderefmark{1}, Bayesian optimization (BO)\sliderefmark{2}, evolutionary search.
+		\item Grid search, random search\sliderefmark{1}, Bayesian optimization (BO)\sliderefmark{2}.
 		\item Repeated train-and-validate over candidate configurations.
 	\end{itemize}
 
@@ -354,27 +416,29 @@
 		\column{0.49\linewidth}
 		\methodologycard{methodblue}{Supervised setting}{%
 			\begin{itemize}
+				\setlength\topsep{0.35em}
 				\setlength\itemsep{0.15em}
 				\item Binary Random Forest on labeled benign/attack traffic.
-				\item Reference: Anser et al., \textbf{NOMS 2023} (AnNet workshop).
+				      % \item Reference: Anser et al., \textbf{NOMS 2023} (AnNet workshop).
 				\item Contexts: \textbf{17 daily} IDS2017/IDS2018 datasets.
 				\item Search space: \textbf{2 RF HPs} (`max\_features`, `min\_samples\_leaf`).
-				\item BO baseline: \textbf{300 iterations/day}, optimized on \textbf{MCC}.
+				\item BO baseline: \textbf{300 iterations/day}.
 			\end{itemize}}
 
 		\column{0.49\linewidth}
 		\methodologycard{methodgreen}{Unsupervised setting}{%
 			\begin{itemize}
+				\setlength\topsep{0.35em}
 				\setlength\itemsep{0.15em}
 				\item Isolation Forest-based AD IDS trained on attack-free data.
-				\item Reference: Anser et al., \textbf{LCN 2024} (short paper).
+				      % \item Reference: Anser et al., \textbf{LCN 2024} (short paper).
 				\item Contexts: \textbf{14 daily} IDS2017/IDS2018 datasets.
 				\item Search space: \textbf{7 iForest HPs + threshold}.
-				\item BO baseline: offline daily optimum with labels; metric: \textbf{precision}.
+				\item BO baseline: offline daily optimum with labels.
 			\end{itemize}}
 	\end{columns}
 
-	\vspace{0em}
+	\vspace{1em}
 	\centering
 	% Previous takeaway kept for reference.
 	% \scriptsize\textbf{$\Rightarrow$ Same meta-learning principle, but different detectors, search spaces, and configuration targets.}
@@ -501,7 +565,8 @@
 		\column{0.39\linewidth}
 		\begin{itemize}
 			\setlength\itemsep{0.42em}
-			\item Attack-free AD: meta-learning can beat budget-matched BO.
+			\item BO stopped at the same time budget as meta-learning.
+			\item Gain = relative improvement: $(\text{meta-learning} - \text{baseline}) / \text{baseline}$.
 			\item Strongest gains on harder days, especially \textbf{5--8}.
 			\item Limited negative gains at equal cost.
 			\item Supervised setting: large gains over the default.
@@ -595,7 +660,7 @@
 
 	\vspace{0.08em}
 	\begin{center}
-		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ A comprehensive analysis of the impact of configuration not presented here is available in our NOMS 2026 paper.}}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ Detailed analysis of the impact of configuration: Anser et al., \emph{An Empirical Study on Configuration Robustness of Unsupervised IDS}, IEEE/IFIP NOMS 2026.}}
 	\end{center}
 
 \end{frame}

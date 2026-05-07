@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1940" height="620" viewBox="0 0 1940 620">
+  <defs>
+    <style>
+      .title { font: 700 36px 'DejaVu Sans', Arial, sans-serif; fill: #14323d; }
+      .label { font: 600 30px 'DejaVu Sans', Arial, sans-serif; fill: #14323d; }
+      .body { font: 400 27px 'DejaVu Sans', Arial, sans-serif; fill: #1f2d33; }
+      .small { font: 400 23px 'DejaVu Sans', Arial, sans-serif; fill: #30424a; }
+      .chip { font: 600 25px 'DejaVu Sans', Arial, sans-serif; fill: #14323d; }
+      .light { fill: #eef5fb; stroke: #8bb5d9; stroke-width: 2.5; }
+      .light2 { fill: #f5f8fb; stroke: #9db4c7; stroke-width: 2.5; }
+      .orange { fill: #fff1e8; stroke: #ec9c6a; stroke-width: 2.5; }
+      .green { fill: #ecf8f1; stroke: #73b88a; stroke-width: 2.5; }
+      .pillBlue { fill: #d9ebf8; stroke: #8bb5d9; stroke-width: 1.5; }
+      .pillOrange { fill: #ffe2cf; stroke: #ec9c6a; stroke-width: 1.5; }
+      .pillGreen { fill: #dff2e5; stroke: #73b88a; stroke-width: 1.5; }
+      .arrow { stroke: #48616d; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#48616d" />
+    </marker>
+  </defs>
+
+  <rect x="30" y="150" rx="24" ry="24" width="380" height="240" class="light" opacity="1" />
+  <text x="220" y="205" text-anchor="middle" class="title" opacity="1">Network observation</text>
+
+  <rect x="70" y="240" rx="18" ry="18" width="115" height="50" class="pillBlue" opacity="1" />
+  <text x="128" y="273" text-anchor="middle" class="chip" opacity="1">packet</text>
+
+  <rect x="225" y="240" rx="18" ry="18" width="115" height="50" class="pillBlue" opacity="1" />
+  <text x="282" y="273" text-anchor="middle" class="chip" opacity="1">flow</text>
+
+  <rect x="70" y="308" rx="18" ry="18" width="115" height="50" class="pillBlue" opacity="1" />
+  <text x="128" y="341" text-anchor="middle" class="chip" opacity="1">sequence</text>
+
+  <rect x="225" y="308" rx="18" ry="18" width="115" height="50" class="pillBlue" opacity="1" />
+  <text x="282" y="341" text-anchor="middle" class="chip" opacity="1">graph</text>
+
+  <rect x="470" y="175" rx="24" ry="24" width="440" height="190" class="light2" opacity="0.14" />
+	<text x="690" y="225" text-anchor="middle" class="title" opacity="0.14">Feature representation</text>
+	<text x="690" y="274" text-anchor="middle" class="body" opacity="0.14">turn traffic into numerical features</text>
+	<text x="690" y="309" text-anchor="middle" class="body" opacity="0.14">for the model to process</text>
+	<text x="690" y="350" text-anchor="middle" class="small" opacity="0.14">duration | bytes | packets | destination port</text>
+
+  <rect x="1010" y="175" rx="24" ry="24" width="340" height="190" class="light2" opacity="0.14" />
+	<text x="1180" y="225" text-anchor="middle" class="title" opacity="0.14">Detection model</text>
+	<text x="1180" y="290" text-anchor="middle" class="label" opacity="0.14">ML / DL model</text>
+	<text x="1180" y="332" text-anchor="middle" class="small" opacity="0.14">RF, AE, CNN, GNN, ...</text>
+
+  <path d="M410 270 H455" class="arrow" marker-end="url(#arrowhead)" opacity="0.14" />
+  <path d="M910 270 H995" class="arrow" marker-end="url(#arrowhead)" opacity="0.14" />
+
+  <path d="M1350 255 C1410 255 1425 195 1460 170" class="arrow" marker-end="url(#arrowhead)" opacity="0.14" />
+  <path d="M1350 295 C1410 295 1425 355 1460 380" class="arrow" marker-end="url(#arrowhead)" opacity="0.14" />
+
+  <text x="1640" y="66" text-anchor="middle" class="label" opacity="0.14">Two common learning settings</text>
+
+  <rect x="1470" y="85" rx="24" ry="24" width="340" height="195" class="orange" opacity="0.14" />
+  <text x="1640" y="138" text-anchor="middle" class="title" opacity="0.14">Classification</text>
+  <text x="1640" y="186" text-anchor="middle" class="body" opacity="0.14">trained on labeled</text>
+  <text x="1640" y="222" text-anchor="middle" class="body" opacity="0.14">benign + attack traffic</text>
+  <text x="1640" y="262" text-anchor="middle" class="body" opacity="0.14">output: traffic label</text>
+  <rect x="1498" y="266" rx="16" ry="16" width="98" height="42" class="pillOrange" opacity="0.14" />
+  <text x="1547" y="294" text-anchor="middle" class="chip" opacity="0.14">benign</text>
+  <rect x="1604" y="266" rx="16" ry="16" width="88" height="42" class="pillOrange" opacity="0.14" />
+  <text x="1648" y="294" text-anchor="middle" class="chip" opacity="0.14">DDoS</text>
+  <rect x="1700" y="266" rx="16" ry="16" width="92" height="42" class="pillOrange" opacity="0.14" />
+  <text x="1746" y="294" text-anchor="middle" class="chip" opacity="0.14">botnet</text>
+
+  <rect x="1470" y="365" rx="24" ry="24" width="340" height="195" class="green" opacity="0.14" />
+  <text x="1640" y="418" text-anchor="middle" class="title" opacity="0.14">Anomaly detection</text>
+  <text x="1640" y="466" text-anchor="middle" class="body" opacity="0.14">trained mainly on</text>
+  <text x="1640" y="502" text-anchor="middle" class="body" opacity="0.14">benign traffic</text>
+  <text x="1640" y="542" text-anchor="middle" class="body" opacity="0.14">output: score -&gt; alert</text>
+  <rect x="1578" y="548" rx="16" ry="16" width="124" height="42" class="pillGreen" opacity="0.14" />
+  <text x="1640" y="576" text-anchor="middle" class="chip" opacity="0.14">score &gt; τ</text>
+</svg>
