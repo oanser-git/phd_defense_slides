@@ -242,9 +242,9 @@
 		\begin{itemize}
 			\footnotesize
 			\setlength\itemsep{0.45em}
-			\item 14 daily IDS2017/IDS2018 datasets; each day a separate context.
+			\item 14 daily IDS2017/IDS2018 datasets; each day differs in attack types and network topology.
+			\item New attack or topology change \(\rightarrow\) new context.
 			\item Can a day-$t$ optimal config be reused on day $t'$?
-			\item Each boxplot \(\rightarrow\) performance drop from transferring another day's best config.
 			\item Limited loss on some days; 20--40\% degradation on others.
 		\end{itemize}
 
@@ -258,7 +258,7 @@
 
 	\vspace{0.15em}
 	\centering
-	\footnotesize\textbf{$\Longrightarrow$ Configuration transfer helps in some contexts, but is not reliable in general.}
+	\footnotesize\textbf{$\Longrightarrow$ Context changes can require reconfiguration; direct transfer is not reliable in general.}
 
 \end{frame}
 
@@ -350,21 +350,11 @@
 	{\fontsize{5.8}{6.5}\selectfont Refs: \sliderefentry{1}{Bergstra \& Bengio, JMLR 2012}; \sliderefentry{2}{Snoek et al., NeurIPS 2012}; \sliderefentry{3}{Anser et al., NOMS 2023}.}
 \end{frame}
 
-\begin{frame}{Research question (RQ1)}
+\begin{frame}{Research question}
 	\small
 
 	\begin{block}{Research question}
 		How can we find a configuration of a ML-based NIDS in a timely manner while maintaining an acceptable level of detection performance?
-	\end{block}
-
-	\vspace{0.35em}
-	\begin{block}{From our analysis of hyperparameter impact}
-		\begin{itemize}
-			\item A NIDS configuration method has to be applied at each network context change.
-			\item A new network context is defined by a new attack in the network or by a topology change.
-		\end{itemize}
-		\vspace{0.15em}
-		{\scriptsize\emph{Source:} Anser et al., \emph{An Empirical Study on Configuration Robustness of Unsupervised IDS}, IEEE/IFIP NOMS 2026.}
 	\end{block}
 
 	\vspace{0.2em}
@@ -432,7 +422,7 @@
 				\setlength\itemsep{0.15em}
 				\item Isolation Forest-based AD IDS trained on attack-free data.
 				      % \item Reference: Anser et al., \textbf{LCN 2024} (short paper).
-				\item Contexts: \textbf{14 daily} IDS2017/IDS2018 datasets.
+				\item Contexts: \textbf{14 daily} IDS2017/IDS2018 datasets (corrected version).
 				\item Search space: \textbf{7 iForest HPs + threshold}.
 				\item BO baseline: offline daily optimum with labels.
 			\end{itemize}}
@@ -566,7 +556,10 @@
 		\begin{itemize}
 			\setlength\itemsep{0.42em}
 			\item BO stopped at the same time budget as meta-learning.
-			\item Gain = relative improvement: $(\text{meta-learning} - \text{baseline}) / \text{baseline}$.
+		\end{itemize}
+		\[\text{Gain} = \frac{\text{MtL} - \text{baseline}}{\text{baseline}}\]
+		\begin{itemize}
+			\setlength\itemsep{0.42em}
 			\item Strongest gains on harder days, especially \textbf{5--8}.
 			\item Limited negative gains at equal cost.
 			\item Supervised setting: large gains over the default.

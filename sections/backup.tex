@@ -27,3 +27,102 @@
 	\footnotesize\textbf{$\Longrightarrow$ Example on provenance-based IDSs: tuning matters across graph-based models too.}
 
 \end{frame}
+
+\begin{frame}[noframenumbering]{Backup: why are days 5--7 harder?}
+	\small
+	\centering
+	\makebox[\linewidth][c]{\hspace*{-0.03\linewidth}\resizebox{0.90\linewidth}{!}{\input{/home/oanser/Documents/work/NOMS2026_slides/figures/study_design/benchmark_context_visual.tex}}}
+
+	\vspace{0.2em}
+	\begin{itemize}
+		\scriptsize
+		\setlength\itemsep{0.10em}
+		\item D4--D13 are large IDS2018 days: more than \(5\)M flows, versus less than \(0.6\)M on IDS2017.
+		\item Inside that large-volume group, D6 is unusual: only \(74.2\%\) benign, while most IDS2018 days are around \(95\)--\(100\%\) benign.
+		\item D5, D6, and D7 also correspond to different attack families: GoldenEye/Slowloris, Hulk, and LOIC-HTTP.
+		\item With the same IF sample size, each tree sees a much smaller fraction of traffic on large days; combined with changes in benign/attack mix, this can shift the best depth, gain threshold, and alert threshold.
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}[noframenumbering]{Backup: additional NOMS 2026 evidence}
+	\small
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.485\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{/home/oanser/Documents/work/noms2026/sections/figures/daily_results_alternatives.pdf}
+		\par\vspace{0.08em}
+		{\scriptsize\textbf{Default, Overall and Under-sampling}}
+
+		\column{0.485\linewidth}
+		\centering
+		\includegraphics[width=\linewidth]{/home/oanser/Documents/work/noms2026/sections/figures/attacks_transfer_IDS2017_to_IDS2018.pdf}
+		\par\vspace{0.08em}
+		{\scriptsize\textbf{Transferability of optimal configurations across attacks}}
+	\end{columns}
+
+	\vspace{0.08em}
+	\begin{beamercolorbox}[rounded=true,shadow=true,wd=0.96\linewidth,sep=0.8ex,center]{block body}
+		\scriptsize\textbf{$\Rightarrow$ Even stronger reuse baselines remain unstable: one-size-fits-all settings fail on several days, and even attack-specific transfer across years can still lose robustness.}
+	\end{beamercolorbox}
+\end{frame}
+
+\begin{frame}[noframenumbering]{Backup: TATA overview}
+	\centering
+	\includegraphics[width=0.72\linewidth]{/home/oanser/Documents/work/esorics2025_presentation/tata/figures/TATA-crop.pdf}
+\end{frame}
+
+\begin{frame}[noframenumbering]{Backup: intuition for the Vendi Score}
+	\small
+	\begin{itemize}
+		\footnotesize
+		\setlength\itemsep{0.18em}
+		\item \textbf{Similarity matrix \(K\):} compare every pair of points; this captures redundancy versus true variety.
+		\item \textbf{Eigenvalues \(\lambda_i\):} summarize how many independent similarity patterns are present.
+		\item One dominant eigenvalue \(\Rightarrow\) most points follow one repeated pattern; several comparable eigenvalues \(\Rightarrow\) several distinct patterns.
+		\item \textbf{Normalization} \(p_i = \lambda_i / \sum_j \lambda_j\): turns the spectrum into proportions, so we measure structure rather than raw matrix scale.
+		\item \textbf{Entropy} asks whether the spectrum is concentrated on one pattern or spread across many patterns.
+		\item \textbf{Exponentiation} converts that entropy into an interpretable effective count.
+
+		      \[
+			      \mathrm{VS}(K)=\exp\!\left(-\sum_i p_i \log p_i\right)
+		      \]
+
+		\item Low VS: many near-duplicates.
+		\item High VS: many genuinely different cases.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[noframenumbering]{Backup: meta-features used}
+	\small
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.58\linewidth}
+		{\normalsize\textbf{Representative groups}}\\[0.1em]
+		\begin{itemize}
+			\footnotesize
+			\setlength\itemsep{0.3em}
+			\item \textbf{Simple descriptors:} \#instances, \#attributes, \#classes, numeric/categorical ratio; capture dataset size and representation.
+			\item \textbf{Distribution descriptors:} std, IQR, range, skewness, kurtosis, outlier count; capture variability, asymmetry, and extreme values.
+			\item \textbf{Dependency descriptors:} covariance eigenvalues, correlated-attribute count, canonical correlations; capture redundancy and interactions between features.
+		\end{itemize}
+
+		\column{0.38\linewidth}
+		{\normalsize\textbf{Why do they help?}}\\[0.1em]
+		\begin{itemize}
+			\footnotesize
+			\setlength\itemsep{0.3em}
+			\item Fast to compute and data-agnostic.
+			\item Different contexts produce different descriptor patterns.
+			\item Similar contexts \(\rightarrow\) similar meta-feature vectors.
+			\item The meta-model maps these vectors to a good configuration without rerunning HPO.
+		\end{itemize}
+	\end{columns}
+
+	\vspace{0.15em}
+	\centering
+	\footnotesize\textbf{$\Longrightarrow$ Meta-features indirectly describe the network context through dataset properties.}\\[-0.02em]
+	{\fontsize{6.3}{7.0}\selectfont\emph{Source:} Anser et al., ANNET 2023 / NOMS 2023; extracted with \texttt{pymfe} (Alcoba\c{c}a et al., 2020).}
+
+\end{frame}

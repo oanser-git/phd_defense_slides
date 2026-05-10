@@ -155,7 +155,7 @@
 	\small
 	\begin{columns}[T,onlytextwidth]
 		% ---------------- Left column ----------------
-		\column{0.55\linewidth}
+		\column{0.57\linewidth}
 		\begin{itemize}
 			\item<1-> \textbf{Protocol:}
 			      20 eval episodes on IDS2017; no reward/updates; add Benign SSH flows;
@@ -179,11 +179,13 @@
 		\end{itemize}
 
 		% Step 3: prompt to transition
-		\only<3->{%
-			\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex]{focusbox}
-				\normalsize What is the impact on NIDS performance?
-			\end{beamercolorbox}
-		}
+		\setbeamercolor{impactbox}{use={alerted text, normal text}, fg=black, bg=alerted text.fg!18!normal text.bg}
+		\begin{overlayarea}{\linewidth}{0.12\textheight}
+			\only<3->{%
+				\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1.0ex,center]{impactbox}
+					\normalsize\textbf{What is the impact on NIDS performance?}
+				\end{beamercolorbox}}
+		\end{overlayarea}
 
 		% ---------------- Right column ----------------
 		\column{0.42\linewidth}

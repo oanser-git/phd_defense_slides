@@ -48,25 +48,25 @@
 \newcommand{\jurycard}[3]{%
   \begin{minipage}[t]{\linewidth}
     \raggedright
-    {\setlength{\fboxsep}{3pt}\colorbox{structure.fg}{\textcolor{white}{\scriptsize\textbf{#1}}}}\\[0.35em]
-    {\footnotesize\textbf{#2}}\\[0.15em]
-    {\fontsize{7.1}{7.8}\selectfont #3}
+    {\setlength{\fboxsep}{2.5pt}\colorbox{structure.fg}{\textcolor{white}{\scriptsize\textbf{#1}}}}\\[0.2em]
+    {\scriptsize\textbf{#2}}\\[0.08em]
+    {\fontsize{6.7}{7.2}\selectfont #3}
   \end{minipage}%
 }
 
 \newcommand{\jurygroupcard}[5]{%
   \begin{minipage}[t]{\linewidth}
     \raggedright
-    {\setlength{\fboxsep}{3pt}\colorbox{structure.fg}{\textcolor{white}{\scriptsize\textbf{#1}}}}\\[0.35em]
+    {\setlength{\fboxsep}{2.5pt}\colorbox{structure.fg}{\textcolor{white}{\scriptsize\textbf{#1}}}}\\[0.2em]
     \begin{minipage}[t]{0.48\linewidth}
       \raggedright
-      {\footnotesize\textbf{#2}}\\[0.15em]
-      {\fontsize{7.1}{7.8}\selectfont #3}
+      {\scriptsize\textbf{#2}}\\[0.08em]
+      {\fontsize{6.7}{7.2}\selectfont #3}
     \end{minipage}\hfill
     \begin{minipage}[t]{0.48\linewidth}
       \raggedright
-      {\footnotesize\textbf{#4}}\\[0.15em]
-      {\fontsize{7.1}{7.8}\selectfont #5}
+      {\scriptsize\textbf{#4}}\\[0.08em]
+      {\fontsize{6.7}{7.2}\selectfont #5}
     \end{minipage}
   \end{minipage}%
 }
@@ -84,28 +84,30 @@
   \centering
   {\usebeamerfont{title}\usebeamercolor[fg]{title}\Large\bfseries Toward Robust Machine Learning based Network Intrusion Detection Systems\par}
 
-  \vspace{0.35em}
-  {\large Omar Anser\par}
+  \vspace{0.2em}
+  {\normalsize Omar Anser\par}
 
-  \vspace{0.12em}
-  {\footnotesize Inria, Université de Lorraine, CNRS, LORIA, Nancy, France (currently post doc Univ. Luxembourg)\par}
+  \vspace{0.05em}
+  {\scriptsize Inria, Université de Lorraine, CNRS, LORIA, Nancy, France (currently post doc Univ. Luxembourg)\par}
 
-  \vspace{0.42em}
-  \begin{beamercolorbox}[wd=0.95\linewidth,sep=0.7ex,rounded=true]{block body}
+  \vspace{0.22em}
+  \begin{beamercolorbox}[wd=0.95\linewidth,sep=0.45ex,rounded=true]{block body}
     \centering
     \begin{minipage}{0.88\linewidth}
       \begin{minipage}[t]{0.30\linewidth}
-        \jurycard{President}{Bernardetta Addis}{Professeure\\Université de Lorraine}
+        \jurycard{Examiner}{Bernardetta Addis}{Professeure\\Université de Lorraine}
       \end{minipage}\hfill
       \begin{minipage}[t]{0.66\linewidth}
         \jurygroupcard{Rapporteurs}{Nadjib A\"it-Saadi}{Professeur des universités\\UVSQ - Université Paris-Saclay}{Francesco Bronzino}{Maître de conférences HDR\\ENS de Lyon}
-      \end{minipage}\\[0.55em]
+      \end{minipage}\\[0.3em]
       \begin{minipage}[t]{0.30\linewidth}
         \jurycard{Examiner}{Guillaume Hiet}{Full Professor\\CentraleSupélec}
       \end{minipage}\hfill
       \begin{minipage}[t]{0.66\linewidth}
-        \jurygroupcard{Supervisors}{Isabelle Chrisment}{Professeure\\Université de Lorraine}{Jérôme François}{Research scientist\\University of Luxembourg, SnT}
+        \jurygroupcard{Supervisors}{Isabelle Chrisment}{Professeure\\Université de Lorraine\\On secondment to Inria}{Jérôme François}{Research scientist\\University of Luxembourg, SnT}
       \end{minipage}
+      \\[0.4em]
+      {\centering\scriptsize\textbf{Guest:} Gregory BLANC, Associate Professor, Télécom SudParis\par}
     \end{minipage}
   \end{beamercolorbox}
 
