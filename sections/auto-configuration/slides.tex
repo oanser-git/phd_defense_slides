@@ -54,10 +54,10 @@
 	\vspace{-0.30em}
 	{\fontsize{8}{5.2}\selectfont
 		\parbox{0.99\linewidth}{\centering
-			\textit{Publications:} Part I -- \emph{Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning} (NOMS 2023, AnNet);\\
-			\emph{Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets} (LCN 2024).\\
-			\textcolor{black!35}{Part II -- \emph{TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation} (ESORICS 2025);\\
-				\emph{An Empirical Study on Configuration Robustness of Unsupervised IDS} (NOMS 2026).}}}
+			\emph{- Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning} (NOMS 2023, AnNet);\\
+			\emph{- Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets} (LCN 2024, short paper).\\
+			\textcolor{black!35}{\emph{- TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation} (ESORICS 2025);\\
+				\emph{- An Empirical Study on Configuration Robustness of Unsupervised IDS} (NOMS 2026).}}}
 
 \end{frame}
 
@@ -242,7 +242,7 @@
 		\begin{itemize}
 			\footnotesize
 			\setlength\itemsep{0.45em}
-			\item 14 daily IDS2017/IDS2018 datasets; each day is a separate context.
+			\item 14 daily IDS2017/IDS2018 datasets; each day a separate context.
 			\item Can a day-$t$ optimal config be reused on day $t'$?
 			\item Each boxplot \(\rightarrow\) performance drop from transferring another day's best config.
 			\item Limited loss on some days; 20--40\% degradation on others.
@@ -497,9 +497,9 @@
 		\begin{itemize}
 			\setlength\itemsep{0.42em}
 			\item High overall precision in attack-free AD.
+			\item Default configuration is much worse than MtL.
 			\item Higher variability on days \textbf{2} and \textbf{5--8}.
 			\item Harder contexts $\rightarrow$ weaker transfer.
-			\item Supervised setting: meta-learning close to the (sub-)optimal configuration.
 		\end{itemize}
 
 		\column{0.58\linewidth}
@@ -511,7 +511,7 @@
 
 	\vspace{0.08em}
 	\begin{center}
-		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ High precision overall; attack-free AD reveals the harder transfer days.}}
+		\parbox{0.96\linewidth}{\centering\small\textbf{$\Rightarrow$ High precision overall; MtL stays much higher than default and closer to optimal on most days.}}
 	\end{center}
 \end{frame}
 

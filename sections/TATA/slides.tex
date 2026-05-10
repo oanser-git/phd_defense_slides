@@ -1,4 +1,65 @@
+\metroset{sectionpage=none}
 \section{Part II: Evaluation}
+\metroset{sectionpage=progressbar}
+
+\begin{frame}{Roadmap of the presentation}
+	\small
+
+	\setbeamercolor{roadmap step}{fg=normal text.fg,bg=structure.fg!10}
+	\setbeamercolor{roadmap card}{fg=normal text.fg,bg=black!3}
+	\setbeamercolor{roadmap card title}{fg=white,bg=structure.fg}
+	\setbeamercolor{roadmap card title alt}{fg=white,bg=alerted text.fg}
+	\setbeamercolor{roadmap card dim}{fg=black!35,bg=black!2}
+	\setbeamercolor{roadmap card title dim}{fg=white!85,bg=black!20}
+
+	\centering
+	\vspace*{0.2em}
+
+	\begin{columns}[T,onlytextwidth]
+		\column{0.49\linewidth}
+		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card dim}
+			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title dim}
+				\centering \textbf{Part I \quad Adaptation}
+			\end{beamercolorbox}
+			\begin{minipage}[t][4.2cm][t]{\linewidth}
+				\vspace*{0.05cm}
+				\raggedright
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{%
+					\footnotesize\color{black!35}
+					\textbullet\ Context change handling\\[0.45em]
+					\textbullet\ Fast NIDS reconfiguration\\[0.45em]
+					\textbullet\ Meta-learning-based auto-configuration}
+			\end{minipage}
+		\end{beamercolorbox}
+
+		\column{0.49\linewidth}
+		\begin{beamercolorbox}[wd=\linewidth,sep=0pt,rounded=true]{roadmap card}
+			\begin{beamercolorbox}[wd=\linewidth,sep=1ex,rounded=true]{roadmap card title alt}
+				\centering \textbf{Part II \quad Evaluation}
+			\end{beamercolorbox}
+			\begin{minipage}[t][4.2cm][t]{\linewidth}
+				\vspace*{0.05cm}
+				\raggedright
+				\hspace*{0.03\linewidth}\parbox{0.94\linewidth}{%
+					\footnotesize
+					\begin{itemize}
+						\setlength\itemsep{0.45em}
+						\item Test-set difficulty assessment \(\rightarrow\) relvealing NIDS weaknesses
+						\item Targeted augmentation of the test set when difficulty is low
+					\end{itemize}}
+			\end{minipage}
+		\end{beamercolorbox}
+	\end{columns}
+
+	\vspace{-0.30em}
+	{\fontsize{8}{5.2}\selectfont
+		\parbox{0.99\linewidth}{\centering
+			\textcolor{black!35}{\emph{Auto-tuning of Hyper-parameters for Detecting Network Intrusions via Meta-learning} (NOMS 2023, AnNet);\\
+				\emph{Automated Machine Learning Configuration to Learn Intrusion Detectors on Attack-Free Datasets} (LCN 2024, short paper).}\\
+			\emph{TATA: Benchmark NIDS Test Sets Assessment and Targeted Augmentation} (ESORICS 2025);\\
+			\emph{An Empirical Study on Configuration Robustness of Unsupervised IDS} (NOMS 2026).}}
+
+\end{frame}
 
 \begin{frame}{Benchmark NIDS datasets — A Closer Look}
 
@@ -48,16 +109,10 @@
 	\begin{columns}[T,onlytextwidth]
 		\column{0.42\linewidth}
 		\begin{itemize}
-			\item A robust evaluation should expose challenging cases, including
-			      corner cases.
-			\item Pre-deployment evaluation mainly relies on the test set
-			      \(\mathcal{D}_{\text{test}}\).
-			\item The key question is whether \(\mathcal{D}_{\text{test}}\)
-			      really stresses the ML-based NIDS.
-			\item The detector is constructed from
-			      \(\mathcal{D}_{\text{train}}\) \( \rightarrow \)
-			      \(\mathcal{D}_{\text{test}}\) must be assessed relative to
-			      \(\mathcal{D}_{\text{train}}\).
+			\item Robust evaluation needs hard and corner cases.
+			\item Pre-deployment evaluation relies on \(\mathcal{D}_{\text{test}}\).
+			\item Question: does \(\mathcal{D}_{\text{test}}\) really stress the NIDS?
+			\item \(\mathcal{D}_{\text{test}}\) must be assessed relative to \(\mathcal{D}_{\text{train}}\).
 		\end{itemize}
 
 		\column{0.56\linewidth}
@@ -120,12 +175,18 @@
 \newcommand{\gOne}[1]{\colorbox{blue!15}{#1}}
 \newcommand{\gTwo}[1]{\colorbox{green!20}{#1}}
 \newcommand{\gThree}[1]{\colorbox{orange!50}{#1}}
+\newcommand{\gOneFaded}[1]{\colorbox{blue!7}{\textcolor{black!40}{#1}}}
+\newcommand{\gTwoFaded}[1]{\colorbox{green!9}{\textcolor{black!40}{#1}}}
+\newcommand{\gThreeFaded}[1]{\colorbox{orange!18}{\textcolor{black!40}{#1}}}
 % usage: \lateGOne{\limMA}
 \newcommand{\lateGOne}[1]{\alt<12->{\gOne{#1}}{#1}}
 \newcommand{\lateGTwo}[1]{\alt<12->{\gTwo{#1}}{#1}}
 \newcommand{\lateGThree}[1]{\alt<12->{\gThree{#1}}{#1}}
 \newcommand{\showat}[2]{\alt<#1->{#2}{\phantom{#2}}}
 \newcommand{\finalonly}[1]{\alt<4->{#1}{\phantom{#1}}}
+\newcommand{\muted}[1]{\textcolor{black!35}{#1}}
+\newcommand{\fadedcmark}{\textcolor{black!35}{\faCheck}}
+\newcommand{\fadedxmark}{\textcolor{black!35}{\faTimes}}
 \newcommand{\ncovlim}{%
 	\parbox[t]{\linewidth}{%
 		Model access (\lateGOne{\limMA}) + NN-only (\lateGOne{\iconNN}) + \\
@@ -140,6 +201,28 @@
 	\parbox[t]{\linewidth}{%
 		Model access (\gOne{\limMA}) + NN-only (\gOne{\iconNN}) + \\
 		Ignores train--test alignment (\gTwo{\limTA})}}
+\newcommand{\ncovlimmuted}{%
+	\parbox[t]{\linewidth}{%
+		\muted{Model access (\limMA) + NN-only (\iconNN) +}\\
+		\muted{Ignores train--test alignment (\limTA)}}}
+\newcommand{\ncovlimGOne}{%
+	\parbox[t]{\linewidth}{%
+		Model access (\gOne{\limMA}) + NN-only (\gOne{\iconNN}) +\\
+		\muted{Ignores train--test alignment (\limTA)}}}
+\newcommand{\ncovlimGTwo}{%
+	\parbox[t]{\linewidth}{%
+		\muted{Model access (\limMA) + NN-only (\iconNN) +}\\
+		Ignores train--test alignment (\gTwo{\limTA})}}
+\newcommand{\surplimmuted}{\muted{\limMA \; + \; \iconNN \; + \; Proximity-only focus (\limPR)}}
+\newcommand{\surplimGOne}{\gOne{\limMA} \; + \; \gOne{\iconNN} \; + \; \muted{Proximity-only focus (\limPR)}}
+\newcommand{\surplimGTwo}{\muted{\limMA \; + \; \iconNN \; + \;} Proximity-only focus (\gTwo{\limPR})}
+\newcommand{\mutlimtopmuted}{\muted{\limMA \; + \; \limTA \; + \; Model-change sensitive (\limMC)}}
+\newcommand{\mutlimtopGOne}{\gOne{\limMA} \; + \; \muted{\limTA} \; + \; Model-change sensitive (\gOne{\limMC})}
+\newcommand{\mutlimtopGTwo}{\muted{\limMA} \; + \; \gTwo{\limTA} \; + \; \muted{Model-change sensitive (\limMC)}}
+\newcommand{\mutlimbotmuted}{\muted{Retrain per dataset (\limRT) \;+\; Synthetic data (\limSY)}}
+\newcommand{\mutlimbotGThree}{Retrain per dataset (\gThree{\limRT}) \;+\; Synthetic data (\gThree{\limSY})}
+\newcommand{\manuallimmuted}{\muted{Unguided augmentation (\limMU)}}
+\newcommand{\manuallimGThree}{Unguided augmentation (\gThree{\limMU})}
 
 \newcommand{\tataGapClosureVisual}{%
 	\begin{tikzpicture}[baseline=(current bounding box.center)]
@@ -356,14 +439,14 @@
 			\showat{1}{Neuron coverage}                   &
 			\finalonly{\cmark}                            &
 			\finalonly{\xmark}                            &
-			\finalonly{\ncovlim}                                                                                   \\[0.3em]
+			\finalonly{\ncovlim} \\[0.45em]
 
 			% t1
 			\showat{2}{Surprise coverage}                 &
 			\finalonly{\cmark}                            &
 			\finalonly{\xmark}                            &
 			\finalonly{\limMA \; + \; \iconNN \; + \; Proximity-only focus (\lateGTwo{\limPR})}
-			\\[0.3em]
+			\\[0.45em]
 
 			% t2 (two rows)
 			\multirow{2}{=}{\showat{3}{Mutation testing}} &
@@ -373,9 +456,9 @@
 			                                              &
 			\finalonly{\limMA \; + \; \limTA \; + \; Model-change sensitive (\lateGOne{\limMC})}
 			\\
-			                                              &              &              & \finalonly
+				                                              &              &              & \finalonly
 			{Retrain per dataset (\lateGThree{\limRT}) \;+\; Synthetic data (\lateGThree{\limSY}
-			)}                                                                                                     \\[0.3em]
+			)} \\[0.45em]
 
 			% Manual row: reserved, shown only on final
 			\showat{4}{Manual (Flood et al.)}             &
@@ -388,27 +471,49 @@
 		\end{tabular}
 	}
 
-	% -------- Final table (t3) — full, exactly like before --------
-	\only<4->{%
+	% -------- Final table / gap focus sequence --------
+	\only<4>{%
 		\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.9cm} c c p{7.6cm}@{}}
 			\toprule
 			\textbf{Method category}          & \textbf{RQ1}                            & \textbf{RQ2} &
 			\textbf{Key limitations}
 			\\
 			\midrule
-			Neuron coverage                   & \cmark                                  & \xmark       & \ncovlimfinal
-			\\[0.3em]
-			Surprise coverage                 & \cmark                                  & \xmark       & \limMA \; + \;
-			\iconNN \; + \; Proximity-only focus (\gTwo{\limPR})                                                                                     \\[0.3em]
-			\multirow{2}{=}{Mutation testing} & \multirow{2}{*}{\cmark}                 &
+			\muted{Neuron coverage}          & \cmark                                  & \xmark       & \ncovlimmuted \\[0.45em]
+			\muted{Surprise coverage}        & \cmark                                  & \xmark       & \surplimmuted \\[0.45em]
+			\multirow{2}{=}{\muted{Mutation testing}} & \multirow{2}{*}{\cmark} &
 			\multirow{2}{*}{\cmark}
-			                                  &
-			\limMA \; + \; \limTA \; + \; Model-change sensitive (\gOne{\limMC})
+				                                  &
+			\mutlimtopmuted
 			\\
-			                                  &                                         &              & Retrain per dataset (\gThree{\limRT}) \;+\;
-			Synthetic data (\gThree{\limSY})                                                                                                         \\[0.3em]
+				                                  &                                         &              & \mutlimbotmuted \\[0.45em]
 			Manual (Flood et al., 2024)       & \xmark                                  & \cmark
-			                                  & Unguided augmentation (\gThree{\limMU})
+				                                  & Unguided augmentation (\limMU)
+			\\
+			\bottomrule
+		\end{tabular}
+
+		\vspace{0.8em}
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex]{takebox}
+			\gOneFaded{\textbf{G1}}\;\muted{Model-related gaps}\quad
+			\gTwoFaded{\textbf{G2}}\;\muted{Shortcomings in assessing \(\mathcal{D}_{\text{test}}\) $\rightarrow$ RQ1}\quad
+			\gThreeFaded{\textbf{G3}}\;\muted{Weaknesses in \(\mathcal{D}_{\text{test}}\) augmentation workflows $\rightarrow$ RQ2}
+		\end{beamercolorbox}
+	}
+
+	\only<5>{%
+		\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.9cm} c c p{7.6cm}@{}}
+			\toprule
+			\textbf{Method category}          & \textbf{RQ1}                            & \textbf{RQ2} &
+			\textbf{Key limitations}
+			\\
+			\midrule
+			Neuron coverage                   & \cmark                                  & \xmark       & \ncovlimGOne \\[0.45em]
+			Surprise coverage                 & \cmark                                  & \xmark       & \surplimGOne \\[0.45em]
+			\multirow{2}{=}{Mutation testing} & \multirow{2}{*}{\cmark}                 & \multirow{2}{*}{\cmark} & \mutlimtopGOne
+			\\
+				                                  &                                         &              & \mutlimbotmuted \\[0.45em]
+			\muted{Manual (Flood et al., 2024)} & \fadedxmark                           & \fadedcmark  & \manuallimmuted
 			\\
 			\bottomrule
 		\end{tabular}
@@ -416,8 +521,59 @@
 		\vspace{0.8em}
 		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex]{takebox}
 			\gOne{\textbf{G1}}\;Model-related gaps\quad
+			\muted{\textbf{G2}\;Shortcomings in assessing \(\mathcal{D}_{\text{test}}\) $\rightarrow$ RQ1}\quad
+			\muted{\textbf{G3}\;Weaknesses in \(\mathcal{D}_{\text{test}}\) augmentation workflows $\rightarrow$ RQ2}
+		\end{beamercolorbox}
+	}
+
+	\only<6>{%
+		\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.9cm} c c p{7.6cm}@{}}
+			\toprule
+			\textbf{Method category}          & \textbf{RQ1}                            & \textbf{RQ2} &
+			\textbf{Key limitations}
+			\\
+			\midrule
+			Neuron coverage                   & \cmark                                  & \xmark       & \ncovlimGTwo \\[0.45em]
+			Surprise coverage                 & \cmark                                  & \xmark       & \surplimGTwo \\[0.45em]
+			\multirow{2}{=}{Mutation testing} & \multirow{2}{*}{\cmark}                 & \multirow{2}{*}{\cmark} & \mutlimtopGTwo
+			\\
+				                                  &                                         &              & \mutlimbotmuted \\[0.45em]
+			\muted{Manual (Flood et al., 2024)} & \fadedxmark                           & \fadedcmark  & \manuallimmuted
+			\\
+			\bottomrule
+		\end{tabular}
+
+		\vspace{0.8em}
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex]{takebox}
+			\muted{\textbf{G1}\;Model-related gaps}\quad
 			\gTwo{\textbf{G2}}\;Shortcomings in assessing \(\mathcal{D}_{\text{test}}\)
 			$\rightarrow$ RQ1\quad
+			\muted{\textbf{G3}\;Weaknesses in \(\mathcal{D}_{\text{test}}\) augmentation workflows $\rightarrow$ RQ2}
+		\end{beamercolorbox}
+	}
+
+	\only<7->{%
+		\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.9cm} c c p{7.6cm}@{}}
+			\toprule
+			\textbf{Method category}          & \textbf{RQ1}                            & \textbf{RQ2} &
+			\textbf{Key limitations}
+			\\
+			\midrule
+			\muted{Neuron coverage}          & \fadedcmark                             & \fadedxmark  & \ncovlimmuted \\[0.45em]
+			\muted{Surprise coverage}        & \fadedcmark                             & \fadedxmark  & \surplimmuted \\[0.45em]
+			\multirow{2}{=}{Mutation testing} & \multirow{2}{*}{\cmark} & \multirow{2}{*}{\cmark} & \mutlimtopmuted
+			\\
+				                                  &                                         &              & \mutlimbotGThree \\[0.45em]
+			Manual (Flood et al., 2024)       & \xmark                                  & \cmark
+				                                  & \manuallimGThree
+			\\
+			\bottomrule
+		\end{tabular}
+
+		\vspace{0.8em}
+		\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=0.8ex]{takebox}
+			\muted{\textbf{G1}\;Model-related gaps}\quad
+			\muted{\textbf{G2}\;Shortcomings in assessing \(\mathcal{D}_{\text{test}}\) $\rightarrow$ RQ1}\quad
 			\gThree{\textbf{G3}}\;Weaknesses in \(\mathcal{D}_{\text{test}}\)
 			augmentation workflows $\rightarrow$ RQ2
 		\end{beamercolorbox}
@@ -427,26 +583,26 @@
 	\only<1>{\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1ex]{defbox}
 			\scriptsize
 			\textbf{Neuron coverage:}
-			Fraction of neurons whose activation exceeds a preset threshold at least once
-			across the test set; higher $\rightarrow$
-			explore more of the model’s internal
+			\textbf{Fraction of neurons} whose activation exceeds a \textbf{preset threshold}
+			at least once across the test set; \textbf{higher} $\rightarrow$
+			explore more of the model’s \textbf{internal}
 			logic.
 		\end{beamercolorbox}}
 
 	\only<2>{\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1ex]{defbox}
 			\scriptsize
 			\textbf{Surprise coverage:}
-			Measures how broadly the test set differs from
-			what the model saw in training; higher $\rightarrow$ the test set includes
-			highly surprising inputs.
+			Measures how broadly the test set \textbf{differs from}
+			what the model saw in training; \textbf{higher} $\rightarrow$ the test set includes
+			\textbf{highly surprising inputs}.
 		\end{beamercolorbox}}
 
 	\only<3>{\begin{beamercolorbox}[rounded=true,shadow=true,wd=\linewidth,sep=1ex]{defbox}
 			\scriptsize
 			\textbf{Mutation testing:}
-			Mutates the model and/or its training setup (e.g., weights, architecture, or
-			hyperparameters), then checks if the test set can distinguish the mutant from
-			the original model.
+			\textbf{Mutates the model and/or its training setup}
+			(e.g., weights, architecture, or hyperparameters), then checks if the test set can
+			\textbf{distinguish the mutant from the original model}.
 		\end{beamercolorbox}}
 
 \end{frame}
